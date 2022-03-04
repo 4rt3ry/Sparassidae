@@ -7,7 +7,7 @@ namespace FinalProject
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
+        private SpriteBatch batch;
 
         public Game1()
         {
@@ -25,7 +25,7 @@ namespace FinalProject
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            batch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
         }

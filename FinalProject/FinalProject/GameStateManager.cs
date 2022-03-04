@@ -3,6 +3,7 @@
  * Handles game states and transitions
  */
 
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -33,6 +34,10 @@ namespace FinalProject
         }
 
         //Methods
+        public void Display(SpriteBatch batch)
+        {
+
+        }
         public void Update(float dTime)
         {
 
