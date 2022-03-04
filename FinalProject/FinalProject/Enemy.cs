@@ -10,6 +10,10 @@ using System.Text;
 
 namespace FinalProject
 {
+    enum EnemyState
+    {
+
+    }
     class Enemy
     {
         //Fields

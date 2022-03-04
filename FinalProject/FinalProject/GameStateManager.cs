@@ -35,6 +35,11 @@ namespace FinalProject
         }
 
         //Methods
+        /// <summary>
+        /// Handles all visual displays for game states
+        /// (Mostly menu display)
+        /// </summary>
+        /// <param name="batch">Sprite Batch</param>
         public void Display(SpriteBatch batch)
         {
             //Current state actions
@@ -58,6 +63,12 @@ namespace FinalProject
                     break;
             }
         }
+
+        /// <summary>
+        /// Handles all time-based functionality for game states
+        /// (State switching, motion/animation/state switch detection)
+        /// </summary>
+        /// <param name="dTime">Time passed (seconds)</param>
         public void Update(float dTime)
         {
             //Current state actions
