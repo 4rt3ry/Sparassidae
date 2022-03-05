@@ -28,6 +28,12 @@ namespace FinalProject
             batch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+        
+        }
+
+        void PlayerMovement()
+        {
+
         }
 
         protected override void Update(GameTime gameTime)
