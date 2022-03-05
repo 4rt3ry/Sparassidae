@@ -35,9 +35,9 @@ namespace FinalProject
 
         //Methods
 
-        public void Draw(SpriteBatch sp,Color tint)
+        public virtual void Draw(SpriteBatch sp,Rectangle rect,Texture2D texture,Color tint)
         {
-            
+            sp.Draw(texture,rect, tint);
         }
 
 
