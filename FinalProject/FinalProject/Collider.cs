@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-// Author: Arthur Powers 3/4/2022
+// Author:  Arthur Powers 3/4/2022
 // Purpose: Contains only the necessary components for sub-colliders to draw from.
 
 namespace FinalProject
@@ -11,35 +11,30 @@ namespace FinalProject
     {
         // Fields
 
-        private GameObject parent;
-        private Vector2 position;
-        private Vector2 relativePosition;
-        private bool isTrigger;
+        protected GameObject parent;
+        protected bool isTrigger;
 
 
         // Properties
 
         /// <summary>
-        /// The collider's absolute position (relative to its center point).
+        /// The collider's center point relative to the origin (0, 0).
         /// 
-        /// WARNING: INCOMPLETE
-        /// TODO: get => parent.position + RelativePosition
-        ///       set 
-        ///       {
-        ///           this.position = value;
-        ///           this.relativePosition = value - parent.Position
-        ///       }
+        /// WARNING: Untested. Should always track parent GameObject's position.
         /// </summary>
         public Vector2 Position
         {
-            get => Vector2.Zero;
+            get => parent.Position + RelativePosition;
             set
             {
-                this.position = Vector2.Zero;
+                RelativePosition = value - parent.Position;
             }
         }
 
-        public Vector2 RelativePosition => relativePosition;
+        /// <summary>
+        /// The collider's center point relative to its parent <see cref="GameObject"/>
+        /// </summary>
+        public Vector2 RelativePosition { get; private set; }
 
         /// <summary>
         /// Trigger colliders cannot have physics collisions.
@@ -47,28 +42,33 @@ namespace FinalProject
         public bool IsTrigger => isTrigger;
 
         /// <summary>
-        /// Creates a collider relative to its parent GameObject.
+        /// Specify the Collider's center point <see cref="Vector2"/> <paramref name="position"/> relative to its  
+        /// <see cref="GameObject"/> parent's position. <br></br>
+        /// Trigger colliders will not check for physics collisions.
         /// </summary>
-        /// <param name="position">Center point relative to parent GameObject</param>
-        /// <param name="isTrigger"></param>
+        /// <param name="parent">Position is relative to its parent <see cref="GameObject"/></param>
+        /// <param name="position">Center point relative to parent <see cref="GameObject"/></param>
+        /// <param name="isTrigger">Trigger colliders cannot cause physics collisions</param>
         public Collider(GameObject parent, Vector2 position, bool isTrigger)
         {
-            this.relativePosition = position;
-            this.position = Vector2.Zero; // TODO: Position = parent.Position + position;
+            this.parent = parent;
+            RelativePosition = position;
             this.isTrigger = isTrigger;
         }
 
         /// <summary>
-        /// Creates a collider with a center point <paramref name="position"/> relative to point (0, 0).
+        /// Specify the Collider's center point <see cref="Vector2"/> <paramref name="position"/> relative to the origin (0, 0). <br></br>
+        /// Trigger colliders will not check for physics collisions.
         /// </summary>
-        /// <param name="position"></param>
-        /// <param name="isTrigger"></param>
+        /// <param name="position">Center point relative to parent <see cref="GameObject"/></param>
+        /// <param name="isTrigger">Trigger colliders cannot cause physics collisions</param>
         public Collider(Vector2 position, bool isTrigger) : this(new GameObject(), position, isTrigger) { }
 
         /// <summary>
-        /// Creates a trigger collider with a center point <paramref name="position"/> relative to point (0, 0).
+        /// Specify the Collider's center point <see cref="Vector2"/> <paramref name="position"/> relative to the origin (0, 0). <br></br>
+        /// By default, this Collider is a trigger and will not check for physics collisions.
         /// </summary>
-        /// <param name="position"></param>
+        /// <param name="position">Center point relative to parent <see cref="GameObject"/></param>
         public Collider(Vector2 position) : this(new GameObject(), position, true) { }
 
         /// <summary>
@@ -76,14 +76,14 @@ namespace FinalProject
         /// outside boundary is considered inside.
         /// </summary>
         /// <param name="point"></param>
-        /// <returns>Does this collider contain <paramref name="point"/></returns>
+        /// <returns>Does this collider contain <see cref="Vector2"/> <paramref name="point"/>?</returns>
         public abstract bool ContainsPoint(Vector2 point);
 
         /// <summary>
         /// Determines if intersecting another collider.
         /// </summary>
         /// <param name="other"></param>
-        /// <returns>Does this collider intersect <paramref name="other"/></returns>
+        /// <returns>Does this collider intersect <see cref="Collider"/> <paramref name="other"/></returns>
         public abstract bool Intersects(Collider other);
 
         /// <summary>
