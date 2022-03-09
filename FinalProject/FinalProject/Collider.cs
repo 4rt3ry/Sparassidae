@@ -73,7 +73,7 @@ namespace FinalProject
 
         /// <summary>
         /// Determines whether or not the current collider contains the specified point. A point on the 
-        /// outside boundary is considered inside.
+        /// <see cref="Collider"/>'s boundary is considered inside.
         /// </summary>
         /// <param name="point"></param>
         /// <returns>Does this collider contain <see cref="Vector2"/> <paramref name="point"/>?</returns>
@@ -91,7 +91,5 @@ namespace FinalProject
         /// </summary>
         /// <returns></returns>
         public abstract bool CheckCollision(GameObject other);
-
-
     }
 }

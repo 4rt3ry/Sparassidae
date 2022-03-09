@@ -56,12 +56,85 @@ namespace FinalProject
 
         public override bool ContainsPoint(Vector2 point)
         {
-            throw new NotImplementedException();
+            // Considering AB = vector from startpoint to endpoint
+            //             AP = vector from startpoint to specified point,
+            //
+            // Point and line segment are colinear if cross product between AB and AP == 0
+            Vector2 AB = EndPosition - Position;
+            Vector2 AP = point - Position;
+            return AboutEquals(CrossProduct(AB, AP), 0);
         }
 
         public override bool Intersects(Collider other)
         {
-            throw new NotImplementedException();
+            if (other is LineCollider)
+            {
+                LineCollider lc = (LineCollider)other;
+
+                // See https://www.geeksforgeeks.org/orientation-3-ordered-points/
+
+
+                // Considering A is startpoint, B is endpoint, C is other startpoint, D is other endpoint
+                float orientationABC = Orientation(Position, EndPosition, lc.Position);
+                float orientationABD = Orientation(Position, EndPosition, lc.EndPosition);
+                float orientationCDA = Orientation(lc.Position, lc.EndPosition, Position);
+                float orientationCDB = Orientation(lc.Position, lc.EndPosition, EndPosition);
+
+                if (orientationABC !=orientationABD && orientationCDA != orientationCDB)
+                {
+                    return true;
+                }
+
+                // Check if any point lines on any either segment
+                if (ContainsPoint(lc.Position) || ContainsPoint(lc.endPosition) || lc.ContainsPoint(Position) || lc.ContainsPoint(endPosition))
+                {
+                    return true;
+                }
+            }
+
+            if (other is RectangleCollider)
+            {
+
+            }
+
+
+            // Priority since player is a circleCollider
+            if (other is CircleCollider)
+            {
+
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Compares two floats for equivilence
+        /// Epsilon value of 1E-6 is an arbitrary decision.
+        /// </summary>
+        private bool AboutEquals(float x, float y) => MathF.Abs(x - y) < MathF.Max(MathF.Abs(x), MathF.Abs(y)) * 1E-6;
+
+        /// <summary>
+        /// Gets the magnitude of the cross product between two <see cref="Vector2"/>
+        /// </summary>
+        private float CrossProduct(Vector2 a, Vector2 b) => a.X * b.Y - a.Y * b.X;
+
+        /// <summary>
+        /// Gets the orientation (either clockwise, counter-clockwise, or undefined) of three points.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
+        /// <returns>1 = clockwise<br></br>2 = counter-clockwise<br></br>0 = colinear</returns>
+        private int Orientation(Vector2 a, Vector2 b, Vector2 c)
+        {
+            // See https://www.geeksforgeeks.org/orientation-3-ordered-points/
+            // Basically just compares slopes of ab and bc
+
+            float orientation = (b.Y - a.Y) * (c.Y - b.Y) - (b.X - a.X) * (c.X - b.X);
+
+            // clockwise if positive, counter-clockwise if negative, colinear if zero
+            return orientation > 0 ? 1 : orientation < 0? 2 : 0;
+
         }
     }
 }

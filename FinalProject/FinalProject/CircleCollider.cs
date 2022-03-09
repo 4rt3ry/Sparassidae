@@ -45,14 +45,25 @@ namespace FinalProject
             throw new NotImplementedException();
         }
 
-        public override bool ContainsPoint(Vector2 point)
-        {
-            throw new NotImplementedException();
-        }
+        public override bool ContainsPoint(Vector2 point) => MathF.Pow(point.X - Position.X, 2) + MathF.Pow(point.Y - Position.Y, 2) <= radius * radius;
 
         public override bool Intersects(Collider other)
         {
-            throw new NotImplementedException();
+            if (other is CircleCollider)
+            {
+                CircleCollider cc = (CircleCollider)other;
+
+                // Check if distance is less than radius1 + radius2 without sqrt()
+                return MathF.Pow(cc.Position.X - Position.X, 2) + MathF.Pow(cc.Position.Y - Position.Y, 2) <= MathF.Pow(cc.radius + radius, 2);
+                
+            }
+            if (other is RectangleCollider)
+            {
+                RectangleCollider rc = (RectangleCollider)other;
+                return false; // TODO: https://stackoverflow.com/questions/1945632/2d-ball-collisions-with-corners#1945673
+            }
+
+            return false;
         }
     }
 }
