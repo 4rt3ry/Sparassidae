@@ -59,11 +59,15 @@ namespace FinalProject
                 return rc.Position.X + rc.Size.X > Position.X && rc.Position.X < Position.X + Size.X &&
                        rc.Position.Y + rc.size.Y > Position.Y && rc.Position.Y < Position.Y + Size.Y;
             }
-
-            else if (other is CircleCollider)
+            if (other is CircleCollider)
             {
                 CircleCollider cc = (CircleCollider)other;
                 return false; // TODO: https://stackoverflow.com/questions/1945632/2d-ball-collisions-with-corners#1945673
+            }
+            if (other is LineCollider)
+            {
+                LineCollider lc = (LineCollider)other;
+                return lc.Intersects(this);
             }
 
             return false;

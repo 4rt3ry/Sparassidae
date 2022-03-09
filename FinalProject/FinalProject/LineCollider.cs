@@ -29,7 +29,7 @@ namespace FinalProject
             get => parent.Position + ReltiveEndPosition;
             set
             {
-                ReltiveEndPosition = value - parent.Position;
+                ReltiveEndPosition = value - parent?.Position ?? Vector2.Zero;
             }
         }
         public Vector2 ReltiveEndPosition { get; private set; }
@@ -47,6 +47,14 @@ namespace FinalProject
         {
             this.endPosition = endPosition;
         }
+        /// <summary>
+        /// Specify a <see cref="LineCollider"/>'s starting point <see cref="Vector2"/> <paramref name="position"/> and 
+        /// ending point <see cref="Vector2"/>
+        /// </summary>
+        /// <param name="position">Starting point relative to origin (0, 0)</param>
+        /// <param name="endPosition">Ending point relative to origin (0, 0)</param>
+        /// <param name="isTrigger">Trigger colliders cannot cause physics collisions. For now, always default to true</param>
+        public LineCollider(Vector2 position, Vector2 endPosition) : this(null, position, endPosition) { }
 
         public override bool CheckCollision(GameObject other)
         {
@@ -73,7 +81,6 @@ namespace FinalProject
 
                 // See https://www.geeksforgeeks.org/orientation-3-ordered-points/
 
-
                 // Considering A is startpoint, B is endpoint, C is other startpoint, D is other endpoint
                 float orientationABC = Orientation(Position, EndPosition, lc.Position);
                 float orientationABD = Orientation(Position, EndPosition, lc.EndPosition);
@@ -94,14 +101,24 @@ namespace FinalProject
 
             if (other is RectangleCollider)
             {
+                // Converts rectangle into 4 line segments, checks if any intersect with this
+                // I'm lazy so I turn them into LineColliders :)
 
+                RectangleCollider rc = (RectangleCollider)other;
+                LineCollider top = new LineCollider(rc.Position, new Vector2(rc.Position.X + rc.Size.X, rc.Position.Y));
+                LineCollider right = new LineCollider(top.EndPosition, new Vector2(rc.Position.X + rc.Size.X, rc.Position.Y + rc.Size.Y));
+                LineCollider bottom = new LineCollider(right.EndPosition, new Vector2(rc.Position.X, rc.Position.Y + rc.Size.Y));
+                LineCollider left = new LineCollider(bottom.EndPosition, top.Position);
+
+                if (Intersects(top) || Intersects(right) || Intersects(bottom) || Intersects(left)) return true;
             }
 
 
             // Priority since player is a circleCollider
             if (other is CircleCollider)
             {
-
+                CircleCollider cc = (CircleCollider)other;
+                return false;
             }
 
             return false;

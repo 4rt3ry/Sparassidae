@@ -62,6 +62,11 @@ namespace FinalProject
                 RectangleCollider rc = (RectangleCollider)other;
                 return false; // TODO: https://stackoverflow.com/questions/1945632/2d-ball-collisions-with-corners#1945673
             }
+            if (other is LineCollider)
+            {
+                LineCollider lc = (LineCollider)other;
+                return false;
+            }
 
             return false;
         }
