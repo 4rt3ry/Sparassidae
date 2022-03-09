@@ -27,7 +27,7 @@ namespace FinalProject
             get => parent.Position + RelativePosition;
             set
             {
-                RelativePosition = value - parent.Position;
+                RelativePosition = value - parent?.Position?? Vector2.Zero;
             }
         }
 
@@ -62,14 +62,14 @@ namespace FinalProject
         /// </summary>
         /// <param name="position">Center point relative to parent <see cref="GameObject"/></param>
         /// <param name="isTrigger">Trigger colliders cannot cause physics collisions</param>
-        public Collider(Vector2 position, bool isTrigger) : this(new GameObject(), position, isTrigger) { }
+        public Collider(Vector2 position, bool isTrigger) : this(null, position, isTrigger) { }
 
         /// <summary>
         /// Specify the Collider's center point <see cref="Vector2"/> <paramref name="position"/> relative to the origin (0, 0). <br></br>
         /// By default, this Collider is a trigger and will not check for physics collisions.
         /// </summary>
         /// <param name="position">Center point relative to parent <see cref="GameObject"/></param>
-        public Collider(Vector2 position) : this(new GameObject(), position, true) { }
+        public Collider(Vector2 position) : this(position, true) { }
 
         /// <summary>
         /// Determines whether or not the current collider contains the specified point. A point on the 
