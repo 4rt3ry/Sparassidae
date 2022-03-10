@@ -58,8 +58,13 @@ namespace FinalProject
 
         public override bool CheckCollision(GameObject other)
         {
-            // For now, just call Intersects() with other's physics collider.
-            throw new NotImplementedException();
+            if (IsTrigger)
+            {
+                return Intersects(other.PhysicsCollider);
+            }
+            // Currently don't need physics collisions
+
+            return false;
         }
 
         public override bool ContainsPoint(Vector2 point)

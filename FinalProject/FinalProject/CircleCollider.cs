@@ -42,7 +42,14 @@ namespace FinalProject
             // If trigger, should just call Intersects() on other's physics collider
             // (possibly its first non-physics collider if doesn't exist). Otherwise,
             // use other GameObject's velocity to detect collision
-            throw new NotImplementedException();
+            if (IsTrigger)
+            {
+                return Intersects(other.PhysicsCollider);
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public override bool ContainsPoint(Vector2 point) => MathF.Pow(point.X - Position.X, 2) + MathF.Pow(point.Y - Position.Y, 2) <= radius * radius;
