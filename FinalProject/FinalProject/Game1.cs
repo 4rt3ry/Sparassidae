@@ -9,6 +9,8 @@ namespace FinalProject
         private GraphicsDeviceManager _graphics;
         private SpriteBatch batch;
 
+        private GameStateManager gameStateManager;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -18,7 +20,9 @@ namespace FinalProject
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            _graphics.PreferredBackBufferWidth = 1920;
+            _graphics.PreferredBackBufferHeight = 1080;
+            _graphics.ApplyChanges();
 
             base.Initialize();
         }
@@ -27,8 +31,18 @@ namespace FinalProject
         {
             batch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
-        
+            //Load menu and button content
+            //Initialized the gameStateManager
+            gameStateManager = new GameStateManager(
+                Content.Load<Texture2D>("Menu_Light"),
+                Content.Load<Texture2D>("Menu_noLight"), 
+                Content.Load<Texture2D>("Instruction"),
+                Content.Load<Texture2D>("Controls/Instruction"), 
+                Content.Load<Texture2D>("Controls/Instruction_hover"),
+                Content.Load<Texture2D>("Controls/Options"),
+                Content.Load<Texture2D>("Controls/Options_hover"),
+                Content.Load<Texture2D>("Controls/Play"),
+                Content.Load<Texture2D>("Controls/Play_hover"));
         }
 
         void PlayerMovement()
@@ -41,7 +55,7 @@ namespace FinalProject
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            gameStateManager.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
             base.Update(gameTime);
         }
@@ -50,7 +64,11 @@ namespace FinalProject
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            batch.Begin();
+
+            gameStateManager.Display(batch);
+
+            batch.End();
 
             base.Draw(gameTime);
         }
