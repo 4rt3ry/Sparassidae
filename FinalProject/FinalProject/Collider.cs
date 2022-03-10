@@ -24,7 +24,7 @@ namespace FinalProject
         /// </summary>
         public Vector2 Position
         {
-            get => parent.Position + RelativePosition;
+            get => parent?.Position?? Vector2.Zero + RelativePosition;
             set
             {
                 RelativePosition = value - parent?.Position?? Vector2.Zero;

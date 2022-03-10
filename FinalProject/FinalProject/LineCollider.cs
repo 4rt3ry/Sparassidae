@@ -26,7 +26,7 @@ namespace FinalProject
         /// </summary>
         public Vector2 EndPosition
         {
-            get => parent.Position + ReltiveEndPosition;
+            get => parent?.Position?? Vector2.Zero + ReltiveEndPosition;
             set
             {
                 ReltiveEndPosition = value - parent?.Position ?? Vector2.Zero;
