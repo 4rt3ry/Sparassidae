@@ -12,6 +12,7 @@ namespace FinalProject
         // Fields
 
         protected GameObject parent;
+        protected Texture2D debugTexture;
         protected bool isTrigger;
 
 
@@ -24,10 +25,10 @@ namespace FinalProject
         /// </summary>
         public Vector2 Position
         {
-            get => parent?.Position?? Vector2.Zero + RelativePosition;
+            get => (parent?.Position ?? Vector2.Zero) + RelativePosition;
             set
             {
-                RelativePosition = value - parent?.Position?? Vector2.Zero;
+                RelativePosition = value - (parent?.Position ?? Vector2.Zero);
             }
         }
 
@@ -91,5 +92,23 @@ namespace FinalProject
         /// </summary>
         /// <returns></returns>
         public abstract bool CheckCollision(GameObject other);
+
+        /// <summary>
+        /// Sets internal debug texture for the current <see cref="Collider"/>. Changing the <see cref="Collider"/>'s dimensions
+        /// will not resize the debug texture.
+        /// </summary>
+        /// <param name="gd"></param>
+        /// <param name="baseColor"></param>
+        public abstract void SetDebugTexture(GraphicsDevice gd, Color baseColor);
+
+        /// <summary>
+        /// Draws the <see cref="Collider"/>. If no debug texture is set, this will initialize
+        /// the debug texture using<br></br><see cref="SetDebugTexture(GraphicsDevice, Color)"/>. 
+        /// <see cref="Color"/> <paramref name="tint"/> will be used as its base color.
+        /// 
+        /// </summary>
+        /// <param name="sb"></param>
+        /// <param name="tint"></param>
+        public abstract void DrawDebugTexture(SpriteBatch sb, Color tint);
     }
 }

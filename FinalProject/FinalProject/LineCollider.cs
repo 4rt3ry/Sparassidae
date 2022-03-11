@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Text;
 
@@ -13,9 +15,7 @@ using System.Text;
 namespace FinalProject
 {
     sealed class LineCollider : Collider
-    {
-        // Fields
-        private Vector2 endPosition;
+    { 
 
         // Properties
 
@@ -26,13 +26,13 @@ namespace FinalProject
         /// </summary>
         public Vector2 EndPosition
         {
-            get => parent?.Position?? Vector2.Zero + ReltiveEndPosition;
+            get => (parent?.Position ?? Vector2.Zero) + RelativeEndPosition;
             set
             {
-                ReltiveEndPosition = value - parent?.Position ?? Vector2.Zero;
+                RelativeEndPosition = value - (parent?.Position ?? Vector2.Zero);
             }
         }
-        public Vector2 ReltiveEndPosition { get; private set; }
+        public Vector2 RelativeEndPosition { get; private set; }
 
         /// <summary>
         /// Specify a <see cref="LineCollider"/>'s starting point <see cref="Vector2"/> <paramref name="position"/> and 
@@ -45,7 +45,7 @@ namespace FinalProject
         /// <param name="isTrigger">Trigger colliders cannot cause physics collisions. For now, always default to true</param>
         public LineCollider(GameObject parent, Vector2 position, Vector2 endPosition) : base(parent, position, true)
         {
-            this.endPosition = endPosition;
+            RelativeEndPosition = endPosition;
         }
         /// <summary>
         /// Specify a <see cref="LineCollider"/>'s starting point <see cref="Vector2"/> <paramref name="position"/> and 
@@ -98,7 +98,7 @@ namespace FinalProject
                 }
 
                 // Check if any point lines on any either segment
-                if (ContainsPoint(lc.Position) || ContainsPoint(lc.endPosition) || lc.ContainsPoint(Position) || lc.ContainsPoint(endPosition))
+                if (ContainsPoint(lc.Position) || ContainsPoint(lc.EndPosition) || lc.ContainsPoint(Position) || lc.ContainsPoint(EndPosition))
                 {
                     return true;
                 }
@@ -108,11 +108,12 @@ namespace FinalProject
             {
                 // Converts rectangle into 4 line segments, checks if any intersect with this
                 // I'm lazy so I turn them into LineColliders :)
+                // Also remember that the rectangle's position is its center
 
                 RectangleCollider rc = (RectangleCollider)other;
-                LineCollider top = new LineCollider(rc.Position, new Vector2(rc.Position.X + rc.Size.X, rc.Position.Y));
-                LineCollider right = new LineCollider(top.EndPosition, new Vector2(rc.Position.X + rc.Size.X, rc.Position.Y + rc.Size.Y));
-                LineCollider bottom = new LineCollider(right.EndPosition, new Vector2(rc.Position.X, rc.Position.Y + rc.Size.Y));
+                LineCollider top = new LineCollider(rc.Position - rc.Size / 2, new Vector2(rc.Position.X + rc.Size.X / 2, rc.Position.Y - rc.Size.Y / 2));
+                LineCollider right = new LineCollider(top.EndPosition, new Vector2(rc.Position.X + rc.Size.X / 2, rc.Position.Y + rc.Size.Y / 2));
+                LineCollider bottom = new LineCollider(right.EndPosition, new Vector2(rc.Position.X - rc.Size.X / 2, rc.Position.Y + rc.Size.Y / 2));
                 LineCollider left = new LineCollider(bottom.EndPosition, top.Position);
 
                 if (Intersects(top) || Intersects(right) || Intersects(bottom) || Intersects(left)) return true;
@@ -123,6 +124,29 @@ namespace FinalProject
             if (other is CircleCollider)
             {
                 CircleCollider cc = (CircleCollider)other;
+
+                // Either of two endpoints lies in circle
+                if (cc.ContainsPoint(Position) || cc.ContainsPoint(EndPosition)) return true;
+
+                // Basically inflate line segment into a rectangle who's width = radius^2 and height = line length
+                // and checks if the center of the circle is inside this rectangle
+                // 
+                Vector2 perpDirection = new Vector2(Position.Y - EndPosition.Y, EndPosition.X - Position.X);
+                perpDirection.Normalize();
+
+                // 4 rectangle corners
+                Vector2 p1 = Position + perpDirection * cc.Radius;
+                Vector2 p2 = Position - perpDirection * cc.Radius;
+                Vector2 p3 = EndPosition - perpDirection * cc.Radius;
+                Vector2 p4 = EndPosition + perpDirection * cc.Radius;
+
+                if (SignedTriangleArea(cc.Position, p1, p2) > 0 && SignedTriangleArea(cc.Position, p2, p3) > 0 && 
+                    SignedTriangleArea(cc.Position, p3, p4) > 0 && SignedTriangleArea(cc.Position, p4, p1) > 0)
+                {
+                    return true;
+                }
+                
+
                 return false;
             }
 
@@ -140,6 +164,8 @@ namespace FinalProject
         /// </summary>
         private float CrossProduct(Vector2 a, Vector2 b) => a.X * b.Y - a.Y * b.X;
 
+        private float SignedTriangleArea(Vector2 a, Vector2 b, Vector2 c) => (a.X - c.X) * (b.Y - c.Y) - (b.X - c.X) * (a.Y - c.Y);
+
         /// <summary>
         /// Gets the orientation (either clockwise, counter-clockwise, or undefined) of three points.
         /// </summary>
@@ -152,11 +178,43 @@ namespace FinalProject
             // See https://www.geeksforgeeks.org/orientation-3-ordered-points/
             // Basically just compares slopes of ab and bc
 
-            float orientation = (b.Y - a.Y) * (c.Y - b.Y) - (b.X - a.X) * (c.X - b.X);
+            float orientation = (b.Y - a.Y) * (c.X - b.X) - (b.X - a.X) * (c.Y - b.Y);
 
             // clockwise if positive, counter-clockwise if negative, colinear if zero
             return orientation > 0 ? 1 : orientation < 0? 2 : 0;
 
+        }
+
+        public override void SetDebugTexture(GraphicsDevice gd, Color baseColor)
+        {
+            int length = (int)(EndPosition - Position).Length();
+            int strokeWeight = 2;
+
+            if (length == 0) return;
+
+            Texture2D texture = new Texture2D(gd, length, strokeWeight);
+            Color[] colorData = new Color[length * strokeWeight];
+
+            for(int i = 0; i < colorData.Length;i++)
+            {
+                colorData[i] = baseColor;
+            }
+
+            texture.SetData(colorData);
+            debugTexture = texture;
+        }
+
+        public override void DrawDebugTexture(SpriteBatch sb, Color tint)
+        {
+            if (debugTexture == null) return;
+            sb.Draw(debugTexture,
+                    Position,
+                    null,
+                    tint,
+                    MathF.Atan2(EndPosition.Y - Position.Y, EndPosition.X - Position.X),
+                    Vector2.Zero, 1,
+                    SpriteEffects.None,
+                    0);
         }
     }
 }

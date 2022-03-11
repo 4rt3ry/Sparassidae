@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,6 +20,7 @@ namespace FinalProject
         private float radius;
 
         // Properties
+        public float Radius => radius;
 
         /// <summary>
         /// Specify a <see cref="CircleCollider"/>'s center point <see cref="Vector2"/> <paramref name="position"/> relative to its  
@@ -67,15 +69,53 @@ namespace FinalProject
             if (other is RectangleCollider)
             {
                 RectangleCollider rc = (RectangleCollider)other;
-                return false; // TODO: https://stackoverflow.com/questions/1945632/2d-ball-collisions-with-corners#1945673
+                return rc.Intersects(this);
             }
             if (other is LineCollider)
             {
                 LineCollider lc = (LineCollider)other;
-                return false;
+                return lc.Intersects(this);
             }
 
             return false;
+        }
+
+        public override void SetDebugTexture(GraphicsDevice gd, Color baseColor)
+        {
+            int diameter = (int)radius * 2;
+            if (diameter == 0) return;
+
+            Texture2D texture = new Texture2D(gd, diameter, diameter);
+            Color[] colorData = new Color[diameter * diameter];
+
+            float radiussq = radius * radius;
+
+            // Loop over a square, setting only pixels on the circle's border to a color
+            for (int i = 0; i < diameter; i++)
+            {
+                for (int j = 0; j < diameter; j++)
+                {
+                    int index = i * diameter + j;
+                    Vector2 pos = new Vector2(i - radius, j - radius);
+                    if (Math.Abs(pos.LengthSquared() - radiussq + 100) < 100)
+                    {
+                        colorData[index] = baseColor;
+                    }
+                    else
+                    {
+                        colorData[index] = Color.Transparent;
+                    }
+                }
+            }
+
+            texture.SetData(colorData);
+            debugTexture = texture;
+        }
+
+        public override void DrawDebugTexture(SpriteBatch sb, Color tint)
+        {
+            if (debugTexture == null) return;
+            sb.Draw(debugTexture, Position - new Vector2(radius), tint);
         }
     }
 }

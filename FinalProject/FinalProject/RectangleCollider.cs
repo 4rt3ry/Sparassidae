@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -69,7 +70,30 @@ namespace FinalProject
             if (other is CircleCollider)
             {
                 CircleCollider cc = (CircleCollider)other;
-                return false; // TODO: https://stackoverflow.com/questions/1945632/2d-ball-collisions-with-corners#1945673
+
+                // Check if circle contains any corner points
+                if ((cc.Position - Position + Size / 2).LengthSquared() <= cc.Radius * cc.Radius || 
+                    (cc.Position - Position + Size / 2 - Vector2.UnitX * Size).LengthSquared() <= cc.Radius *cc.Radius ||
+                    (cc.Position - Position - Size / 2).LengthSquared() <= cc.Radius * cc.Radius ||
+                    (cc.Position - Position + Size / 2 - Vector2.UnitY * Size).LengthSquared() <= cc.Radius * cc.Radius)
+                {
+                    return true;
+                }
+
+                // Inflates left and right sides by circle's radius, checks if its centerpoint is contained
+                if (cc.Position.X >= Position.X - Size.X / 2 - cc.Radius && cc.Position.X <= Position.X + Size.X / 2 + cc.Radius &&
+                    cc.Position.Y >= Position.Y - Size.Y / 2 && cc.Position.Y <= Position.Y + size.Y / 2)
+                {
+                    return true;
+                }
+                // Inflates top and bottomm sides by circle's radius, checks if centerpoint is contained
+                if (cc.Position.X >= Position.X - Size.X / 2 && cc.Position.X <= Position.X + Size.X / 2&&
+                    cc.Position.Y >= Position.Y - Size.Y / 2 - cc.Radius && cc.Position.Y <= Position.Y + size.Y / 2 + cc.Radius)
+                {
+                    return true;
+                }
+
+                return false; 
             }
             if (other is LineCollider)
             {
@@ -80,6 +104,42 @@ namespace FinalProject
             return false;
         }
 
-        
+        public override void SetDebugTexture(GraphicsDevice gd, Color baseColor)
+        {
+            int width = (int)size.X;
+            int height = (int)size.Y;
+
+            if (width * height == 0) return;
+
+            Texture2D texture = new Texture2D(gd, width, height);
+            Color[] colorData = new Color[width * height];
+
+            int strokeWeight = 2;
+
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    int index = j * width + i;
+                    if (i <= strokeWeight || i >= width - strokeWeight || j <= strokeWeight || j >= height - strokeWeight)
+                    {
+                        colorData[index] = baseColor;
+                    }
+                    else
+                    {
+                        colorData[index] = Color.Transparent;
+                    }
+                }
+            }
+
+            texture.SetData(colorData);
+            debugTexture = texture;
+        }
+
+        public override void DrawDebugTexture(SpriteBatch sb, Color tint)
+        {
+            if (debugTexture == null) return;
+            sb.Draw(debugTexture, Position - Size / 2, tint);
+        }
     }
 }
