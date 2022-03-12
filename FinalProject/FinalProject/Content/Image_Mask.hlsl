@@ -1,4 +1,8 @@
-﻿// References: https://learn-monogame.github.io/tutorial/first-shader/
+﻿
+// Author: Arthur Powers 3/12/2022
+// Purpose: Image masking
+// 
+// References: https://learn-monogame.github.io/tutorial/first-shader/
 //             https://gamedev.stackexchange.com/questions/38118/best-way-to-mask-2d-sprites-in-xna
 
 #if OPENGL
