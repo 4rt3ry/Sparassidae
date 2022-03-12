@@ -1,15 +1,14 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 // Author:  Arthur Powers 3/4/2022
 // Purpose: Allows for both physics and non-physics collision detection
 //          between objects with a CircleCollider and any other collider.
 //
 // Restrictions: Physics collisions might not work with line colliders.
 // TODO: Implement method overrides
+
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace FinalProject
 {

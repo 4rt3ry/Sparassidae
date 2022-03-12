@@ -1,16 +1,14 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 // Author:  Arthur Powers 3/4/2022
 // Purpose: Allows for non-physics collision detection between objects with a
 //          LineCollider and any other collider.
 //
 // Restrictions: Might have to change the structure of a collider for this to work properly
 // TODO:         Implement method overrides
+
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace FinalProject
 {

@@ -1,9 +1,10 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-
+﻿
 // Author:  Arthur Powers 3/4/2022
 // Purpose: Contains only the necessary components for sub-colliders to draw from.
+
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
 
 namespace FinalProject
 {
