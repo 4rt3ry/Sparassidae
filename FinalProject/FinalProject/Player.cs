@@ -21,7 +21,17 @@ namespace FinalProject
     class Player
     {
         //Fields
-        PlayerState currentState;
+        //State management variables
+        private PlayerState currentState;
+        private float shockTimer;
+        private int numTargets;
+
+        //Speed Variables
+        private float currentSpeed;
+        private float walkingSpeed;
+        private float afraidSpeed;
+        private float shockSpeed;
+        private float chaseSpeed;
 
         //Properties
 
@@ -68,10 +78,15 @@ namespace FinalProject
 
                     break;
                 case PlayerState.AfraidState:
-
+                    
                     break;
                 case PlayerState.ShockState:
-
+                    if (shockTimer <= 0)
+                    {
+                        currentState = PlayerState.ChaseState;
+                        currentSpeed = chaseSpeed;
+                    }
+                    shockTimer -= dTime;
                     break;
                 case PlayerState.ChaseState:
 
@@ -80,6 +95,48 @@ namespace FinalProject
 
                     break;
             }
+        }
+
+        /// <summary>
+        /// Set player into afraid state
+        /// </summary>
+        public void SetAfraidState()
+        {
+            currentState = PlayerState.AfraidState;
+            currentSpeed = afraidSpeed;
+        }
+
+        /// <summary>
+        /// Put player into shock state
+        /// </summary>
+        public void SetShockState()
+        {
+            currentState = PlayerState.ShockState;
+            currentSpeed = shockSpeed;
+            shockTimer = 2f;
+            numTargets += 1;
+        }
+
+        /// <summary>
+        /// Called when an enemy loses a chase with the player, decreases number of targets attracted to player
+        /// If no enemies are targeting the player, it reverts to walking state
+        /// </summary>
+        public void DeAgro()
+        {
+            numTargets -= 1;
+            if(numTargets <= 0)
+            {
+                SetWalkingState();
+            }
+        }
+
+        /// <summary>
+        /// Sets the player state to the walking state
+        /// </summary>
+        public void SetWalkingState()
+        {
+            currentState = PlayerState.WalkingState;
+            currentSpeed = walkingSpeed;
         }
     }
 }
