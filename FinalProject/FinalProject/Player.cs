@@ -19,7 +19,7 @@ namespace FinalProject
         ChaseState,
         DeadState
     }
-    class Player
+    class Player : GameObject
     {
         //Fields
         //State management variables

@@ -21,12 +21,20 @@ namespace FinalProject
         PlayerDeadState,
         ReturnState
     }
-    class Enemy
+    class Enemy : GameObject
     {
         //Fields
         private EnemyState currentState;
         private Vector2 position;
         private float chaseWindupTimer;
+
+        //Roam Variables
+        private Vector2[] roamLocations;
+        private int targetRoam; //Int represent position in roam array that enemy is targeting
+        private int roamCheckDistance; //Distance to mark a checkpoint as 'checked'
+        private Boolean moving; //Is enemy currently moving?
+        private float moveTime; //Time enemy will be moving towards roam point
+        private float downTime; //Time enemy will wait before moving again
 
         //Distance at which a player starts a chase
         private float chaseStartDistance;
@@ -39,7 +47,36 @@ namespace FinalProject
         public Vector2 Position { get => position; set => position = value; }
 
         //Constructors
+        /// <summary>
+        /// Default constructor, DO NOT USE THIS ONE
+        /// </summary>
+        public Enemy()
+        {
+            //Starting state
+            currentState = EnemyState.RoamingState;
+        }
 
+        /// <summary>
+        /// Constructor for unmoving enemy, stands at starting position
+        /// </summary>
+        /// <param name="position">Starting/standing position</param>
+        public Enemy(Vector2 position)
+        {
+            currentState = EnemyState.RoamingState;
+            this.position = position;
+            this.roamLocations = null;
+        }
+
+        /// <summary>
+        /// Constructor that takes a starting position and an array of locations to roam to
+        /// </summary>
+        /// <param name="position">Starting position</param>
+        /// <param name="roamLocations">Array of locations for the enemy to roam to</param>
+        public Enemy(Vector2 position, Vector2[] roamLocations)
+        {
+            this.position = position;
+            this.roamLocations = roamLocations;
+        }
 
         //Methods
         /// <summary>
@@ -80,7 +117,10 @@ namespace FinalProject
             switch (currentState)
             {
                 case EnemyState.RoamingState:
-
+                    if(roamLocations != null)
+                    {
+                        
+                    }
                     break;
                 case EnemyState.InvestigateState:
                     // If player is within chase start distance
