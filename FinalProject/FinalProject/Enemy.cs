@@ -35,8 +35,11 @@ namespace FinalProject
         private float moveTime; //Time enemy will be moving towards roam point
         private float downTime; //Time enemy will wait before moving again
 
-        //Distance at which a player starts a chase
+        //Detection variables
+        private float detectionRadius;
         private float chaseStartDistance;
+        private LineCollider playerDetectionLink;
+        private Vector2 lastSeenPosition;
 
         //Reference holder for target player
         private Player target;
@@ -74,6 +77,11 @@ namespace FinalProject
         {
             this.position = position;
             this.roamLocations = roamLocations;
+        }
+
+        public Enemy(Vector2 position, Vector2[] roamLocations, float detectionRadius) : this(position, roamLocations)
+        {
+            this.detectionRadius = detectionRadius;
         }
 
         //Methods
@@ -184,16 +192,21 @@ namespace FinalProject
                     }
                     break;
                 case EnemyState.InvestigateState:
+
+
+                    //Movement code
+
+                    //Detection code
+                    ///Run something here that updates the Enemy/Player link (needs additional help)
+                    
                     // If player is within chase start distance
                     // THIS IS TEMP CODE, WE CAN REPLACE WITH RAYTRACING/SENSOR COLLISIONS
-                    if (Math.Abs((position - target.Position).Length()) <= chaseStartDistance) {
+                    if (Math.Abs((position - target.Position).Length()) <= chaseStartDistance)
+                    {
                         currentState = EnemyState.ChaseWindupState;
                         chaseWindupTimer = 4f;
                         target.SetShockState();
                     }
-
-                    //Movement code
-
                     break;
                 case EnemyState.ChaseWindupState:
                     chaseWindupTimer -= dTime;
@@ -217,6 +230,23 @@ namespace FinalProject
                     // Path back to start
                     break;
             }
+
+            //This code always runs regardless of state
+
+            //If the enemy is in a state where there is a target, the detection code will run
+            //This updates the enemy/player link as well as the last seen position if the player is in vision
+            if(target != null)
+            {
+                playerDetectionLink.EndPosition = target.Position;
+                playerDetectionLink.Position = position;
+                //SOME SORT OF DETECTION OF LINES COLLISION WITH MAP OBJECTS
+
+                //if no collision with map objects
+                if (true)
+                {
+                    lastSeenPosition = playerDetectionLink.EndPosition;
+                }
+            }
         }
 
         /// <summary>
@@ -229,6 +259,7 @@ namespace FinalProject
             this.target = p;
             currentState = EnemyState.InvestigateState;
             p.SetAfraidState();
+            this.playerDetectionLink = new LineCollider(position, p.Position);
         }
 
         /// <summary>
