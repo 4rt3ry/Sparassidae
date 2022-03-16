@@ -25,6 +25,9 @@ namespace FinalProject
         //Fields
         private EnemyState currentState;
 
+        //Reference holder for target player
+        private Player target;
+
         //Properties
         public EnemyState CurrentState { get => currentState;  }
 
@@ -88,6 +91,28 @@ namespace FinalProject
 
                     break;
             }
+        }
+
+        /// <summary>
+        /// Ran when player collides with farthest detector
+        /// Gives the enemy a reference to the player
+        /// </summary>
+        /// <param name="p">Player p that is encountered</param>
+        public void StartPlayerEncounter(Player p)
+        {
+            this.target = p;
+            currentState = EnemyState.InvestigateState;
+            p.SetAfraidState();
+        }
+
+        /// <summary>
+        /// Ends the encounter with the player
+        /// </summary>
+        public void EndPlayerEncounter()
+        {
+            currentState = EnemyState.RoamingState;
+            target.DeAgro();
+            target = null;
         }
     }
 }

@@ -104,6 +104,7 @@ namespace FinalProject
         {
             currentState = PlayerState.AfraidState;
             currentSpeed = afraidSpeed;
+            numTargets += 1;
         }
 
         /// <summary>
@@ -114,7 +115,6 @@ namespace FinalProject
             currentState = PlayerState.ShockState;
             currentSpeed = shockSpeed;
             shockTimer = 2f;
-            numTargets += 1;
         }
 
         /// <summary>
