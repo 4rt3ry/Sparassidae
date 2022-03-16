@@ -151,5 +151,13 @@ namespace FinalProject
             currentState = PlayerState.WalkingState;
             currentSpeed = walkingSpeed;
         }
+
+        /// <summary>
+        /// Ran when player is caught, sets them to dead
+        /// </summary>
+        public void SetDeadState()
+        {
+            currentState = PlayerState.DeadState;
+        }
     }
 }

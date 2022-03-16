@@ -240,5 +240,16 @@ namespace FinalProject
             target.DeAgro();
             target = null;
         }
+
+        /// <summary>
+        /// Ran on player physics body collision with enemy
+        /// Causes player to die
+        /// (Runs players 'get caught' function)
+        /// </summary>
+        public void CatchPlayer()
+        {
+            currentState = EnemyState.PlayerDeadState;
+            target.SetDeadState();
+        }
     }
 }
