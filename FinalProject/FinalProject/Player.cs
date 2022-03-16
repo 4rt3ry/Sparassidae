@@ -26,7 +26,6 @@ namespace FinalProject
         private PlayerState currentState;
         private float shockTimer;
         private int numTargets;
-        private Vector2 position;
 
         //Speed Variables
         private float currentSpeed;
@@ -36,7 +35,6 @@ namespace FinalProject
         private float chaseSpeed;
 
         //Properties
-        public Vector2 Position { get => position; set => position = value; }
 
         //Constructors
         public Player()

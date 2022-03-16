@@ -25,7 +25,6 @@ namespace FinalProject
     {
         //Fields
         private EnemyState currentState;
-        private Vector2 position;
         private float chaseWindupTimer;
 
         //Roam Variables
@@ -44,7 +43,6 @@ namespace FinalProject
 
         //Properties
         public EnemyState CurrentState { get => currentState;  }
-        public Vector2 Position { get => position; set => position = value; }
 
         //Constructors
         /// <summary>
@@ -117,9 +115,20 @@ namespace FinalProject
             switch (currentState)
             {
                 case EnemyState.RoamingState:
+                    //No locations (Stand still)
                     if(roamLocations != null)
                     {
                         
+                    }
+                    //One location (Roam about a single point)
+                    if (roamLocations.Length == 1)
+                    {
+
+                    }
+                    //Multiple locations (Roam between locations)
+                    if(roamLocations.Length > 1)
+                    {
+
                     }
                     break;
                 case EnemyState.InvestigateState:
