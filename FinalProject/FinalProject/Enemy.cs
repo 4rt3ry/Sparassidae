@@ -29,7 +29,7 @@ namespace FinalProject
 
         //Roam Variables
         private Vector2[] roamLocations;
-        private int targetRoam; //Int represent position in roam array that enemy is targeting
+        private int roamTarget; //Int represent position in roam array that enemy is targeting
         private int roamCheckDistance; //Distance to mark a checkpoint as 'checked'
         private Boolean moving; //Is enemy currently moving?
         private float moveTime; //Time enemy will be moving towards roam point
@@ -123,12 +123,64 @@ namespace FinalProject
                     //One location (Roam about a single point)
                     if (roamLocations.Length == 1)
                     {
+                        //Movement code
+                        if (moving)
+                        {
+                            //Move enemy
 
+                            //Time Increment
+                            moveTime -= dTime;
+                            if (moveTime <= 0)
+                            {
+                                downTime = 1f;
+                                moving = false;
+                            }
+                        }
+                        else
+                        {
+                            //Time Increment
+                            downTime -= dTime;
+                            if (downTime <= 0)
+                            {
+                                moveTime = 1.5f;
+                                moving = true;
+                            }
+                        }
                     }
                     //Multiple locations (Roam between locations)
                     if(roamLocations.Length > 1)
                     {
+                        //Check distance to target pos
+                        if (Math.Abs((position - roamLocations[roamTarget]).Length()) <= roamCheckDistance)
+                        {
+                            //Increment and ensure target location is within array
+                            roamTarget += 1;
+                            roamTarget = roamTarget % (roamLocations.Length - 1);
+                        }
 
+                        //Movement code
+                        if (moving)
+                        {
+                            //Move enemy
+
+                            //Time Increment
+                            moveTime -= dTime;
+                            if (moveTime <= 0)
+                            {
+                                downTime = 1f;
+                                moving = false;
+                            }
+                        }
+                        else
+                        {
+                            //Time Increment
+                            downTime -= dTime;
+                            if(downTime <= 0)
+                            {
+                                moveTime = 1.5f;
+                                moving = true;
+                            }
+                        }
                     }
                     break;
                 case EnemyState.InvestigateState:
@@ -139,6 +191,9 @@ namespace FinalProject
                         chaseWindupTimer = 4f;
                         target.SetShockState();
                     }
+
+                    //Movement code
+
                     break;
                 case EnemyState.ChaseWindupState:
                     chaseWindupTimer -= dTime;
@@ -165,7 +220,7 @@ namespace FinalProject
         }
 
         /// <summary>
-        /// Ran when player collides with farthest detector
+        /// Triggered on player collision with farthest detector
         /// Gives the enemy a reference to the player
         /// </summary>
         /// <param name="p">Player p that is encountered</param>
