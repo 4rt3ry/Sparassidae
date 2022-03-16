@@ -41,7 +41,15 @@ namespace FinalProject
         //Constructors
         public Player()
         {
+            //Set standards for different speeds
+            walkingSpeed = 0;
+            afraidSpeed = 0;
+            shockSpeed = 0;
+            chaseSpeed = 0;
 
+            //Initialize variables
+            currentSpeed = walkingSpeed;
+            currentState = PlayerState.WalkingState;
         }
 
         //Methods
