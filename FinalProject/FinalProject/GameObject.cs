@@ -16,14 +16,19 @@ namespace FinalProject
     class GameObject
     {
         //Fields
-        protected Vector2 position;
-        Collider physicsCollider;
-        List<Collider> Colliders;
+        protected Vector2 _position;
+        Collider _physicsCollider;
+        List<Collider> _colliders;
 
         //Properties
-        public Vector2 Position { get => position; set => position = value; }
-        internal Collider PhysicsCollider { get => physicsCollider; set => physicsCollider = value; }
-        internal List<Collider> Colliders1 { get => Colliders; set => Colliders = value; }
+        public Vector2 Position { get => _position; set => _position = value; }
+
+        public float X { get => _position.X; set => _position.X = value; }
+        public float Y { get => _position.Y; set => _position.Y = value; }
+
+
+        internal Collider PhysicsCollider { get => _physicsCollider; set => _physicsCollider = value; }
+        internal List<Collider> Colliders { get => _colliders; set => _colliders = value; }
 
         //Constructors
 
