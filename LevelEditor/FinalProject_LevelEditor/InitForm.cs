@@ -10,12 +10,17 @@ using System.Windows.Forms;
 
 namespace FinalProject_LevelEditor
 {
-    public partial class Form1 : Form
+    public partial class InitForm : Form
     {
-        public Form1()
+        public InitForm()
         {
             InitializeComponent();
         }
 
+        private void CreateLevelButton_Click(object sender, EventArgs e)
+        {
+            LevelEditor newLevel = new LevelEditor(Convert.ToInt32(WidthTextBox.Text), Convert.ToInt32(HeightTextBox.Text));
+            newLevel.Show();
+        }
     }
 }
