@@ -98,7 +98,7 @@ namespace FinalProject
             if (wDown) { addVelocity += new Vector2(0, speed); }
             if (sDown) { addVelocity += new Vector2(0, -speed); }
 
-            //adds acceleration by lerping
+            //adds acceleration/smoothing by lerping
             playerObject.Velocity = Lerp(playerObject.Velocity, addVelocity,.1f);
 
             playerObject.PlayerPosition += playerObject.Velocity;
