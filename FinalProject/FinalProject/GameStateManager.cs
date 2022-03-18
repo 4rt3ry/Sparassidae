@@ -31,6 +31,9 @@ namespace FinalProject
         private float menuLightTimer;
         private bool isMenuLighted;
 
+        //GameState fields
+        Map map;
+
         //Texture2D for menu and buttons
         private Texture2D menuNoLight_Texture;
         private Texture2D menuLight_Texture;
@@ -114,7 +117,7 @@ namespace FinalProject
                     break;
 
                 case GameState.PlayState:
-
+                    map.Draw(batch);
                     break;
                 case GameState.PauseState:
 
@@ -174,7 +177,7 @@ namespace FinalProject
                     break;
 
                 case GameState.PlayState:
-
+                    //map.Update(dTime);
                     break;
                 case GameState.PauseState:
 
