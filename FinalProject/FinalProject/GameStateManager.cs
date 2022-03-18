@@ -89,6 +89,40 @@ namespace FinalProject
             switch (currentState)
             {
                 case GameState.IntroState:
+                    break;
+
+                case GameState.MenuState:
+               
+                    break;
+
+                case GameState.OptionState:
+                    break;
+
+                case GameState.InstructionState:
+                    break;
+
+                case GameState.PlayState:
+                    map.Draw(batch);
+                    break;
+                case GameState.PauseState:
+
+                    break;
+                case GameState.GameOverState:
+
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Draw UI and things that are not effected by Light system
+        /// </summary>
+        /// <param name="batch"></param>
+        public void DrawUI(SpriteBatch batch)
+        {
+            //Current state actions
+            switch (currentState)
+            {
+                case GameState.IntroState:
                     batch.Draw(instruction_Texture,
                         new Rectangle(0, 0, instruction_Texture.Width, instruction_Texture.Height),
                         Color.White);
@@ -96,7 +130,7 @@ namespace FinalProject
 
                 case GameState.MenuState:
                     //Switch between no light menu and lighted menu background
-                    if(isMenuLighted)
+                    if (isMenuLighted)
                     {
                         batch.Draw(menuLight_Texture,
                         new Rectangle(0, 0, menuLight_Texture.Width, menuLight_Texture.Height),
@@ -108,9 +142,9 @@ namespace FinalProject
                         new Rectangle(0, 0, menuNoLight_Texture.Width, menuNoLight_Texture.Height),
                         Color.White);
                     }
-                    
+
                     //Draw the buttons
-                    for(int i = 0; i < buttons.Count; i++)
+                    for (int i = 0; i < buttons.Count; i++)
                     {
                         buttons[i].Draw(batch);
                     }

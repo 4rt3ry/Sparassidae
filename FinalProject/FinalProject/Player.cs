@@ -8,8 +8,8 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using Penumbra;
 
 namespace FinalProject
 {
@@ -36,10 +36,15 @@ namespace FinalProject
         private float shockSpeed;
         private float chaseSpeed;
 
+        //Light
+        private Spotlight flashlight;
+
         Vector2 velocity = new Vector2(0, 0);
 
         public PlayerState CurrentState { get => currentState; set => currentState = value; }
         public Vector2 Velocity { get => velocity; set => velocity = value; }
+        public Spotlight Flashlight1 { get => flashlight; set => flashlight = value; }
+
 
         //Constructors
         public Player(): base()
@@ -54,6 +59,13 @@ namespace FinalProject
             currentSpeed = walkingSpeed;
             currentState = PlayerState.WalkingState;
 
+            //Creaet the spotlight
+            Flashlight1 = new Spotlight
+            {
+                Position = this.Position,
+                Scale = new Vector2(50), //Range of the light source
+                ShadowType = ShadowType.Solid
+            };
         }
 
 

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
 using System;
+using Penumbra;
 namespace FinalProject
 {
     public class Game1 : Game
@@ -11,6 +12,7 @@ namespace FinalProject
         private SpriteBatch batch;
 
         private GameStateManager gameStateManager;
+        private PenumbraComponent penumbra;
 
         Player playerObject;
         public Game1()
@@ -27,6 +29,13 @@ namespace FinalProject
             _graphics.ApplyChanges();
 
             base.Initialize();
+
+            penumbra = new PenumbraComponent(this)
+            {
+                AmbientColor = Color.Black
+            };
+          
+            penumbra.Initialize();
         }
 
         protected override void LoadContent()
@@ -117,12 +126,21 @@ namespace FinalProject
 
         protected override void Draw(GameTime gameTime)
         {
+            // Everything after this call will be affected by the lighting system.
+            penumbra.BeginDraw();
+
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             batch.Begin();
-
             gameStateManager.Display(batch);
+            batch.End();
 
+            // Draw the actual lit scene.
+            penumbra.Draw(gameTime);
+
+            // Draw stuff that is not affected by lighting (UI, etc).
+            batch.Begin();
+            gameStateManager.DrawUI(batch);
             batch.End();
 
             base.Draw(gameTime);
