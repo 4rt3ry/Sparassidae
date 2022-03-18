@@ -35,16 +35,7 @@ namespace FinalProject
 
             //Load menu and button content
             //Initialized the gameStateManager
-            gameStateManager = new GameStateManager(
-                Content.Load<Texture2D>("Menu_Light"),
-                Content.Load<Texture2D>("Menu_noLight"), 
-                Content.Load<Texture2D>("Instruction"),
-                Content.Load<Texture2D>("Controls/Instruction"), 
-                Content.Load<Texture2D>("Controls/Instruction_hover"),
-                Content.Load<Texture2D>("Controls/Options"),
-                Content.Load<Texture2D>("Controls/Options_hover"),
-                Content.Load<Texture2D>("Controls/Play"),
-                Content.Load<Texture2D>("Controls/Play_hover"));
+            gameStateManager = new GameStateManager(Content);
 
             //creates the player
             playerObject = new Player();

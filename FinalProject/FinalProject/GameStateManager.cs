@@ -9,6 +9,9 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
+using Penumbra;
+using Microsoft.Xna.Framework.Content;
 
 namespace FinalProject
 {
@@ -39,6 +42,10 @@ namespace FinalProject
         private Texture2D menuLight_Texture;
         private Texture2D instruction_Texture;
 
+        private Button playButton;
+        private Button optionButton;
+        private Button instructionButton;
+
         //Buttons
         private List<Button> buttons = new List<Button>();
 
@@ -47,10 +54,7 @@ namespace FinalProject
         public GameState CurrentState { get => currentState; } 
 
         //Constructors
-        public GameStateManager(Texture2D menuNoLight_Texture, Texture2D menuLight_Texture,
-            Texture2D instruction_Texture, Texture2D buttonInstruction_Texture,
-            Texture2D buttonInstructionHover_Texture, Texture2D buttonOptions_Texture,
-            Texture2D buttonOptionsHover_Texture, Texture2D buttonPlay_Texture, Texture2D buttonPlayHover_Texture)
+        public GameStateManager(ContentManager content)
         {
             //Set intro timer
             introTimer = 2f;
@@ -59,14 +63,12 @@ namespace FinalProject
             isMenuLighted = false;
 
             //Load Texture2d For menu and buttons
-            this.menuLight_Texture = menuLight_Texture;
-            this.menuNoLight_Texture = menuNoLight_Texture;
-            this.instruction_Texture = instruction_Texture;
+            LoadMenuContent(content);
 
             //Initialize buttons
-            buttons.Add(new Button(buttonPlay_Texture, buttonPlayHover_Texture, 1500, 700));
-            buttons.Add(new Button(buttonOptions_Texture, buttonOptionsHover_Texture, 1500, 800));
-            buttons.Add(new Button(buttonInstruction_Texture, buttonInstructionHover_Texture, 1500, 900));
+            buttons.Add(playButton);
+            buttons.Add(optionButton);
+            buttons.Add(instructionButton);
         }
 
         //Methods
@@ -186,6 +188,18 @@ namespace FinalProject
 
                     break;
             }
+        }
+
+
+        public void LoadMenuContent(ContentManager content)
+        {
+            menuLight_Texture = content.Load<Texture2D>("Menu_Light");
+            menuNoLight_Texture = content.Load<Texture2D>("Menu_noLight");
+            instruction_Texture = content.Load<Texture2D>("Instruction");
+
+            playButton = new Button(content.Load<Texture2D>("Controls/Play"), content.Load<Texture2D>("Controls/Play_hover"), 1500, 700);
+            optionButton = new Button(content.Load<Texture2D>("Controls/Options"), content.Load<Texture2D>("Controls/Options_hover"), 1500, 800);
+            instructionButton = new Button(content.Load<Texture2D>("Controls/Instruction"), content.Load<Texture2D>("Controls/Instruction_hover"), 1500, 900);
         }
     }
 }
