@@ -66,9 +66,15 @@ namespace FinalProject
             LoadMenuContent(content);
 
             //Initialize buttons
+
+            instructionButton.Click += Click_ToInstruction;
+            optionButton.Click += Click_ToOption;
+            playButton.Click += Click_ToPlay;
+
             buttons.Add(playButton);
             buttons.Add(optionButton);
             buttons.Add(instructionButton);
+
         }
 
         //Methods
@@ -176,6 +182,7 @@ namespace FinalProject
                     break;
 
                 case GameState.InstructionState:
+                    
                     break;
 
                 case GameState.PlayState:
@@ -190,7 +197,10 @@ namespace FinalProject
             }
         }
 
-
+        /// <summary>
+        /// Load the menu contents and create main buttons
+        /// </summary>
+        /// <param name="content"></param>
         public void LoadMenuContent(ContentManager content)
         {
             menuLight_Texture = content.Load<Texture2D>("Menu_Light");
@@ -200,6 +210,36 @@ namespace FinalProject
             playButton = new Button(content.Load<Texture2D>("Controls/Play"), content.Load<Texture2D>("Controls/Play_hover"), 1500, 700);
             optionButton = new Button(content.Load<Texture2D>("Controls/Options"), content.Load<Texture2D>("Controls/Options_hover"), 1500, 800);
             instructionButton = new Button(content.Load<Texture2D>("Controls/Instruction"), content.Load<Texture2D>("Controls/Instruction_hover"), 1500, 900);
+        }
+
+        /// <summary>
+        /// Change the state to Instruction state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+       public void Click_ToInstruction(object sender, System.EventArgs e)
+        {
+            currentState = GameState.InstructionState;
+        }
+
+        /// <summary>
+        /// Change the state to Option
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void Click_ToOption(object sender, System.EventArgs e)
+        {
+            currentState = GameState.OptionState;
+        }
+
+        /// <summary>
+        /// Change the state to Play
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void Click_ToPlay(object sender, System.EventArgs e)
+        {
+            currentState = GameState.OptionState;
         }
     }
 }
