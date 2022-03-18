@@ -39,10 +39,8 @@ namespace FinalProject
         //Light
         private Spotlight flashlight;
 
-        Vector2 velocity = new Vector2(0, 0);
-
         public PlayerState CurrentState { get => currentState; set => currentState = value; }
-        public Vector2 Velocity { get => velocity; set => velocity = value; }
+  
         public Spotlight Flashlight1 { get => flashlight; set => flashlight = value; }
 
 
