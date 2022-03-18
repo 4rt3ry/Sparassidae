@@ -101,8 +101,8 @@ namespace FinalProject
             //adds acceleration/smoothing by lerping
             playerObject.Velocity = Lerp(playerObject.Velocity, addVelocity,.1f);
 
-            playerObject.PlayerPosition += playerObject.Velocity;
-            //Debug.WriteLine(playerObject.PlayerPosition);
+            playerObject.Position += playerObject.Velocity;
+            //Debug.WriteLine(playerObject.Position);
             //Debug.WriteLine("add velocity is " + addVelocity);
 
         }
