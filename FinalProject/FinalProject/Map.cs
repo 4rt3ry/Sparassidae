@@ -35,11 +35,11 @@ namespace FinalProject
         //Constructors
 
 
-        public Map(Player player, Effect maskEffect, Texture2D stoneRevealMask)
+        public Map(Player player/*, Effect maskEffect, Texture2D stoneRevealMask*/)
         {
             _player = player;
-            _maskEffect = maskEffect;
-            _stoneRevealMask = stoneRevealMask;
+            //_maskEffect = maskEffect;
+            //_stoneRevealMask = stoneRevealMask;
 
             _mapColliders = new List<Collider>();
             _enemies = new List<Enemy>();
@@ -53,7 +53,7 @@ namespace FinalProject
         /// <param name="batch"></param>
         public void Draw(SpriteBatch batch)
         {
-
+            _player.Display(batch);
         }
 
         /// <summary>

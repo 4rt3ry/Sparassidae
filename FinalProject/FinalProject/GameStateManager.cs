@@ -26,7 +26,7 @@ namespace FinalProject
     class GameStateManager
     {
         //Fields
-        private GameState currentState;
+        private GameState currentState = GameState.PlayState;
         private float introTimer;
         private float menuLightTimer;
         private bool isMenuLighted;
@@ -47,7 +47,7 @@ namespace FinalProject
         public GameState CurrentState { get => currentState; } 
 
         //Constructors
-        public GameStateManager(Texture2D menuNoLight_Texture, Texture2D menuLight_Texture,
+        public GameStateManager(Map map, Texture2D menuNoLight_Texture, Texture2D menuLight_Texture,
             Texture2D instruction_Texture, Texture2D buttonInstruction_Texture,
             Texture2D buttonInstructionHover_Texture, Texture2D buttonOptions_Texture,
             Texture2D buttonOptionsHover_Texture, Texture2D buttonPlay_Texture, Texture2D buttonPlayHover_Texture)
@@ -67,6 +67,8 @@ namespace FinalProject
             buttons.Add(new Button(buttonPlay_Texture, buttonPlayHover_Texture, 1500, 700));
             buttons.Add(new Button(buttonOptions_Texture, buttonOptionsHover_Texture, 1500, 800));
             buttons.Add(new Button(buttonInstruction_Texture, buttonInstructionHover_Texture, 1500, 900));
+
+            this.map = map;
         }
 
         //Methods

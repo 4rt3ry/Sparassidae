@@ -12,6 +12,8 @@ namespace FinalProject
 
         private GameStateManager gameStateManager;
 
+        private Map map;
+
         Player playerObject;
         public Game1()
         {
@@ -26,6 +28,9 @@ namespace FinalProject
             _graphics.PreferredBackBufferHeight = 1080;
             _graphics.ApplyChanges();
 
+            playerObject = new Player();
+            map = new Map(playerObject);
+
             base.Initialize();
         }
 
@@ -36,6 +41,7 @@ namespace FinalProject
             //Load menu and button content
             //Initialized the gameStateManager
             gameStateManager = new GameStateManager(
+                map,
                 Content.Load<Texture2D>("Menu_Light"),
                 Content.Load<Texture2D>("Menu_noLight"), 
                 Content.Load<Texture2D>("Instruction"),
@@ -47,7 +53,7 @@ namespace FinalProject
                 Content.Load<Texture2D>("Controls/Play_hover"));
 
             //creates the player
-            playerObject = new Player();
+            //playerObject = new Player();
 
         }
         float Lerp(float firstFloat, float secondFloat, float by)

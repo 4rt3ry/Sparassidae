@@ -54,6 +54,8 @@ namespace FinalProject
             currentSpeed = walkingSpeed;
             currentState = PlayerState.WalkingState;
 
+            PhysicsCollider = new CircleCollider(this, new Vector2(0, 0), 10f, true);
+            
         }
 
 
@@ -65,6 +67,9 @@ namespace FinalProject
         /// <param name="batch">Sprite batch</param>
         public void Display(SpriteBatch batch)
         {
+            PhysicsCollider.SetDebugTexture(batch.GraphicsDevice, Color.White);
+            PhysicsCollider.DrawDebugTexture(batch, Color.White);
+
             switch (CurrentState)
             {
                 case PlayerState.WalkingState:
