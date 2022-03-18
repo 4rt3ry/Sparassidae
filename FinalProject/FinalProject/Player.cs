@@ -78,11 +78,8 @@ namespace FinalProject
             //Initialize variables
             currentSpeed = walkingSpeed;
             currentState = PlayerState.WalkingState;
-        }
+            playerPosition = new Vector2(0, 0);
 
-        public Player()
-        {
-            playerPosition = new Vector2(0,0);
         }
 
 
