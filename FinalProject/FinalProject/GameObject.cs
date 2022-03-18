@@ -16,7 +16,7 @@ namespace FinalProject
     class GameObject
     {
         //Fields
-        Vector2 position;
+        protected Vector2 position;
         Collider physicsCollider;
         List<Collider> Colliders;
 

@@ -3,6 +3,7 @@
  * Contains all code relevant to player
  */
 
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -20,10 +21,20 @@ namespace FinalProject
         ChaseState,
         DeadState
     }
-    class Player
+    class Player : GameObject
     {
         //Fields
-        PlayerState currentState;
+        //State management variables
+        private PlayerState currentState;
+        private float shockTimer;
+        private int numTargets;
+
+        //Speed Variables
+        private float currentSpeed;
+        private float walkingSpeed;
+        private float afraidSpeed;
+        private float shockSpeed;
+        private float chaseSpeed;
 
         //Properties
         Vector2 playerPosition;
@@ -56,6 +67,18 @@ namespace FinalProject
         public Vector2 Velocity { get => velocity; set => velocity = value; }
 
         //Constructors
+        public Player()
+        {
+            //Set standards for different speeds
+            walkingSpeed = 0;
+            afraidSpeed = 0;
+            shockSpeed = 0;
+            chaseSpeed = 0;
+
+            //Initialize variables
+            currentSpeed = walkingSpeed;
+            currentState = PlayerState.WalkingState;
+        }
 
         public Player()
         {
@@ -104,10 +127,15 @@ namespace FinalProject
 
                     break;
                 case PlayerState.AfraidState:
-
+                    
                     break;
                 case PlayerState.ShockState:
-
+                    if (shockTimer <= 0)
+                    {
+                        currentState = PlayerState.ChaseState;
+                        currentSpeed = chaseSpeed;
+                    }
+                    shockTimer -= dTime;
                     break;
                 case PlayerState.ChaseState:
 
@@ -116,6 +144,56 @@ namespace FinalProject
 
                     break;
             }
+        }
+
+        /// <summary>
+        /// Set player into afraid state
+        /// </summary>
+        public void SetAfraidState()
+        {
+            currentState = PlayerState.AfraidState;
+            currentSpeed = afraidSpeed;
+            numTargets += 1;
+        }
+
+        /// <summary>
+        /// Put player into shock state
+        /// </summary>
+        public void SetShockState()
+        {
+            currentState = PlayerState.ShockState;
+            currentSpeed = shockSpeed;
+            shockTimer = 2f;
+        }
+
+        /// <summary>
+        /// Called when an enemy loses a chase with the player, decreases number of targets attracted to player
+        /// If no enemies are targeting the player, it reverts to walking state
+        /// </summary>
+        public void DeAgro()
+        {
+            numTargets -= 1;
+            if(numTargets <= 0)
+            {
+                SetWalkingState();
+            }
+        }
+
+        /// <summary>
+        /// Sets the player state to the walking state
+        /// </summary>
+        public void SetWalkingState()
+        {
+            currentState = PlayerState.WalkingState;
+            currentSpeed = walkingSpeed;
+        }
+
+        /// <summary>
+        /// Ran when player is caught, sets them to dead
+        /// </summary>
+        public void SetDeadState()
+        {
+            currentState = PlayerState.DeadState;
         }
     }
 }
