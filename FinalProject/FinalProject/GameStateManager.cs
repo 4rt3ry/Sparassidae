@@ -177,7 +177,7 @@ namespace FinalProject
                     break;
 
                 case GameState.PlayState:
-                    map.Update(dTime);
+                    //map.Update(dTime);
                     break;
                 case GameState.PauseState:
 
