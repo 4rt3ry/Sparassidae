@@ -102,8 +102,8 @@ namespace FinalProject
             playerObject.Velocity = Lerp(playerObject.Velocity, addVelocity,.1f);
 
             playerObject.PlayerPosition += playerObject.Velocity;
-            Debug.WriteLine(playerObject.PlayerPosition);
-            Debug.WriteLine("add velocity is " + addVelocity);
+            //Debug.WriteLine(playerObject.PlayerPosition);
+            //Debug.WriteLine("add velocity is " + addVelocity);
 
         }
 
