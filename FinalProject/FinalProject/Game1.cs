@@ -83,17 +83,24 @@ namespace FinalProject
             bool sDown = kb.IsKeyDown(Keys.S);
 
 
-            Vector2 addVelocity = new Vector2(0, 0);
-            if (aDown) { addVelocity += new Vector2(-speed, 0); }
-            if (dDown) { addVelocity += new Vector2(speed, 0); }
-            if (wDown) { addVelocity += new Vector2(0, speed); }
-            if (sDown) { addVelocity += new Vector2(0, -speed); }
+            Vector2 addVelocity = Vector2.Zero;
+            if (aDown) { addVelocity += -Vector2.UnitX; }
+            if (dDown) { addVelocity += Vector2.UnitX; }
+            if (wDown) { addVelocity += -Vector2.UnitY; }
+            if (sDown) { addVelocity += Vector2.UnitY; }
+
+            // Ensures speed remains the same when moving diagonally
+            if (addVelocity.LengthSquared() > 0)
+            {
+                addVelocity.Normalize();
+                addVelocity *= speed;
+            }
 
             //adds acceleration/smoothing by lerping
             playerObject.Velocity = Lerp(playerObject.Velocity, addVelocity,.1f);
 
-            playerObject.PlayerPosition += playerObject.Velocity;
-            //Debug.WriteLine(playerObject.PlayerPosition);
+            playerObject.Position += playerObject.Velocity;
+            //Debug.WriteLine(playerObject.Position);
             //Debug.WriteLine("add velocity is " + addVelocity);
 
         }

@@ -68,7 +68,7 @@ namespace FinalProject
         /// <param name="position">Starting/standing position</param>
         public Enemy(Vector2 position) : this()
         {
-            this.position = position;
+            this._position = position;
             this.roamLocations = null;
             this.enemyTexture = null;
         }
@@ -195,7 +195,7 @@ namespace FinalProject
                     if(roamLocations.Length > 1)
                     {
                         //Check distance to target pos
-                        if (Math.Abs((position - roamLocations[roamTarget]).Length()) <= roamCheckDistance)
+                        if (Math.Abs((_position - roamLocations[roamTarget]).Length()) <= roamCheckDistance)
                         {
                             //Increment and ensure target location is within array
                             roamTarget += 1;
@@ -237,7 +237,7 @@ namespace FinalProject
                     
                     // If player is within chase start distance
                     // THIS IS TEMP CODE, WE CAN REPLACE WITH RAYTRACING/SENSOR COLLISIONS
-                    if (Math.Abs((position - target.Position).Length()) <= chaseStartDistance)
+                    if (Math.Abs((_position - target.Position).Length()) <= chaseStartDistance)
                     {
                         currentState = EnemyState.ChaseWindupState;
                         chaseWindupTimer = 4f;
@@ -270,15 +270,15 @@ namespace FinalProject
             //This code always runs regardless of state
 
             //Update display rectangle based on position
-            displayRectangle.X = (int)position.X;
-            displayRectangle.Y = (int)position.Y;
+            displayRectangle.X = (int)_position.X;
+            displayRectangle.Y = (int)_position.Y;
 
             //If the enemy is in a state where there is a target, the detection code will run
             //This updates the enemy/player link as well as the last seen position if the player is in vision
             if(target != null)
             {
                 playerDetectionLink.EndPosition = target.Position;
-                playerDetectionLink.Position = position;
+                playerDetectionLink.Position = _position;
                 //SOME SORT OF DETECTION OF LINES COLLISION WITH MAP OBJECTS
 
                 //if no collision with map objects
@@ -299,7 +299,7 @@ namespace FinalProject
             this.target = p;
             currentState = EnemyState.InvestigateState;
             p.SetAfraidState();
-            this.playerDetectionLink = new LineCollider(position, p.Position);
+            this.playerDetectionLink = new LineCollider(_position, p.Position);
         }
 
         /// <summary>

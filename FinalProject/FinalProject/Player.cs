@@ -36,38 +36,13 @@ namespace FinalProject
         private float shockSpeed;
         private float chaseSpeed;
 
-        //Properties
-        Vector2 playerPosition;
-
         Vector2 velocity = new Vector2(0, 0);
-        int x;
-        int y;
-        public int X
-        {
-            get => x;
-            set
-            {
-                playerPosition.X = value;
-                x = value;
-            }
-        }
 
-        public int Y
-        {
-            get => y;
-            set
-            {
-                playerPosition.Y = value;
-                y = value;
-            }
-        }
-
-        public Vector2 PlayerPosition { get => playerPosition; set => playerPosition = value; }
         public PlayerState CurrentState { get => currentState; set => currentState = value; }
         public Vector2 Velocity { get => velocity; set => velocity = value; }
 
         //Constructors
-        public Player()
+        public Player(): base()
         {
             //Set standards for different speeds
             walkingSpeed = 0;
@@ -78,7 +53,6 @@ namespace FinalProject
             //Initialize variables
             currentSpeed = walkingSpeed;
             currentState = PlayerState.WalkingState;
-            playerPosition = new Vector2(0, 0);
 
         }
 
