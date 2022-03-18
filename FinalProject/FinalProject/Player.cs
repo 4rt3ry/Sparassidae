@@ -36,10 +36,8 @@ namespace FinalProject
         private float shockSpeed;
         private float chaseSpeed;
 
-        Vector2 velocity = new Vector2(0, 0);
 
         public PlayerState CurrentState { get => currentState; set => currentState = value; }
-        public Vector2 Velocity { get => velocity; set => velocity = value; }
 
         //Constructors
         public Player(): base()
