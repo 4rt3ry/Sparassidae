@@ -95,6 +95,14 @@ namespace FinalProject
         public abstract bool CheckCollision(GameObject other);
 
         /// <summary>
+        /// Determines if a physics collision has occured. Information such as collision normals and hit points are saved into <paramref name="hitInfo"/>
+        /// </summary>
+        /// <param name="other"></param>
+        /// <param name="hitInfo">Contains information on collision hit points</param>
+        /// <returns></returns>
+        public abstract bool CheckCollision(GameObject other, out ColliderHitInfo collisionInfo);
+
+        /// <summary>
         /// Sets internal debug texture for the current <see cref="Collider"/>. Changing the <see cref="Collider"/>'s dimensions
         /// will not resize the debug texture.
         /// </summary>

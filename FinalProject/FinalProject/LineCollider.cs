@@ -60,7 +60,32 @@ namespace FinalProject
             {
                 return Intersects(other.PhysicsCollider);
             }
-            // Currently don't need physics collisions
+            else
+            {
+                // Eventually, this should use other gameobject's velocity to determine if collisions occur
+                return Intersects(other.PhysicsCollider);
+            }
+
+            return false;
+        }
+
+        public override bool CheckCollision(GameObject other, out ColliderHitInfo collisionInfo)
+        {
+            // Set collision information
+            Vector2 collisionNormal = new Vector2();
+            Vector2 hitPoint = new Vector2();
+
+            collisionInfo = new ColliderHitInfo(collisionNormal, hitPoint);
+
+            if (IsTrigger)
+            {
+                return Intersects(other.PhysicsCollider);
+            }
+            else
+            {
+                // Eventually, this should use other gameobject's velocity to determine if collisions occur
+                return Intersects(other.PhysicsCollider);
+            }
 
             return false;
         }

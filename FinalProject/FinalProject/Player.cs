@@ -54,6 +54,8 @@ namespace FinalProject
             currentSpeed = walkingSpeed;
             currentState = PlayerState.WalkingState;
 
+            Position = new Vector2(1920 / 2, 1080 / 2);
+
             PhysicsCollider = new CircleCollider(this, new Vector2(0, 0), 10f, true);
             
         }

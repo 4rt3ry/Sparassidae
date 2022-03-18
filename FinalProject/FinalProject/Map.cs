@@ -43,6 +43,9 @@ namespace FinalProject
 
             _mapColliders = new List<Collider>();
             _enemies = new List<Enemy>();
+
+            _mapColliders.Add(new RectangleCollider(null, new Vector2(1920 / 2, 0), new Vector2(1920, 10), false));
+            _mapColliders.Add(new RectangleCollider(null, new Vector2(1920 / 2, 1080), new Vector2(1920, 10), false));
         }
 
         //Methods
@@ -62,7 +65,13 @@ namespace FinalProject
         /// <param name="gameTime"></param>
         public void Update(GameTime gameTime)
         {
-
+            foreach(Collider collider in _mapColliders)
+            {
+                if (collider.CheckCollision(_player))
+                {
+                    
+                }
+            }
         }
 
         public void Load(string filepath)
