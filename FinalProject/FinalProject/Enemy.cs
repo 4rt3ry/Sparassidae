@@ -44,6 +44,10 @@ namespace FinalProject
         //Reference holder for target player
         private Player target;
 
+        //Visual Variables
+        private Texture2D enemyTexture;
+        private Rectangle displayRectangle;
+
         //Properties
         public EnemyState CurrentState { get => currentState;  }
 
@@ -55,17 +59,29 @@ namespace FinalProject
         {
             //Starting state
             currentState = EnemyState.RoamingState;
+            displayRectangle = default(Rectangle);
         }
 
         /// <summary>
         /// Constructor for unmoving enemy, stands at starting position
         /// </summary>
         /// <param name="position">Starting/standing position</param>
-        public Enemy(Vector2 position)
+        public Enemy(Vector2 position) : this()
         {
-            currentState = EnemyState.RoamingState;
             this.position = position;
             this.roamLocations = null;
+            this.enemyTexture = null;
+        }
+
+        /// <summary>
+        /// Enemy constructor for simple stationary enemy
+        /// </summary>
+        /// <param name="position">Standing position of enemy</param>
+        /// <param name="enemyTexture">Enemy visual texture</param>
+        public Enemy(Vector2 position, Texture2D enemyTexture) : this(position)
+        {
+            this.enemyTexture = enemyTexture;
+            displayRectangle = new Rectangle(new Point((int)position.X, (int)position.Y), new Point(enemyTexture.Width, enemyTexture.Height));
         }
 
         /// <summary>
@@ -73,15 +89,33 @@ namespace FinalProject
         /// </summary>
         /// <param name="position">Starting position</param>
         /// <param name="roamLocations">Array of locations for the enemy to roam to</param>
-        public Enemy(Vector2 position, Vector2[] roamLocations)
+        public Enemy(Vector2 position, Vector2[] roamLocations) : this(position)
         {
-            this.position = position;
             this.roamLocations = roamLocations;
         }
 
+        /// <summary>
+        /// Constructor for roaming enemy with unique detection radius
+        /// </summary>
+        /// <param name="position">Enemy starting position</param>
+        /// <param name="roamLocations">Array of positions to roam to</param>
+        /// <param name="detectionRadius">Radius for detecting player</param>
         public Enemy(Vector2 position, Vector2[] roamLocations, float detectionRadius) : this(position, roamLocations)
         {
             this.detectionRadius = detectionRadius;
+        }
+
+        /// <summary>
+        /// Enemy constructor with unique detection radius and texture
+        /// </summary>
+        /// <param name="position">Enemy starting position</param>
+        /// <param name="roamLocations">Array of positions to roam to</param>
+        /// <param name="detectionRadius">Radius for detecting player</param>
+        /// <param name="enemyTexture">Visual texture</param>
+        public Enemy(Vector2 position, Vector2[] roamLocations, float detectionRadius, Texture2D enemyTexture) : this(position, roamLocations, detectionRadius)
+        {
+            this.enemyTexture = enemyTexture;
+            displayRectangle = new Rectangle(new Point((int)position.X, (int)position.Y), new Point(enemyTexture.Width, enemyTexture.Height));
         }
 
         //Methods
@@ -94,7 +128,7 @@ namespace FinalProject
             switch (currentState)
             {
                 case EnemyState.RoamingState:
-
+                    
                     break;
                 case EnemyState.InvestigateState:
 
@@ -112,6 +146,8 @@ namespace FinalProject
 
                     break;
             }
+            //Constant display of enemy texture (For current version, not including animations)
+            batch.Draw(enemyTexture, displayRectangle, Color.White);
         }
 
         /// <summary>
@@ -232,6 +268,10 @@ namespace FinalProject
             }
 
             //This code always runs regardless of state
+
+            //Update display rectangle based on position
+            displayRectangle.X = (int)position.X;
+            displayRectangle.Y = (int)position.Y;
 
             //If the enemy is in a state where there is a target, the detection code will run
             //This updates the enemy/player link as well as the last seen position if the player is in vision
