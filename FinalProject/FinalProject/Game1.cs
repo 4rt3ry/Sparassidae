@@ -99,8 +99,11 @@ namespace FinalProject
             if (sDown) { addVelocity += Vector2.UnitY; }
 
             // Ensures speed remains the same when moving diagonally
-            addVelocity.Normalize();
-            addVelocity *= speed;
+            if (addVelocity.LengthSquared() > 0)
+            {
+                addVelocity.Normalize();
+                addVelocity *= speed;
+            }
 
             //adds acceleration/smoothing by lerping
             playerObject.Velocity = Lerp(playerObject.Velocity, addVelocity,.1f);
