@@ -45,6 +45,8 @@ namespace FinalProject
         private Button playButton;
         private Button optionButton;
         private Button instructionButton;
+        private Button backMainButton;
+        private Button mainMenuButton;
 
         //Buttons
         private List<Button> buttons = new List<Button>();
@@ -70,11 +72,12 @@ namespace FinalProject
             instructionButton.Click += Click_ToInstruction;
             optionButton.Click += Click_ToOption;
             playButton.Click += Click_ToPlay;
+            backMainButton.Click += Click_ToMenu;
+            mainMenuButton.Click += Click_ToMenu;
 
             buttons.Add(playButton);
             buttons.Add(optionButton);
             buttons.Add(instructionButton);
-
         }
 
         //Methods
@@ -95,6 +98,7 @@ namespace FinalProject
                
                     break;
 
+                //
                 case GameState.OptionState:
                     break;
 
@@ -102,7 +106,7 @@ namespace FinalProject
                     break;
 
                 case GameState.PlayState:
-                    map.Draw(batch);
+                   // map.Draw(batch);
                     break;
                 case GameState.PauseState:
 
@@ -153,19 +157,22 @@ namespace FinalProject
                     break;
 
                 case GameState.OptionState:
+                    backMainButton.Draw(batch);
                     break;
 
                 case GameState.InstructionState:
+                    backMainButton.Draw(batch);
                     break;
 
                 case GameState.PlayState:
-                    map.Draw(batch);
+                    // map.Draw(batch);
+                    
                     break;
                 case GameState.PauseState:
-
+                    mainMenuButton.Draw(batch);
                     break;
                 case GameState.GameOverState:
-
+                    mainMenuButton.Draw(batch);
                     break;
             }
         }
@@ -213,20 +220,26 @@ namespace FinalProject
                     break;
 
                 case GameState.OptionState:
+                    backMainButton.Update();
                     break;
 
                 case GameState.InstructionState:
-                    
+                    backMainButton.Update();
                     break;
 
                 case GameState.PlayState:
                     //map.Update(dTime);
+                    if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+                    {
+                        currentState = GameState.PauseState;
+                    }
                     break;
                 case GameState.PauseState:
+                    mainMenuButton.Update();
 
                     break;
                 case GameState.GameOverState:
-
+                    mainMenuButton.Update();
                     break;
             }
         }
@@ -244,6 +257,8 @@ namespace FinalProject
             playButton = new Button(content.Load<Texture2D>("Controls/Play"), content.Load<Texture2D>("Controls/Play_hover"), 1500, 700);
             optionButton = new Button(content.Load<Texture2D>("Controls/Options"), content.Load<Texture2D>("Controls/Options_hover"), 1500, 800);
             instructionButton = new Button(content.Load<Texture2D>("Controls/Instruction"), content.Load<Texture2D>("Controls/Instruction_hover"), 1500, 900);
+            backMainButton = new Button(content.Load<Texture2D>("Controls/Back"), content.Load<Texture2D>("Controls/Back_Hover"), 1500, 700); //Position not decided yet
+            mainMenuButton = new Button(content.Load<Texture2D>("Controls/MainMenu"), content.Load<Texture2D>("Controls/MainMenu_hover"), 1500, 700); //Position not decided yet
         }
 
         /// <summary>
@@ -273,7 +288,12 @@ namespace FinalProject
         /// <param name="e"></param>
         public void Click_ToPlay(object sender, System.EventArgs e)
         {
-            currentState = GameState.OptionState;
+            currentState = GameState.PlayState;
+        }
+
+        public void Click_ToMenu(object sender, System.EventArgs e)
+        {
+            currentState = GameState.MenuState;
         }
     }
 }
