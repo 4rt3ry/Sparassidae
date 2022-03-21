@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace FinalProject_LevelEditor
 {
-    class Enemy
+    class Enemy : Component
     {
         //Fields
         private List<MapPoint> locations;

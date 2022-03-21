@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace FinalProject_LevelEditor
 {
-    class Wall
+    class Wall : Component
     {
     }
 }
