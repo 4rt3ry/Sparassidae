@@ -39,6 +39,8 @@ namespace FinalProject
         //Light
         private Spotlight flashlight;
 
+        //MouseState
+        private MouseState ms;
 
         //Properties
         public PlayerState CurrentState { get => currentState; set => currentState = value; }
@@ -117,6 +119,9 @@ namespace FinalProject
         {
             //This will make more sense if player's position can be set in the property
             //flashlight.Position = this.Position;
+            ms = Mouse.GetState();
+            //Rotate the flashlight direction based on the mouse position
+            flashlight.Rotation = MathF.Atan2(ms.Y -  this.Position.Y, ms.X - this.Position.X);
 
             switch (CurrentState)
             {
