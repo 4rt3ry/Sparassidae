@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
 using System;
 using Penumbra;
+using Microsoft.Xna.Framework.Content;
 namespace FinalProject
 {
     public class Game1 : Game
@@ -30,11 +31,13 @@ namespace FinalProject
 
             base.Initialize();
 
+            // Create lighting component and register it as a service so that subsystem can access it
             penumbra = new PenumbraComponent(this)
             {
                 AmbientColor = Color.Black
             };
-          
+            Services.AddService(penumbra);
+
             penumbra.Initialize();
         }
 

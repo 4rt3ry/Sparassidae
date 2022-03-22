@@ -24,19 +24,19 @@ namespace FinalProject
         public float Wdith { get => wdith; set => wdith = value; }
         public float Height { get => height; set => height = value; }
 
-        public Wall(float width, float height)
+        /// <summary>
+        /// Create the wall rectangle shadow hull 
+        /// </summary>
+        /// <param name="width">Width of the wall</param>
+        /// <param name="height">Height of the wall</param>
+        /// <param name="position">Initial position of the wall</param>
+        public Wall(float width, float height, Vector2 position)
         {
             this.wdith = width;
             this.height = height;
-            hull = new Hull(this.Position, new Vector2(this.X + width, this.Y),
-                new Vector2(this.X, this.Y + height), new Vector2(this.X + width, this.Y + height))
-            {
-                Position = this.Position
-            };
+            //Create the rectangle hull
+            hull = Hull.CreateRectangle(position, new Vector2(width, height));
         }
-
-
-
 
     }
 }
