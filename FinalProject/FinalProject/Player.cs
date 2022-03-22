@@ -46,15 +46,15 @@ namespace FinalProject
         public Spotlight Flashlight { get => flashlight; set => flashlight = value; }
 
         // Set position should also update the position of flashlight
-        //public Vector2 Position
-        //{
-        //    get { return Position; }
-        //    set 
-        //    {
-        //        Position = value;
-        //        flashlight.Position = value;
-        //    }
-        //}
+        public new Vector2 Position
+        {
+            get { return Position; }
+            set
+            {
+                Position = value;
+                flashlight.Position = value;
+            }
+        }
 
         //Constructors
         public Player(): base()
@@ -116,7 +116,7 @@ namespace FinalProject
         public void Update(float dTime)
         {
             //This will make more sense if player's position can be set in the property
-            flashlight.Position = this.Position;
+            //flashlight.Position = this.Position;
 
             switch (CurrentState)
             {
