@@ -20,6 +20,7 @@ namespace FinalProject
         private Player _player;
         private List<Collider> _mapColliders;
         private List<Enemy> _enemies;
+        private List<Wall> _walls;
         //private List<Stone> stones;
 
 
