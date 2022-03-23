@@ -39,10 +39,24 @@ namespace FinalProject
         //Light
         private Spotlight flashlight;
 
+        //MouseState
+        private MouseState ms;
+
+        //Properties
         public PlayerState CurrentState { get => currentState; set => currentState = value; }
   
-        public Spotlight Flashlight1 { get => flashlight; set => flashlight = value; }
+        public Spotlight Flashlight { get => flashlight; set => flashlight = value; }
 
+        // Set position should also update the position of flashlight
+        public new Vector2 Position
+        {
+            get { return Position; }
+            set
+            {
+                Position = value;
+                flashlight.Position = value;
+            }
+        }
 
         //Constructors
         public Player(): base()
@@ -58,7 +72,8 @@ namespace FinalProject
             currentState = PlayerState.WalkingState;
 
             //Creaet the spotlight
-            Flashlight1 = new Spotlight
+            //Now we only use default spotlight, we might add customed one in the future
+            Flashlight = new Spotlight
             {
                 Position = this.Position,
                 Scale = new Vector2(50), //Range of the light source
@@ -102,6 +117,12 @@ namespace FinalProject
         /// <param name="dTime">Time passed (in seconds)</param>
         public void Update(float dTime)
         {
+            //This will make more sense if player's position can be set in the property
+            //flashlight.Position = this.Position;
+            ms = Mouse.GetState();
+            //Rotate the flashlight direction based on the mouse position
+            flashlight.Rotation = MathF.Atan2(ms.Y -  this.Position.Y, ms.X - this.Position.X);
+
             switch (CurrentState)
             {
                 case PlayerState.WalkingState:
