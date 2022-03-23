@@ -57,6 +57,7 @@ namespace FinalProject_LevelEditor
             bWidth = Level.Width / width;
             bHeight = Level.Height / height;
 
+            /*
             for(int i = 0; i < width; i++)
             {
                 for(int j = 0; j < height; j++)
@@ -70,7 +71,10 @@ namespace FinalProject_LevelEditor
                     Level.Controls.Add(p);
                 }
             }
+            */
             currentTile = TileType.Wall;
+
+            KeyPreview = true;
         }
 
 
@@ -106,10 +110,46 @@ namespace FinalProject_LevelEditor
 
         private void NewPieceButton_Click(object sender, EventArgs e)
         {
-            Component comp = new Component(new Point(0, 0), currentTile, Convert.ToInt32(WidthTextBox.Text), Convert.ToInt32(HeightTextBox.Text), bWidth, bHeight);
-            foreach(PictureBox p in comp.GetBoxes())
+            Color c = Color.White;
+            switch (currentTile)
             {
-                Level.Controls.Add(p);
+                case TileType.Wall:
+                    c = WallButton.BackColor;
+                    break;
+                case TileType.Enemy:
+                    c = EnemyButton.BackColor;
+                    break;
+                case TileType.Spawn:
+                    c = SpawnButton.BackColor;
+                    break;
+                case TileType.Objective:
+                    c = ObjectiveButton.BackColor;
+                    break;
+                case TileType.Exit:
+                    c = ExitButton.BackColor;
+                    break;
+            }
+            Component comp = new Component(new Point(0, 0), currentTile, Convert.ToInt32(WidthTextBox.Text), Convert.ToInt32(HeightTextBox.Text), bWidth, bHeight, c);
+            Level.Controls.Add(comp.GetBox());
+        }
+
+        private void LevelEditor_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Up)
+            {
+
+            }
+            if (e.KeyCode == Keys.Down)
+            {
+
+            }
+            if (e.KeyCode == Keys.Left)
+            {
+
+            }
+            if (e.KeyCode == Keys.Right)
+            {
+
             }
         }
     }
