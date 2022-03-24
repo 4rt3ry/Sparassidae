@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Text;
 using Penumbra;
 using Microsoft.Xna.Framework.Content;
+using System.IO;
 
 namespace FinalProject
 {
@@ -23,10 +24,12 @@ namespace FinalProject
         private List<Collider> _mapColliders;
         private List<Enemy> _enemies;
         private List<Wall> _walls;
-        private PenumbraComponent penumbra;
-        private ContentManager content;
         //private List<Stone> stones;
 
+        private PenumbraComponent penumbra;
+        private ContentManager content;
+        private float width;
+        private float height;
 
         // Textures and Effects
         private Effect _maskEffect;
@@ -80,6 +83,29 @@ namespace FinalProject
         /// // Note: When use it in the Game1, pass "Services" as the serviceProvider
         public void Load(string filepath, IServiceProvider serviceProvider)
         {
+            // Open the file for reading
+            StreamReader input = null;
+            try
+            {
+                input = new StreamReader(filepath);
+                string line = null;
+
+                // The first line of level file is width and height of the map
+                if((line = input.ReadLine())!= null)
+                {
+                    string[] peices = line.Split(',');
+                    width = int.Parse(peices[0]);
+                    height = int.Parse(peices[1]);
+                }
+
+                // The second line will be the player info
+            }
+            catch
+            {
+
+            }
+
+
             // Create a new content manager to load content used just by this map
             // this content can be used to content.Load, not sure if we need it
             content = new ContentManager(serviceProvider, "Content");
