@@ -66,11 +66,15 @@ namespace FinalProject_LevelEditor
             if(setActive)
             {
                 pBox.BorderStyle = BorderStyle.FixedSingle;
+                Color c = pBox.BackColor;
+                pBox.BackColor = Color.FromArgb(255, c.R, c.G, c.B);
                 return this;
             }
             else
             {
                 pBox.BorderStyle = BorderStyle.None;
+                Color c = pBox.BackColor;
+                pBox.BackColor = Color.FromArgb(100, c.R, c.G, c.B);
                 return null;
             }
         }
@@ -99,9 +103,60 @@ namespace FinalProject_LevelEditor
             }
         }
 
+        /// <summary>
+        /// Extends the box in the given direction
+        /// </summary>
+        /// <param name="mv">Movement direction</param>
+        /// <param name="mult">Multiplier for distance (number of points moved)</param>
+        public void Extend(BoxMovement mv, int mult)
+        {
+            switch (mv)
+            {
+                case BoxMovement.Down:
+                    pBox.Height = pBox.Height + bHeight * mult;
+                    break;
+                case BoxMovement.Up:
+                    if(pBox.Height > bHeight)
+                        pBox.Height = pBox.Height - bHeight * mult;
+                    break;
+                case BoxMovement.Left:
+                    if(pBox.Width > bWidth)
+                        pBox.Width = pBox.Width - bWidth * mult;
+                    break;
+                case BoxMovement.Right:
+                    pBox.Width = pBox.Width + bWidth * mult;
+                    break;
+            }
+        }
+
         public PictureBox GetBox()
         {
             return pBox;
+        }
+
+        public override string ToString()
+        {
+            String name = "";
+            switch (tileType)
+            {
+                case TileType.Wall:
+                    name += "Wall";
+                    break;
+                case TileType.Enemy:
+                    name += "Enemy";
+                    break;
+                case TileType.Spawn:
+                    name += "Spawn";
+                    break;
+                case TileType.Objective:
+                    name += "Objective";
+                    break;
+                case TileType.Exit:
+                    name += "Exit";
+                    break;
+            }
+            name += " (" + pBox.Location.X / bWidth + ", " + pBox.Location.Y / bHeight + ") {" + pBox.Width/bWidth + ", " + pBox.Height/bHeight + "}";
+            return name;
         }
     }
 }

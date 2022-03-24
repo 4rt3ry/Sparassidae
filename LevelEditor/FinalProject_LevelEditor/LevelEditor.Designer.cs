@@ -30,11 +30,13 @@ namespace FinalProject_LevelEditor
         private void InitializeComponent()
         {
             System.Windows.Forms.Label HeightLabel;
-            this.EditMenu = new System.Windows.Forms.GroupBox();
+            this.SaveButton = new System.Windows.Forms.Button();
             this.Level = new System.Windows.Forms.GroupBox();
             this.PlaceMenu = new System.Windows.Forms.GroupBox();
+            this.WidthLabel = new System.Windows.Forms.Label();
+            this.WidthTextBox = new System.Windows.Forms.TextBox();
+            this.HeightTextBox = new System.Windows.Forms.TextBox();
             this.NewPieceButton = new System.Windows.Forms.Button();
-            this.SaveButton = new System.Windows.Forms.Button();
             this.ExitLabel = new System.Windows.Forms.Label();
             this.ExitButton = new System.Windows.Forms.Button();
             this.ObjectiveLabel = new System.Windows.Forms.Label();
@@ -45,22 +47,28 @@ namespace FinalProject_LevelEditor
             this.EnemyButton = new System.Windows.Forms.Button();
             this.WallLabel = new System.Windows.Forms.Label();
             this.WallButton = new System.Windows.Forms.Button();
-            this.HeightTextBox = new System.Windows.Forms.TextBox();
-            this.WidthTextBox = new System.Windows.Forms.TextBox();
-            this.WidthLabel = new System.Windows.Forms.Label();
+            this.EditMenu = new System.Windows.Forms.ListBox();
             HeightLabel = new System.Windows.Forms.Label();
-            this.EditMenu.SuspendLayout();
             this.PlaceMenu.SuspendLayout();
             this.SuspendLayout();
             // 
-            // EditMenu
+            // HeightLabel
             // 
-            this.EditMenu.Controls.Add(this.SaveButton);
-            this.EditMenu.Location = new System.Drawing.Point(954, 12);
-            this.EditMenu.Name = "EditMenu";
-            this.EditMenu.Size = new System.Drawing.Size(241, 697);
-            this.EditMenu.TabIndex = 1;
-            this.EditMenu.TabStop = false;
+            HeightLabel.AutoSize = true;
+            HeightLabel.Location = new System.Drawing.Point(12, 596);
+            HeightLabel.Name = "HeightLabel";
+            HeightLabel.Size = new System.Drawing.Size(43, 15);
+            HeightLabel.TabIndex = 15;
+            HeightLabel.Text = "Height";
+            // 
+            // SaveButton
+            // 
+            this.SaveButton.Location = new System.Drawing.Point(1064, 654);
+            this.SaveButton.Name = "SaveButton";
+            this.SaveButton.Size = new System.Drawing.Size(131, 55);
+            this.SaveButton.TabIndex = 10;
+            this.SaveButton.Text = "Save File";
+            this.SaveButton.UseVisualStyleBackColor = true;
             // 
             // Level
             // 
@@ -69,6 +77,8 @@ namespace FinalProject_LevelEditor
             this.Level.Size = new System.Drawing.Size(683, 697);
             this.Level.TabIndex = 2;
             this.Level.TabStop = false;
+            this.Level.Enter += new System.EventHandler(this.Level_Enter);
+            this.Level.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.Level_PreviewKeyDown);
             // 
             // PlaceMenu
             // 
@@ -93,6 +103,31 @@ namespace FinalProject_LevelEditor
             this.PlaceMenu.TabIndex = 3;
             this.PlaceMenu.TabStop = false;
             // 
+            // WidthLabel
+            // 
+            this.WidthLabel.AutoSize = true;
+            this.WidthLabel.Location = new System.Drawing.Point(13, 553);
+            this.WidthLabel.Name = "WidthLabel";
+            this.WidthLabel.Size = new System.Drawing.Size(39, 15);
+            this.WidthLabel.TabIndex = 14;
+            this.WidthLabel.Text = "Width";
+            // 
+            // WidthTextBox
+            // 
+            this.WidthTextBox.Location = new System.Drawing.Point(75, 550);
+            this.WidthTextBox.Name = "WidthTextBox";
+            this.WidthTextBox.Size = new System.Drawing.Size(100, 23);
+            this.WidthTextBox.TabIndex = 13;
+            this.WidthTextBox.Text = "1";
+            // 
+            // HeightTextBox
+            // 
+            this.HeightTextBox.Location = new System.Drawing.Point(75, 593);
+            this.HeightTextBox.Name = "HeightTextBox";
+            this.HeightTextBox.Size = new System.Drawing.Size(100, 23);
+            this.HeightTextBox.TabIndex = 12;
+            this.HeightTextBox.Text = "1";
+            // 
             // NewPieceButton
             // 
             this.NewPieceButton.Location = new System.Drawing.Point(58, 636);
@@ -102,15 +137,6 @@ namespace FinalProject_LevelEditor
             this.NewPieceButton.Text = "Create Piece";
             this.NewPieceButton.UseVisualStyleBackColor = true;
             this.NewPieceButton.Click += new System.EventHandler(this.NewPieceButton_Click);
-            // 
-            // SaveButton
-            // 
-            this.SaveButton.Location = new System.Drawing.Point(65, 636);
-            this.SaveButton.Name = "SaveButton";
-            this.SaveButton.Size = new System.Drawing.Size(131, 55);
-            this.SaveButton.TabIndex = 10;
-            this.SaveButton.Text = "Save File";
-            this.SaveButton.UseVisualStyleBackColor = true;
             // 
             // ExitLabel
             // 
@@ -212,49 +238,30 @@ namespace FinalProject_LevelEditor
             this.WallButton.UseVisualStyleBackColor = false;
             this.WallButton.Click += new System.EventHandler(this.WallButton_Click);
             // 
-            // HeightTextBox
+            // EditMenu
             // 
-            this.HeightTextBox.Location = new System.Drawing.Point(75, 593);
-            this.HeightTextBox.Name = "HeightTextBox";
-            this.HeightTextBox.Size = new System.Drawing.Size(100, 23);
-            this.HeightTextBox.TabIndex = 12;
-            // 
-            // WidthTextBox
-            // 
-            this.WidthTextBox.Location = new System.Drawing.Point(75, 550);
-            this.WidthTextBox.Name = "WidthTextBox";
-            this.WidthTextBox.Size = new System.Drawing.Size(100, 23);
-            this.WidthTextBox.TabIndex = 13;
-            // 
-            // WidthLabel
-            // 
-            this.WidthLabel.AutoSize = true;
-            this.WidthLabel.Location = new System.Drawing.Point(13, 553);
-            this.WidthLabel.Name = "WidthLabel";
-            this.WidthLabel.Size = new System.Drawing.Size(39, 15);
-            this.WidthLabel.TabIndex = 14;
-            this.WidthLabel.Text = "Width";
-            // 
-            // HeightLabel
-            // 
-            HeightLabel.AutoSize = true;
-            HeightLabel.Location = new System.Drawing.Point(12, 596);
-            HeightLabel.Name = "HeightLabel";
-            HeightLabel.Size = new System.Drawing.Size(43, 15);
-            HeightLabel.TabIndex = 15;
-            HeightLabel.Text = "Height";
+            this.EditMenu.FormattingEnabled = true;
+            this.EditMenu.ItemHeight = 15;
+            this.EditMenu.Location = new System.Drawing.Point(954, 15);
+            this.EditMenu.Name = "EditMenu";
+            this.EditMenu.Size = new System.Drawing.Size(241, 634);
+            this.EditMenu.Sorted = true;
+            this.EditMenu.TabIndex = 11;
+            this.EditMenu.SelectedIndexChanged += new System.EventHandler(this.EditMenu_SelectedIndexChanged);
+            this.EditMenu.KeyDown += new System.Windows.Forms.KeyEventHandler(this.EditMenu_KeyDown);
+            this.EditMenu.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.EditMenu_KeyPress);
             // 
             // LevelEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1207, 721);
+            this.Controls.Add(this.EditMenu);
+            this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.PlaceMenu);
             this.Controls.Add(this.Level);
-            this.Controls.Add(this.EditMenu);
             this.Name = "LevelEditor";
             this.Text = "LevelEditor";
-            this.EditMenu.ResumeLayout(false);
             this.PlaceMenu.ResumeLayout(false);
             this.PlaceMenu.PerformLayout();
             this.ResumeLayout(false);
@@ -264,7 +271,6 @@ namespace FinalProject_LevelEditor
         #endregion
 
         private System.Windows.Forms.GroupBox PlacementMenu;
-        private System.Windows.Forms.GroupBox EditMenu;
         private System.Windows.Forms.GroupBox Level;
         private System.Windows.Forms.GroupBox PlaceMenu;
         private System.Windows.Forms.Button WallButton;
@@ -282,5 +288,6 @@ namespace FinalProject_LevelEditor
         private System.Windows.Forms.Label WidthLabel;
         private System.Windows.Forms.TextBox WidthTextBox;
         private System.Windows.Forms.TextBox HeightTextBox;
+        private System.Windows.Forms.ListBox EditMenu;
     }
 }

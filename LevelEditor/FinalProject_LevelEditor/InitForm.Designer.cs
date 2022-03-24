@@ -62,6 +62,7 @@ namespace FinalProject_LevelEditor
             this.WidthTextBox.Name = "WidthTextBox";
             this.WidthTextBox.Size = new System.Drawing.Size(146, 23);
             this.WidthTextBox.TabIndex = 3;
+            this.WidthTextBox.Text = "50";
             // 
             // HeightTextBox
             // 
@@ -69,6 +70,7 @@ namespace FinalProject_LevelEditor
             this.HeightTextBox.Name = "HeightTextBox";
             this.HeightTextBox.Size = new System.Drawing.Size(146, 23);
             this.HeightTextBox.TabIndex = 4;
+            this.HeightTextBox.Text = "50";
             // 
             // WidthLabel
             // 
