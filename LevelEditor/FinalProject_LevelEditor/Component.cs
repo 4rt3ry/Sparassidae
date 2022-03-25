@@ -30,6 +30,13 @@ namespace FinalProject_LevelEditor
         private int height;
         private PictureBox pBox;
 
+        private Component parentEnemy;
+        private List<Component> roamPoints;
+
+        //Properties
+        public TileType TileType { get => tileType; set => tileType = value; }
+        internal List<Component> RoamPoints { get => roamPoints; set => roamPoints = value; }
+
         //Constructors
         public Component(Point location, TileType tileType, int width, int height, int bWidth, int bHeight, Color c)
         {
@@ -39,6 +46,14 @@ namespace FinalProject_LevelEditor
             this.width = width;
             this.height = height;
 
+            roamPoints = null;
+            parentEnemy = null;
+
+            if(tileType == TileType.Enemy)
+            {
+                roamPoints = new List<Component>();
+            }
+
             pBox = new PictureBox();
 
             pBox.Location = location;
@@ -46,8 +61,12 @@ namespace FinalProject_LevelEditor
             pBox.Height = height*bHeight;
 
             pBox.BackColor = Color.FromArgb(100, c.R, c.G, c.B);
+        }
 
-            
+        public Component(Point location, TileType tileType, int width, int height, int bWidth, int bHeight, Color c, Component parent) : this(location, tileType, width, height, bWidth, bHeight, c)
+        {
+            parentEnemy = parent;
+            pBox.Location = parent.GetBox().Location;
         }
 
         public Component(Point location, TileType tileType, List<PictureBox> boxes)
@@ -68,6 +87,13 @@ namespace FinalProject_LevelEditor
                 pBox.BorderStyle = BorderStyle.FixedSingle;
                 Color c = pBox.BackColor;
                 pBox.BackColor = Color.FromArgb(255, c.R, c.G, c.B);
+                if (roamPoints != null)
+                {
+                    foreach(Component comp in roamPoints)
+                    {
+                        comp.Select(true);
+                    }
+                }
                 return this;
             }
             else
@@ -75,6 +101,13 @@ namespace FinalProject_LevelEditor
                 pBox.BorderStyle = BorderStyle.None;
                 Color c = pBox.BackColor;
                 pBox.BackColor = Color.FromArgb(100, c.R, c.G, c.B);
+                if (roamPoints != null)
+                {
+                    foreach (Component comp in roamPoints)
+                    {
+                        comp.Select(false);
+                    }
+                }
                 return null;
             }
         }
@@ -137,16 +170,22 @@ namespace FinalProject_LevelEditor
         public override string ToString()
         {
             String name = "";
+            if (tileType == TileType.RoamPoint)
+            {
+                return parentEnemy.ToString() + "  " + "Roam Point (" + pBox.Location.X / bWidth + ", " + pBox.Location.Y / bHeight + ")";
+            }
             switch (tileType)
             {
                 case TileType.Wall:
                     name += "Wall";
                     break;
                 case TileType.Enemy:
-                    name += "Enemy";
+                    name += "Enemy (" + pBox.Location.X / bWidth + ", " + pBox.Location.Y / bHeight + ")";
+                    return name;
                     break;
                 case TileType.Spawn:
-                    name += "Spawn";
+                    name += "Spawn (" + pBox.Location.X / bWidth + ", " + pBox.Location.Y / bHeight + ")";
+                    return name;
                     break;
                 case TileType.Objective:
                     name += "Objective";
@@ -157,6 +196,16 @@ namespace FinalProject_LevelEditor
             }
             name += " (" + pBox.Location.X / bWidth + ", " + pBox.Location.Y / bHeight + ") {" + pBox.Width/bWidth + ", " + pBox.Height/bHeight + "}";
             return name;
+        }
+
+        public void AddRoamPoint(Component comp)
+        {
+            roamPoints.Add(comp);
+        }
+
+        public Component GetParentEnemy()
+        {
+            return parentEnemy;
         }
     }
 }

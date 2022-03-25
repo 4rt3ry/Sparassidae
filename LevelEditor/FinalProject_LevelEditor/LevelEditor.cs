@@ -17,7 +17,8 @@ namespace FinalProject_LevelEditor
         Enemy,
         Spawn,
         Objective,
-        Exit
+        Exit,
+        RoamPoint
     }
     public partial class LevelEditor : Form
     {
@@ -128,6 +129,19 @@ namespace FinalProject_LevelEditor
                 case TileType.Exit:
                     c = ExitButton.BackColor;
                     break;
+                case TileType.RoamPoint:
+                    c = Color.FromArgb(200, 130, 130);
+                    break;
+            }
+            if(currentTile == TileType.RoamPoint)
+            {
+                Component roamPointComp = new Component(new Point(0, 0), currentTile, Convert.ToInt32(WidthTextBox.Text), Convert.ToInt32(HeightTextBox.Text), bWidth, bHeight, c, (Component)EditMenu.SelectedItem);
+                ((Component)EditMenu.Items[EditMenu.SelectedIndex]).AddRoamPoint(roamPointComp);
+                Level.Controls.Add(roamPointComp.GetBox());
+                EditMenu.Items.Add(roamPointComp);
+                EditMenu.Focus();
+                EditMenu.SelectedItem = roamPointComp;
+                return;
             }
             Component comp = new Component(new Point(0, 0), currentTile, Convert.ToInt32(WidthTextBox.Text), Convert.ToInt32(HeightTextBox.Text), bWidth, bHeight, c);
             Level.Controls.Add(comp.GetBox());
@@ -233,6 +247,14 @@ namespace FinalProject_LevelEditor
             if(e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back)
             {
                 Component compRemoved = (Component)EditMenu.Items[EditMenu.SelectedIndex];
+                if(compRemoved.TileType == TileType.Enemy && compRemoved.RoamPoints != null)
+                {
+                    foreach(Component c in compRemoved.RoamPoints)
+                    {
+                        EditMenu.Items.Remove(c);
+                        Level.Controls.Remove(c.GetBox());
+                    }
+                }
                 EditMenu.Items.RemoveAt(EditMenu.SelectedIndex);
                 Level.Controls.Remove(compRemoved.GetBox());
             }
@@ -262,6 +284,27 @@ namespace FinalProject_LevelEditor
                         currentTile = TileType.Exit;
                         NewPieceButton.PerformClick();
                         break;
+                }
+            }
+            else
+            {
+                
+                if (((Component)EditMenu.Items[EditMenu.SelectedIndex]).TileType == TileType.RoamPoint)
+                {
+                    if (e.KeyCode == Keys.Enter)
+                    {
+                        EditMenu.SelectedItem = ((Component)EditMenu.SelectedItem).GetParentEnemy();
+                        currentTile = TileType.RoamPoint;
+                        NewPieceButton.PerformClick();
+                    }
+                }
+                if (((Component)EditMenu.Items[EditMenu.SelectedIndex]).TileType == TileType.Enemy)
+                {
+                    if (e.KeyCode == Keys.Enter)
+                    {
+                        currentTile = TileType.RoamPoint;
+                        NewPieceButton.PerformClick();
+                    }
                 }
             }
         }
