@@ -52,7 +52,7 @@ namespace FinalProject
 
             //Load menu and button content
             //Initialized the gameStateManager
-            _gameStateManager = new GameStateManager(Content, _player, _penumbra);
+            _gameStateManager = new GameStateManager(Content, _player, _penumbra, _graphics);
 
         }
         float Lerp(float firstFloat, float secondFloat, float by)

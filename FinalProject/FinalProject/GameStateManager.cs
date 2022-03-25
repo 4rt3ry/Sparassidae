@@ -34,7 +34,11 @@ namespace FinalProject
         private float menuLightTimer;
         private bool isMenuLighted;
 
+        private KeyboardState ks;
+        private KeyboardState previousKs;
+
         Map map;
+        GraphicsDeviceManager _graphics;
 
         //Texture2D for menu and buttons
         private Texture2D menuNoLight_Texture;
@@ -57,8 +61,10 @@ namespace FinalProject
         public GameState CurrentState { get => currentState; } 
 
         //Constructors
-        public GameStateManager(ContentManager content, Player player, PenumbraComponent penumbra)
+        public GameStateManager(ContentManager content, Player player, PenumbraComponent penumbra, GraphicsDeviceManager graphics)
         {
+            _graphics = graphics;
+
             //Set intro timer
             introTimer = 2f;
             menuLightTimer = 2f;
@@ -82,6 +88,8 @@ namespace FinalProject
 
             // Load map
             map = new Map(player, penumbra);
+
+        
         }
 
         //Methods
@@ -190,6 +198,8 @@ namespace FinalProject
         /// <param name="dTime">Time passed (seconds)</param>
         public void Update(float dTime)
         {
+            ks = Keyboard.GetState();
+           
             //Current state actions
             switch (currentState)
             {
@@ -238,13 +248,18 @@ namespace FinalProject
                     map.Update(dTime);
 
                     // Press start(gamepad) or P(keyboard) to pause
-                    if (GamePad.GetState(PlayerIndex.One).Buttons.Start == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.P))
+                    if (ks.IsKeyDown(Keys.P) && previousKs.IsKeyUp(Keys.P))
                     {
                         currentState = GameState.PauseState;
                     }
                     break;
 
                 case GameState.PauseState:
+                    // Press start(gamepad) or P(keyboard) to unpause
+                    if (ks.IsKeyDown(Keys.P) && previousKs.IsKeyUp(Keys.P))
+                    {
+                        currentState = GameState.PlayState;
+                    }
                     mainMenuButton.Update();
 
                     break;
@@ -252,6 +267,8 @@ namespace FinalProject
                     mainMenuButton.Update();
                     break;
             }
+
+            previousKs = ks;
         }
 
         /// <summary>
@@ -269,7 +286,10 @@ namespace FinalProject
             playButton = new Button(content.Load<Texture2D>("Controls/Play"), content.Load<Texture2D>("Controls/Play_hover"), 1500, 700);
             optionButton = new Button(content.Load<Texture2D>("Controls/Options"), content.Load<Texture2D>("Controls/Options_hover"), 1500, 800);
             instructionButton = new Button(content.Load<Texture2D>("Controls/Instruction"), content.Load<Texture2D>("Controls/Instruction_hover"), 1500, 900);
-            backMainButton = new Button(content.Load<Texture2D>("Controls/Back"), content.Load<Texture2D>("Controls/Back_Hover"), 1500, 700); //Position not decided yet
+
+            Texture2D back = content.Load<Texture2D>("Controls/Back");
+            Texture2D back_Hover = content.Load<Texture2D>("Controls/Back_Hover");
+            backMainButton = new Button(back, back_Hover, _graphics.PreferredBackBufferWidth/2 - back.Width/2, 500);
             mainMenuButton = new Button(content.Load<Texture2D>("Controls/MainMenu"), content.Load<Texture2D>("Controls/MainMenu_hover"), 1500, 700); //Position not decided yet
         }
 
