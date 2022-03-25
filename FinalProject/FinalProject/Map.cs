@@ -43,9 +43,9 @@ namespace FinalProject
         //Constructors
 
 
-        public Map(Player player, PenumbraComponent penumbra/*, Effect maskEffect, Texture2D stoneRevealMask*/)
+        public Map(PenumbraComponent penumbra/*, Effect maskEffect, Texture2D stoneRevealMask*/)
         {
-            _player = player;
+            _player = new Player();
             _player.Position = new Vector2(500, 500);
 
             _penumbra = penumbra;
@@ -139,10 +139,10 @@ namespace FinalProject
 
             // Create a new content manager to load content used just by this map
             // this content can be used to content.Load, not sure if we need it
-            _content = new ContentManager(serviceProvider, "Content");
+            //_content = new ContentManager(serviceProvider, "Content");
 
             // Get ahold of the lighting system and reset it
-            _penumbra = (PenumbraComponent)serviceProvider.GetService(typeof(PenumbraComponent));
+            //_penumbra = (PenumbraComponent)serviceProvider.GetService(typeof(PenumbraComponent));
 
             SetupPenumbraLighting();
         }

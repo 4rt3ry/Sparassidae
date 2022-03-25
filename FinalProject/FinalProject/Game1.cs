@@ -38,8 +38,7 @@ namespace FinalProject
             };
             //Services.AddService(_penumbra);
 
-            //creates the player
-            _player = new Player();
+
 
             _penumbra.Initialize();
 
@@ -53,7 +52,7 @@ namespace FinalProject
 
             //Load menu and button content
             //Initialized the gameStateManager
-            _gameStateManager = new GameStateManager(Content, _player, _penumbra);
+            _gameStateManager = new GameStateManager(Content, _player, _penumbra, _graphics);
 
         }
         
