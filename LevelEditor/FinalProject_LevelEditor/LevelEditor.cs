@@ -25,6 +25,8 @@ namespace FinalProject_LevelEditor
         //Fields
         private TileType currentTile;
 
+        private PictureBox highlighter;
+
         private int bWidth;
         private int bHeight;
 
@@ -68,6 +70,14 @@ namespace FinalProject_LevelEditor
             //Keep box size variables
             bWidth = Level.Width / width;
             bHeight = Level.Height / height;
+
+            //Highlighter setup
+            highlighter = new PictureBox();
+            highlighter.Width = bWidth;
+            highlighter.Height = bHeight;
+            highlighter.Location = new Point(0, 0);
+            highlighter.BackColor = Color.White;
+            highlighter.BorderStyle = BorderStyle.FixedSingle;
 
             //Default tile is wall
             currentTile = TileType.Wall;
@@ -143,11 +153,14 @@ namespace FinalProject_LevelEditor
                 EditMenu.SelectedItem = roamPointComp;
                 return;
             }
-            Component comp = new Component(new Point(0, 0), currentTile, Convert.ToInt32(WidthTextBox.Text), Convert.ToInt32(HeightTextBox.Text), bWidth, bHeight, c);
+            Component comp = new Component(highlighter.Location, currentTile, Convert.ToInt32(WidthTextBox.Text), Convert.ToInt32(HeightTextBox.Text), bWidth, bHeight, c);
             Level.Controls.Add(comp.GetBox());
             EditMenu.Items.Add(comp);
             EditMenu.Focus();
             EditMenu.SelectedItem = comp;
+            selectedComp.Select(false);
+            selectedComp = comp;
+            selectedComp.Select(true);
         }
 
         /// <summary>
@@ -161,12 +174,19 @@ namespace FinalProject_LevelEditor
             if (EditMenu.SelectedIndex != prevSelectedIndex)
             {
                 selectedComp = null;
-                if (prevSelectedIndex != -1)
+                if (prevSelectedIndex != -1 && EditMenu.Items.Count != 0)
                 {
-                    Component comp = ((Component)EditMenu.Items[prevSelectedIndex]);
-                    comp.Select(false);
-                    EditMenu.Items[prevSelectedIndex] = EditMenu.Items[prevSelectedIndex];
-                    comp.GetBox().SendToBack();
+                    try
+                    {
+                        Component comp = ((Component)EditMenu.Items[prevSelectedIndex]);
+                        comp.Select(false);
+                        EditMenu.Items[prevSelectedIndex] = EditMenu.Items[prevSelectedIndex];
+                        comp.GetBox().SendToBack();
+                    }
+                    catch(Exception error)
+                    {
+
+                    }
                 }
                     
                 if (EditMenu.SelectedIndex != -1)
@@ -175,6 +195,7 @@ namespace FinalProject_LevelEditor
                     comp.Select(true);
                     comp.GetBox().BringToFront();
                     selectedComp = comp;
+                    highlighter.Location = comp.GetBox().Location;
                 }
                 prevSelectedIndex = EditMenu.SelectedIndex;
             }
@@ -205,15 +226,19 @@ namespace FinalProject_LevelEditor
                 {
                     case 'w':
                         selectedComp.Move(BoxMovement.Up, 1);
+                        highlighter.Location = new Point(highlighter.Location.X, highlighter.Location.Y - bHeight);
                         break;
                     case 'a':
                         selectedComp.Move(BoxMovement.Left, 1);
+                        highlighter.Location = new Point(highlighter.Location.X - bWidth, highlighter.Location.Y);
                         break;
                     case 's':
                         selectedComp.Move(BoxMovement.Down, 1);
+                        highlighter.Location = new Point(highlighter.Location.X, highlighter.Location.Y + bHeight);
                         break;
                     case 'd':
                         selectedComp.Move(BoxMovement.Right, 1);
+                        highlighter.Location = new Point(highlighter.Location.X + bWidth, highlighter.Location.Y);
                         break;
                     case 'W':
                         selectedComp.Extend(BoxMovement.Up, 1);
@@ -244,7 +269,7 @@ namespace FinalProject_LevelEditor
         /// <param name="e"></param>
         private void EditMenu_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back)
+            if((e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back) && EditMenu.SelectedIndex != -1)
             {
                 Component compRemoved = (Component)EditMenu.Items[EditMenu.SelectedIndex];
                 if(compRemoved.TileType == TileType.Enemy && compRemoved.RoamPoints != null)
@@ -258,10 +283,6 @@ namespace FinalProject_LevelEditor
                 EditMenu.Items.RemoveAt(EditMenu.SelectedIndex);
                 Level.Controls.Remove(compRemoved.GetBox());
             }
-            if( EditMenu.SelectedIndex == -1)
-            {
-                if(e.KeyCode == Keys.Enter)
-                    NewPieceButton.PerformClick();
                 switch (e.KeyCode)
                 {
                     case Keys.D1:
@@ -285,10 +306,8 @@ namespace FinalProject_LevelEditor
                         NewPieceButton.PerformClick();
                         break;
                 }
-            }
-            else
+            if(EditMenu.SelectedIndex != -1)
             {
-                
                 if (((Component)EditMenu.Items[EditMenu.SelectedIndex]).TileType == TileType.RoamPoint)
                 {
                     if (e.KeyCode == Keys.Enter)
