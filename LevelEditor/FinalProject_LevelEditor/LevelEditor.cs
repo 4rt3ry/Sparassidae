@@ -283,6 +283,8 @@ namespace FinalProject_LevelEditor
                 EditMenu.Items.RemoveAt(EditMenu.SelectedIndex);
                 Level.Controls.Remove(compRemoved.GetBox());
             }
+            if(EditMenu.SelectedIndex == -1)
+            {
                 switch (e.KeyCode)
                 {
                     case Keys.D1:
@@ -306,6 +308,7 @@ namespace FinalProject_LevelEditor
                         NewPieceButton.PerformClick();
                         break;
                 }
+            }
             if(EditMenu.SelectedIndex != -1)
             {
                 if (((Component)EditMenu.Items[EditMenu.SelectedIndex]).TileType == TileType.RoamPoint)
