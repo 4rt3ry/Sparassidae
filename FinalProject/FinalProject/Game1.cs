@@ -13,6 +13,7 @@ namespace FinalProject
         private SpriteBatch _batch;
 
         private GameStateManager _gameStateManager;
+        private Fade _fadeTransition;
         private PenumbraComponent _penumbra;
 
         public Game1()
@@ -37,6 +38,7 @@ namespace FinalProject
             };
             ////Services.AddService(_penumbra);
 
+            _fadeTransition = new Fade();
 
 
             _penumbra.Initialize();
@@ -51,7 +53,8 @@ namespace FinalProject
 
             //Load menu and button content
             //Initialized the gameStateManager
-            _gameStateManager = new GameStateManager(Content, _penumbra, _graphics);
+            _fadeTransition.LoadContent(Content);
+            _gameStateManager = new GameStateManager(Content, _player, _penumbra, _graphics);
 
         }
         
@@ -60,22 +63,24 @@ namespace FinalProject
         {
             //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             //    Exit();
+            float updateTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            _gameStateManager.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+            //PlayerMovement(updateTime);
+            _gameStateManager.Update(updateTime);
+            _fadeTransition.Update(updateTime);
 
             base.Update(gameTime);
         }
-
+        
         protected override void Draw(GameTime gameTime)
         {
             // Everything after this call will be affected by the lighting system.
-            _penumbra.BeginDraw();
+           _penumbra.BeginDraw();
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _batch.Begin();
             _gameStateManager.Display(_batch);
-            _gameStateManager.Fade(_batch, .5f, .5f);
 
             _batch.End();
 
@@ -84,7 +89,10 @@ namespace FinalProject
 
             // Draw stuff that is not affected by lighting (UI, etc).
             _batch.Begin();
+
             _gameStateManager.DrawUI(_batch);
+            _fadeTransition.StartFade(_batch, 1f, 1f);
+
             _batch.End();
 
             base.Draw(gameTime);

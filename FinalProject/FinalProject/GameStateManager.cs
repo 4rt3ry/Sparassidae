@@ -54,6 +54,9 @@ namespace FinalProject
         private Button mainMenuButton;
         private Button backGameButton;
 
+                private Fade _fadeTransition;
+
+
         //Buttons
         private List<Button> buttons = new List<Button>();
 
@@ -334,11 +337,6 @@ namespace FinalProject
             currentState = GameState.MenuState;
         }
 
-        public void Fade(SpriteBatch batch,float fadeInTime,float fadeOutTime)
-        {
-            System.Diagnostics.Debug.WriteLine("drawn");
-            batch.Draw(fade_Texture, new Rectangle(50, 50, 5000, 5000), Color.Red);
-        }
 
     }
 }
