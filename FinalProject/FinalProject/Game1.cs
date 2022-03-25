@@ -15,7 +15,6 @@ namespace FinalProject
         private GameStateManager _gameStateManager;
         private PenumbraComponent _penumbra;
 
-        Player _player;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -31,12 +30,12 @@ namespace FinalProject
             _graphics.HardwareModeSwitch = true;
             _graphics.ApplyChanges();
 
-            // Create lighting component and register it as a service so that subsystem can access it
+            //// Create lighting component and register it as a service so that subsystem can access it
             _penumbra = new PenumbraComponent(this)
             {
                 AmbientColor = Color.Black
             };
-            //Services.AddService(_penumbra);
+            ////Services.AddService(_penumbra);
 
 
 
@@ -52,7 +51,7 @@ namespace FinalProject
 
             //Load menu and button content
             //Initialized the gameStateManager
-            _gameStateManager = new GameStateManager(Content, _player, _penumbra, _graphics);
+            _gameStateManager = new GameStateManager(Content, _penumbra, _graphics);
 
         }
         

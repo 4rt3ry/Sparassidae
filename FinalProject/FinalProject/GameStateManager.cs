@@ -52,6 +52,7 @@ namespace FinalProject
         private Button instructionButton;
         private Button backMainButton;
         private Button mainMenuButton;
+        private Button backGameButton;
 
         //Buttons
         private List<Button> buttons = new List<Button>();
@@ -61,7 +62,7 @@ namespace FinalProject
         public GameState CurrentState { get => currentState; } 
 
         //Constructors
-        public GameStateManager(ContentManager content, Player player, PenumbraComponent penumbra, GraphicsDeviceManager graphics)
+        public GameStateManager(ContentManager content, PenumbraComponent penumbra, GraphicsDeviceManager graphics)
         {
             _graphics = graphics;
 
@@ -81,6 +82,7 @@ namespace FinalProject
             playButton.Click += Click_ToPlay;
             backMainButton.Click += Click_ToMenu;
             mainMenuButton.Click += Click_ToMenu;
+            backGameButton.Click += Click_ToPlay;
 
             buttons.Add(playButton);
             buttons.Add(optionButton);
@@ -289,8 +291,11 @@ namespace FinalProject
 
             Texture2D back = content.Load<Texture2D>("Controls/Back");
             Texture2D back_Hover = content.Load<Texture2D>("Controls/Back_Hover");
-            backMainButton = new Button(back, back_Hover, _graphics.PreferredBackBufferWidth/2 - back.Width/2, 500);
-            mainMenuButton = new Button(content.Load<Texture2D>("Controls/MainMenu"), content.Load<Texture2D>("Controls/MainMenu_hover"), 1500, 700); //Position not decided yet
+            backMainButton = new Button(back, back_Hover, _graphics.PreferredBackBufferWidth/2 - back.Width/2, 700);
+            backGameButton = new Button(back, back_Hover, _graphics.PreferredBackBufferWidth / 2 - back.Width / 2, 700);
+            Texture2D mainMain = content.Load<Texture2D>("Controls/MainMenu");
+            Texture2D mainMain_Hover = content.Load<Texture2D>("Controls/MainMenu_hover");
+            mainMenuButton = new Button(mainMain, mainMain_Hover, _graphics.PreferredBackBufferWidth / 2 - mainMain.Width/2, 800); 
         }
 
         /// <summary>

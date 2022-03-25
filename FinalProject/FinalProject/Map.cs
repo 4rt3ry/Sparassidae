@@ -49,6 +49,7 @@ namespace FinalProject
             _player.Position = new Vector2(500, 500);
 
             _penumbra = penumbra;
+
             //_maskEffect = maskEffect;
             //_stoneRevealMask = stoneRevealMask;
 
