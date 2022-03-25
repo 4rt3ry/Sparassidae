@@ -40,13 +40,15 @@ namespace FinalProject
         private Texture2D menuNoLight_Texture;
         private Texture2D menuLight_Texture;
         private Texture2D instruction_Texture;
-        private Texture2D fade_Texture;
 
         private Button playButton;
         private Button optionButton;
         private Button instructionButton;
         private Button backMainButton;
         private Button mainMenuButton;
+
+                private Fade _fadeTransition;
+
 
         //Buttons
         private List<Button> buttons = new List<Button>();
@@ -259,7 +261,6 @@ namespace FinalProject
             menuLight_Texture = content.Load<Texture2D>("Menu_Light");
             menuNoLight_Texture = content.Load<Texture2D>("Menu_noLight");
             instruction_Texture = content.Load<Texture2D>("Instruction");
-            fade_Texture = content.Load<Texture2D>("blackbox2");
 
             playButton = new Button(content.Load<Texture2D>("Controls/Play"), content.Load<Texture2D>("Controls/Play_hover"), 1500, 700);
             optionButton = new Button(content.Load<Texture2D>("Controls/Options"), content.Load<Texture2D>("Controls/Options_hover"), 1500, 800);
@@ -304,11 +305,6 @@ namespace FinalProject
             currentState = GameState.MenuState;
         }
 
-        public void Fade(SpriteBatch batch,float fadeInTime,float fadeOutTime)
-        {
-            System.Diagnostics.Debug.WriteLine("drawn");
-            batch.Draw(fade_Texture, new Rectangle(50, 50, 5000, 5000), Color.Red);
-        }
 
     }
 }
