@@ -10,12 +10,12 @@ namespace FinalProject
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
-        private SpriteBatch batch;
+        private SpriteBatch _batch;
 
-        private GameStateManager gameStateManager;
-        private PenumbraComponent penumbra;
+        private GameStateManager _gameStateManager;
+        private PenumbraComponent _penumbra;
 
-        Player playerObject;
+        Player _player;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -29,28 +29,29 @@ namespace FinalProject
             _graphics.PreferredBackBufferHeight = 1080;
             _graphics.ApplyChanges();
 
-            base.Initialize();
-
             // Create lighting component and register it as a service so that subsystem can access it
-            penumbra = new PenumbraComponent(this)
+            _penumbra = new PenumbraComponent(this)
             {
                 AmbientColor = Color.Black
             };
-            Services.AddService(penumbra);
+            //Services.AddService(_penumbra);
 
-            penumbra.Initialize();
+            //creates the player
+            _player = new Player();
+
+            _penumbra.Initialize();
+
+            base.Initialize();
+
         }
 
         protected override void LoadContent()
         {
-            batch = new SpriteBatch(GraphicsDevice);
+            _batch = new SpriteBatch(GraphicsDevice);
 
             //Load menu and button content
             //Initialized the gameStateManager
-            gameStateManager = new GameStateManager(Content);
-
-            //creates the player
-            playerObject = new Player();
+            _gameStateManager = new GameStateManager(Content, _player, _penumbra);
 
         }
         float Lerp(float firstFloat, float secondFloat, float by)
@@ -69,7 +70,7 @@ namespace FinalProject
             float speed = 5;
             KeyboardState kb = Keyboard.GetState();
 
-            switch (playerObject.CurrentState)
+            switch (_player.CurrentState)
             {
                 case PlayerState.WalkingState:
                     speed = 5;
@@ -109,9 +110,9 @@ namespace FinalProject
             }
 
             //adds acceleration/smoothing by lerping
-            playerObject.Velocity = Lerp(playerObject.Velocity, addVelocity,.1f);
+            _player.Velocity = Lerp(_player.Velocity, addVelocity,.1f);
 
-            playerObject.Position += playerObject.Velocity;
+            _player.Position += _player.Velocity;
             //Debug.WriteLine(playerObject.Position);
             //Debug.WriteLine("add velocity is " + addVelocity);
 
@@ -122,29 +123,30 @@ namespace FinalProject
             //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             //    Exit();
 
-            gameStateManager.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
-            PlayerMovement((float) gameTime.ElapsedGameTime.TotalSeconds);
+            PlayerMovement((float)gameTime.ElapsedGameTime.TotalSeconds);
+            _gameStateManager.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             // Everything after this call will be affected by the lighting system.
-            penumbra.BeginDraw();
+            _penumbra.BeginDraw();
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            batch.Begin();
-            gameStateManager.Display(batch);
-            batch.End();
+            _batch.Begin();
+            _gameStateManager.Display(_batch);
+            _batch.End();
 
             // Draw the actual lit scene.
-            penumbra.Draw(gameTime);
+            _penumbra.Draw(gameTime);
 
             // Draw stuff that is not affected by lighting (UI, etc).
-            batch.Begin();
-            gameStateManager.DrawUI(batch);
-            batch.End();
+            _batch.Begin();
+            _gameStateManager.DrawUI(_batch);
+            _batch.End();
 
             base.Draw(gameTime);
         }

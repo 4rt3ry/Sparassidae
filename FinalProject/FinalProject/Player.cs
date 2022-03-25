@@ -50,10 +50,10 @@ namespace FinalProject
         // Set position should also update the position of flashlight
         public new Vector2 Position
         {
-            get { return Position; }
+            get => _position;
             set
             {
-                Position = value;
+                _position = value;
                 flashlight.Position = value;
             }
         }
@@ -76,9 +76,12 @@ namespace FinalProject
             Flashlight = new Spotlight
             {
                 Position = this.Position,
-                Scale = new Vector2(50), //Range of the light source
-                ShadowType = ShadowType.Solid
+                Scale = new Vector2(800), //Range of the light source
+                ShadowType = ShadowType.Solid,
+                ConeDecay = 2.0f
             };
+
+            _physicsCollider = new CircleCollider(this, new Vector2(0, 0), 20f, false);
         }
 
 

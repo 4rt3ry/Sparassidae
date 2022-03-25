@@ -16,13 +16,13 @@ namespace FinalProject
     class Wall : GameObject
     {
         //Fields
-        private Hull hull;
-        private float wdith;
-        private float height;
+        private Hull _hull;
+        private float _width;
+        private float _height;
 
-        public Hull Hull { get => hull; set => hull = value; }
-        public float Wdith { get => wdith; set => wdith = value; }
-        public float Height { get => height; set => height = value; }
+        public Hull Hull { get => _hull; set => _hull = value; }
+        public float Width { get => _width; set => _width = value; }
+        public float Height { get => _height; set => _height = value; }
 
         /// <summary>
         /// Create the wall rectangle shadow hull 
@@ -30,12 +30,16 @@ namespace FinalProject
         /// <param name="width">Width of the wall</param>
         /// <param name="height">Height of the wall</param>
         /// <param name="position">Initial position of the wall</param>
-        public Wall(float width, float height, Vector2 position)
+        public Wall(Vector2 position, float width, float height): base()
         {
-            this.wdith = width;
-            this.height = height;
-            //Create the rectangle hull
-            hull = Hull.CreateRectangle(position, new Vector2(width, height));
+            // Set up Wall's private fields
+            _position = position;
+            _width = width;
+            _height = height;
+            _hull = Hull.CreateRectangle(position, new Vector2(width, height));
+
+            // Set up Colliders
+            _physicsCollider = new RectangleCollider(this, new Vector2(0, 0), new Vector2(width, height), false);
         }
 
     }

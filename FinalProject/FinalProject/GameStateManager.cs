@@ -34,7 +34,6 @@ namespace FinalProject
         private float menuLightTimer;
         private bool isMenuLighted;
 
-        //GameState fields
         Map map;
 
         //Texture2D for menu and buttons
@@ -56,7 +55,7 @@ namespace FinalProject
         public GameState CurrentState { get => currentState; } 
 
         //Constructors
-        public GameStateManager(ContentManager content)
+        public GameStateManager(ContentManager content, Player player, PenumbraComponent penumbra)
         {
             //Set intro timer
             introTimer = 2f;
@@ -78,6 +77,9 @@ namespace FinalProject
             buttons.Add(playButton);
             buttons.Add(optionButton);
             buttons.Add(instructionButton);
+
+            // Load map
+            map = new Map(player, penumbra);
         }
 
         //Methods
@@ -106,7 +108,7 @@ namespace FinalProject
                     break;
 
                 case GameState.PlayState:
-                   // map.Draw(batch);
+                    map.Draw(batch);
                     break;
                 case GameState.PauseState:
 
@@ -228,8 +230,11 @@ namespace FinalProject
                     break;
 
                 case GameState.PlayState:
-                    //map.Update(dTime);
-                    if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+
+                    map.Update(dTime);
+
+                    // Press start(gamepad) or P(keyboard) to pause
+                    if (GamePad.GetState(PlayerIndex.One).Buttons.Start == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.P))
                     {
                         currentState = GameState.PauseState;
                     }
