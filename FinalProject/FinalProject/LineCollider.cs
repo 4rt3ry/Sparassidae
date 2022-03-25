@@ -13,7 +13,7 @@ using System;
 namespace FinalProject
 {
     sealed class LineCollider : Collider
-    { 
+    {
 
         // Properties
 
@@ -60,7 +60,34 @@ namespace FinalProject
             {
                 return Intersects(other.PhysicsCollider);
             }
-            // Currently don't need physics collisions
+            else
+            {
+                // Eventually, this should use other gameobject's velocity to determine if collisions occur
+                return Intersects(other.PhysicsCollider);
+            }
+
+            return false;
+        }
+
+        public override bool CheckCollision(GameObject other, out ColliderHitInfo collisionInfo)
+        {
+            // Set collision information
+            Vector2 collisionNormal = new Vector2();
+            Vector2 hitPoint = new Vector2();
+
+            //Vector2 physicsColliderPreviousPosition = other.PhysicsCollider.Position;
+
+            collisionInfo = new ColliderHitInfo(collisionNormal, hitPoint);
+
+            if (IsTrigger)
+            {
+                return Intersects(other.PhysicsCollider);
+            }
+            else
+            {
+                // Eventually, this should use other gameobject's velocity to determine if collisions occur
+                return Intersects(other.PhysicsCollider);
+            }
 
             return false;
         }
@@ -90,7 +117,7 @@ namespace FinalProject
                 float orientationCDA = Orientation(lc.Position, lc.EndPosition, Position);
                 float orientationCDB = Orientation(lc.Position, lc.EndPosition, EndPosition);
 
-                if (orientationABC !=orientationABD && orientationCDA != orientationCDB)
+                if (orientationABC != orientationABD && orientationCDA != orientationCDB)
                 {
                     return true;
                 }
@@ -138,12 +165,12 @@ namespace FinalProject
                 Vector2 p3 = EndPosition - perpDirection * cc.Radius;
                 Vector2 p4 = EndPosition + perpDirection * cc.Radius;
 
-                if (SignedTriangleArea(cc.Position, p1, p2) > 0 && SignedTriangleArea(cc.Position, p2, p3) > 0 && 
+                if (SignedTriangleArea(cc.Position, p1, p2) > 0 && SignedTriangleArea(cc.Position, p2, p3) > 0 &&
                     SignedTriangleArea(cc.Position, p3, p4) > 0 && SignedTriangleArea(cc.Position, p4, p1) > 0)
                 {
                     return true;
                 }
-                
+
 
                 return false;
             }
@@ -179,7 +206,7 @@ namespace FinalProject
             float orientation = (b.Y - a.Y) * (c.X - b.X) - (b.X - a.X) * (c.Y - b.Y);
 
             // clockwise if positive, counter-clockwise if negative, colinear if zero
-            return orientation > 0 ? 1 : orientation < 0? 2 : 0;
+            return orientation > 0 ? 1 : orientation < 0 ? 2 : 0;
 
         }
 
@@ -193,7 +220,7 @@ namespace FinalProject
             Texture2D texture = new Texture2D(gd, length, strokeWeight);
             Color[] colorData = new Color[length * strokeWeight];
 
-            for(int i = 0; i < colorData.Length;i++)
+            for (int i = 0; i < colorData.Length; i++)
             {
                 colorData[i] = baseColor;
             }

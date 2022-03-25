@@ -49,8 +49,13 @@ namespace FinalProject
             }
             else
             {
-                return false;
+                return Intersects(other.PhysicsCollider);
             }
+        }
+
+        public override bool CheckCollision(GameObject other, out ColliderHitInfo collisionInfo)
+        {
+            throw new NotImplementedException();
         }
 
         public override bool ContainsPoint(Vector2 point) => MathF.Pow(point.X - Position.X, 2) + MathF.Pow(point.Y - Position.Y, 2) <= radius * radius;
@@ -63,7 +68,7 @@ namespace FinalProject
 
                 // Check if distance is less than radius1 + radius2 without sqrt()
                 return MathF.Pow(cc.Position.X - Position.X, 2) + MathF.Pow(cc.Position.Y - Position.Y, 2) <= MathF.Pow(cc.radius + radius, 2);
-                
+
             }
             if (other is RectangleCollider)
             {
