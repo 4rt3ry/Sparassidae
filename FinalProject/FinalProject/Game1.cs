@@ -27,6 +27,7 @@ namespace FinalProject
         {
             _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1080;
+            _graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
 
             // Create lighting component and register it as a service so that subsystem can access it
@@ -116,6 +117,7 @@ namespace FinalProject
             //Debug.WriteLine(playerObject.Position);
             //Debug.WriteLine("add velocity is " + addVelocity);
 
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -138,6 +140,8 @@ namespace FinalProject
 
             _batch.Begin();
             _gameStateManager.Display(_batch);
+            _gameStateManager.Fade(_batch, .5f, .5f);
+
             _batch.End();
 
             // Draw the actual lit scene.
