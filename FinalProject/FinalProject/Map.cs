@@ -38,6 +38,8 @@ namespace FinalProject
         public Map(Player player/*, Effect maskEffect, Texture2D stoneRevealMask*/)
         {
             _player = player;
+            _player.X = 500;
+            _player.Y = 500;
             //_maskEffect = maskEffect;
             //_stoneRevealMask = stoneRevealMask;
 
@@ -46,8 +48,14 @@ namespace FinalProject
 
             //_mapColliders.Add(new RectangleCollider(null, new Vector2(1920 / 2, 0), new Vector2(1920, 10), false));
             //_mapColliders.Add(new RectangleCollider(null, new Vector2(1920 / 2, 1080), new Vector2(1920, 10), false));
-            _mapColliders.Add(new RectangleCollider(null, new Vector2(300, 300), new Vector2(200, 200), false));
-            _mapColliders.Add(new RectangleCollider(null, new Vector2(300, 500), new Vector2(200, 200), false));
+            _mapColliders.Add(new RectangleCollider(null, new Vector2(500, 10), new Vector2(1000, 20), false));
+            _mapColliders.Add(new RectangleCollider(null, new Vector2(500, 990), new Vector2(1000, 20), false));
+            _mapColliders.Add(new RectangleCollider(null, new Vector2(10, 500), new Vector2(20, 960), false));
+            _mapColliders.Add(new RectangleCollider(null, new Vector2(990, 500), new Vector2(20, 960), false));
+            _mapColliders.Add(new RectangleCollider(null, new Vector2(400, 400), new Vector2(50, 50), false));
+            _mapColliders.Add(new RectangleCollider(null, new Vector2(600, 600), new Vector2(50, 50), false));
+            _mapColliders.Add(new RectangleCollider(null, new Vector2(400, 600), new Vector2(50, 50), false));
+            _mapColliders.Add(new RectangleCollider(null, new Vector2(600, 400), new Vector2(50, 50), false));
         }
 
         //Methods

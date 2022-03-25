@@ -65,7 +65,7 @@ namespace FinalProject
                 ShadowType = ShadowType.Solid
             };
 
-            PhysicsCollider = new CircleCollider(this, new Vector2(0, 0), 20, false);
+            PhysicsCollider = new CircleCollider(this, new Vector2(0, 0), 40, false);
         }
 
 
