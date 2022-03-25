@@ -43,9 +43,9 @@ namespace FinalProject
         //Constructors
 
 
-        public Map(Player player, PenumbraComponent penumbra/*, Effect maskEffect, Texture2D stoneRevealMask*/)
+        public Map(PenumbraComponent penumbra/*, Effect maskEffect, Texture2D stoneRevealMask*/)
         {
-            _player = player;
+            _player = new Player();
             _player.Position = new Vector2(500, 500);
 
             _penumbra = penumbra;

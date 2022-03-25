@@ -87,7 +87,7 @@ namespace FinalProject
             buttons.Add(instructionButton);
 
             // Load map
-            map = new Map(player, penumbra);
+            map = new Map( penumbra);
 
         
         }

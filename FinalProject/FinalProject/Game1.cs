@@ -38,8 +38,7 @@ namespace FinalProject
             };
             //Services.AddService(_penumbra);
 
-            //creates the player
-            _player = new Player();
+
 
             _penumbra.Initialize();
 
