@@ -39,6 +39,7 @@ namespace FinalProject
             };
             //Services.AddService(_penumbra);
 
+            _fadeTransition = new Fade();
 
 
             _penumbra.Initialize();
@@ -65,7 +66,7 @@ namespace FinalProject
             //    Exit();
             float updateTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            PlayerMovement(updateTime);
+            //PlayerMovement(updateTime);
             _gameStateManager.Update(updateTime);
             _fadeTransition.Update(updateTime);
 
