@@ -49,9 +49,78 @@ namespace FinalProject
             }
             else
             {
-                return false;
+                return Intersects(other.PhysicsCollider) ;
             }
         }
+
+        public override bool CheckCollision(GameObject other, out ColliderHitInfo collisionInfo)
+        {
+            collisionInfo = new ColliderHitInfo();
+            if (!Intersects(other.PhysicsCollider)) return false;
+
+            if (other.PhysicsCollider is CircleCollider)
+            {
+                CircleCollider otherCircleCollider = (CircleCollider)other.PhysicsCollider;
+                Vector2 previousPosition = other.Position - other.Velocity;
+                Vector2 hitNormal;
+                Vector2 hitPoint;
+                //RectangleCollider interpolatedCollider = 
+
+                // Check for collision on top side
+                if (otherCircleCollider.Position.Y <= Position.Y - Size.Y / 2 && otherCircleCollider.Position.X >= Position.X - Size.X / 2 && otherCircleCollider.Position.X <= Position.X + Size.X / 2)
+                {
+                    hitPoint = new Vector2(otherCircleCollider.Position.X, Position.Y - Size.Y / 2);
+                }
+                // bottom side
+                else if (otherCircleCollider.Position.Y >= Position.Y + Size.Y / 2 && otherCircleCollider.Position.X >= Position.X - Size.X / 2 && otherCircleCollider.Position.X <= Position.X + Size.X / 2)
+                {
+                    hitPoint = new Vector2(otherCircleCollider.Position.X, Position.Y + Size.Y / 2);
+                }
+                // left side
+                else if (otherCircleCollider.Position.X <= Position.X - Size.X / 2 && otherCircleCollider.Position.Y >= Position.Y - Size.Y / 2 && otherCircleCollider.Position.Y <= Position.Y + Size.Y / 2)
+                {
+                    hitPoint = new Vector2(Position.X - Size.X / 2, otherCircleCollider.Position.Y);
+                }
+                // right side
+                else if (otherCircleCollider.Position.X >= Position.X + Size.X / 2 && otherCircleCollider.Position.Y >= Position.Y - Size.Y / 2 && otherCircleCollider.Position.Y <= Position.Y + Size.Y / 2)
+                {
+                    hitPoint = new Vector2(Position.X + Size.X / 2, otherCircleCollider.Position.Y);
+                }
+
+                // Check if circle contains any corner points
+                // Top left corner
+                else  if ((otherCircleCollider.Position - (Position - Size / 2)).LengthSquared() <= otherCircleCollider.Radius * otherCircleCollider.Radius)
+                {
+                    hitPoint = Position - Size / 2;
+                }
+                // top right corner
+                else if ((otherCircleCollider.Position - (Position - Size / 2 + Vector2.UnitX * Size)).LengthSquared() <= otherCircleCollider.Radius * otherCircleCollider.Radius)
+                {
+                    hitPoint = Position - Size / 2 + Vector2.UnitX * Size;
+                }
+                // bottom right corner
+                else if ((otherCircleCollider.Position - (Position + Size / 2)).LengthSquared() <= otherCircleCollider.Radius * otherCircleCollider.Radius)
+                {
+                    hitPoint = Position + Size / 2;
+                }
+                // bottom left corner
+                else if ((otherCircleCollider.Position - (Position - Size / 2 + Vector2.UnitY * Size)).LengthSquared() <= otherCircleCollider.Radius * otherCircleCollider.Radius)
+                {
+                    hitPoint = Position - Size / 2 + Vector2.UnitY * Size;
+                }
+                else
+                {
+                    hitPoint = previousPosition;
+                }
+
+                hitNormal = otherCircleCollider.Position - hitPoint;
+                hitNormal.Normalize();
+
+                collisionInfo = new ColliderHitInfo(hitNormal, hitPoint);
+            }
+            return true;
+        }
+
 
         public override bool ContainsPoint(Vector2 point) => point.X > Position.X && point.X < Position.X + size.X &&
                                                              point.Y > Position.Y && point.Y < Position.Y + size.Y;
@@ -71,8 +140,8 @@ namespace FinalProject
                 CircleCollider cc = (CircleCollider)other;
 
                 // Check if circle contains any corner points
-                if ((cc.Position - Position + Size / 2).LengthSquared() <= cc.Radius * cc.Radius || 
-                    (cc.Position - Position + Size / 2 - Vector2.UnitX * Size).LengthSquared() <= cc.Radius *cc.Radius ||
+                if ((cc.Position - Position + Size / 2).LengthSquared() <= cc.Radius * cc.Radius ||
+                    (cc.Position - Position + Size / 2 - Vector2.UnitX * Size).LengthSquared() <= cc.Radius * cc.Radius ||
                     (cc.Position - Position - Size / 2).LengthSquared() <= cc.Radius * cc.Radius ||
                     (cc.Position - Position + Size / 2 - Vector2.UnitY * Size).LengthSquared() <= cc.Radius * cc.Radius)
                 {
@@ -86,13 +155,13 @@ namespace FinalProject
                     return true;
                 }
                 // Inflates top and bottomm sides by circle's radius, checks if centerpoint is contained
-                if (cc.Position.X >= Position.X - Size.X / 2 && cc.Position.X <= Position.X + Size.X / 2&&
+                if (cc.Position.X >= Position.X - Size.X / 2 && cc.Position.X <= Position.X + Size.X / 2 &&
                     cc.Position.Y >= Position.Y - Size.Y / 2 - cc.Radius && cc.Position.Y <= Position.Y + size.Y / 2 + cc.Radius)
                 {
                     return true;
                 }
 
-                return false; 
+                return false;
             }
             if (other is LineCollider)
             {

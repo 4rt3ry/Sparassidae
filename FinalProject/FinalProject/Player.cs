@@ -8,8 +8,8 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using Penumbra;
 
 namespace FinalProject
 {
@@ -36,13 +36,16 @@ namespace FinalProject
         private float shockSpeed;
         private float chaseSpeed;
 
-        Vector2 velocity = new Vector2(0, 0);
+        //Light
+        private Spotlight flashlight;
 
         public PlayerState CurrentState { get => currentState; set => currentState = value; }
-        public Vector2 Velocity { get => velocity; set => velocity = value; }
+
+        public Spotlight Flashlight1 { get => flashlight; set => flashlight = value; }
+
 
         //Constructors
-        public Player(): base()
+        public Player() : base()
         {
             //Set standards for different speeds
             walkingSpeed = 0;
@@ -54,10 +57,15 @@ namespace FinalProject
             currentSpeed = walkingSpeed;
             currentState = PlayerState.WalkingState;
 
-            Position = new Vector2(1920 / 2, 1080 / 2);
+            //Creaet the spotlight
+            Flashlight1 = new Spotlight
+            {
+                Position = this.Position,
+                Scale = new Vector2(50), //Range of the light source
+                ShadowType = ShadowType.Solid
+            };
 
-            PhysicsCollider = new CircleCollider(this, new Vector2(0, 0), 10f, true);
-            
+            PhysicsCollider = new CircleCollider(this, new Vector2(0, 0), 20, false);
         }
 
 
@@ -71,7 +79,7 @@ namespace FinalProject
         {
             PhysicsCollider.SetDebugTexture(batch.GraphicsDevice, Color.White);
             PhysicsCollider.DrawDebugTexture(batch, Color.White);
-
+            
             switch (CurrentState)
             {
                 case PlayerState.WalkingState:
@@ -105,7 +113,7 @@ namespace FinalProject
 
                     break;
                 case PlayerState.AfraidState:
-                    
+
                     break;
                 case PlayerState.ShockState:
                     if (shockTimer <= 0)
@@ -151,7 +159,7 @@ namespace FinalProject
         public void DeAgro()
         {
             numTargets -= 1;
-            if(numTargets <= 0)
+            if (numTargets <= 0)
             {
                 SetWalkingState();
             }

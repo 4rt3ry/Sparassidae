@@ -124,9 +124,8 @@ namespace FinalProject
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
+            PlayerMovement((float)gameTime.ElapsedGameTime.TotalSeconds);
             gameStateManager.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
-            PlayerMovement((float) gameTime.ElapsedGameTime.TotalSeconds);
             base.Update(gameTime);
         }
 

@@ -17,11 +17,21 @@ namespace FinalProject
     {
         //Fields
         protected Vector2 _position;
-        Collider _physicsCollider;
-        List<Collider> _colliders;
+        protected Vector2 _velocity;
+        protected Collider _physicsCollider;
+        protected List<Collider> _colliders;
 
         //Properties
+
+        /// <summary>
+        /// The <see cref="GameObject"/>'s position
+        /// </summary>
         public Vector2 Position { get => _position; set => _position = value; }
+
+        /// <summary>
+        /// The <see cref="GameObject"/>'s velocity
+        /// </summary>
+        public Vector2 Velocity { get => _velocity; set => _velocity = value; }
 
         public float X { get => _position.X; set => _position.X = value; }
         public float Y { get => _position.Y; set => _position.Y = value; }
@@ -35,14 +45,15 @@ namespace FinalProject
         public GameObject()
         {
             Position = new Vector2(0, 0);
+            Velocity = new Vector2(0, 0);
         }
 
 
         //Methods
 
-        public virtual void Draw(SpriteBatch sp,Rectangle rect,Texture2D texture,Color tint)
+        public virtual void Draw(SpriteBatch sp, Rectangle rect, Texture2D texture, Color tint)
         {
-            sp.Draw(texture,rect, tint);
+            sp.Draw(texture, rect, tint);
         }
 
 

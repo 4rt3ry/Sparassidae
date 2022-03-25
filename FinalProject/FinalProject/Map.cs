@@ -44,8 +44,10 @@ namespace FinalProject
             _mapColliders = new List<Collider>();
             _enemies = new List<Enemy>();
 
-            _mapColliders.Add(new RectangleCollider(null, new Vector2(1920 / 2, 0), new Vector2(1920, 10), false));
-            _mapColliders.Add(new RectangleCollider(null, new Vector2(1920 / 2, 1080), new Vector2(1920, 10), false));
+            //_mapColliders.Add(new RectangleCollider(null, new Vector2(1920 / 2, 0), new Vector2(1920, 10), false));
+            //_mapColliders.Add(new RectangleCollider(null, new Vector2(1920 / 2, 1080), new Vector2(1920, 10), false));
+            _mapColliders.Add(new RectangleCollider(null, new Vector2(300, 300), new Vector2(200, 200), false));
+            _mapColliders.Add(new RectangleCollider(null, new Vector2(300, 500), new Vector2(200, 200), false));
         }
 
         //Methods
@@ -56,6 +58,11 @@ namespace FinalProject
         /// <param name="batch"></param>
         public void Draw(SpriteBatch batch)
         {
+            foreach(Collider collider in _mapColliders)
+            {
+                collider.SetDebugTexture(batch.GraphicsDevice, Color.White);
+                collider.DrawDebugTexture(batch, Color.White);
+            }
             _player.Display(batch);
         }
 
@@ -63,14 +70,19 @@ namespace FinalProject
         /// Updates enemy positions and stone throws.
         /// </summary>
         /// <param name="gameTime"></param>
-        public void Update(GameTime gameTime)
+        public void Update(float dTime)
         {
             foreach(Collider collider in _mapColliders)
             {
-                if (collider.CheckCollision(_player))
+                ColliderHitInfo hitInfo;
+                if (collider.CheckCollision(_player, out hitInfo))
                 {
-                    
+                    _player.Position = hitInfo.HitPoint + hitInfo.Normal * ((CircleCollider)_player.PhysicsCollider).Radius;
                 }
+                //if (collider.Intersects(_player.PhysicsCollider))
+                //{
+                //    _player.Position = Vector2.Zero;
+                //}
             }
         }
 

@@ -49,8 +49,13 @@ namespace FinalProject
             }
             else
             {
-                return false;
+                return Intersects(other.PhysicsCollider);
             }
+        }
+
+        public override bool CheckCollision(GameObject other, out ColliderHitInfo collisionInfo)
+        {
+            throw new NotImplementedException();
         }
 
         public override bool ContainsPoint(Vector2 point) => MathF.Pow(point.X - Position.X, 2) + MathF.Pow(point.Y - Position.Y, 2) <= radius * radius;

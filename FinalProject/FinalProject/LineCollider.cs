@@ -75,6 +75,8 @@ namespace FinalProject
             Vector2 collisionNormal = new Vector2();
             Vector2 hitPoint = new Vector2();
 
+            //Vector2 physicsColliderPreviousPosition = other.PhysicsCollider.Position;
+
             collisionInfo = new ColliderHitInfo(collisionNormal, hitPoint);
 
             if (IsTrigger)
