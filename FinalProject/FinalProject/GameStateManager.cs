@@ -40,6 +40,7 @@ namespace FinalProject
         private Texture2D menuNoLight_Texture;
         private Texture2D menuLight_Texture;
         private Texture2D instruction_Texture;
+        private Texture2D pauseMask;
 
         private Button playButton;
         private Button optionButton;
@@ -110,6 +111,7 @@ namespace FinalProject
                 case GameState.PlayState:
                     map.Draw(batch);
                     break;
+
                 case GameState.PauseState:
 
                     break;
@@ -167,12 +169,13 @@ namespace FinalProject
                     break;
 
                 case GameState.PlayState:
-                    // map.Draw(batch);
-                    
                     break;
+
                 case GameState.PauseState:
+                    batch.Draw(pauseMask, Vector2.Zero, Color.White);
                     mainMenuButton.Draw(batch);
                     break;
+
                 case GameState.GameOverState:
                     mainMenuButton.Draw(batch);
                     break;
@@ -239,6 +242,7 @@ namespace FinalProject
                         currentState = GameState.PauseState;
                     }
                     break;
+
                 case GameState.PauseState:
                     mainMenuButton.Update();
 
@@ -258,6 +262,7 @@ namespace FinalProject
             menuLight_Texture = content.Load<Texture2D>("Menu_Light");
             menuNoLight_Texture = content.Load<Texture2D>("Menu_noLight");
             instruction_Texture = content.Load<Texture2D>("Instruction");
+            pauseMask = content.Load<Texture2D>("PauseMask");
 
             playButton = new Button(content.Load<Texture2D>("Controls/Play"), content.Load<Texture2D>("Controls/Play_hover"), 1500, 700);
             optionButton = new Button(content.Load<Texture2D>("Controls/Options"), content.Load<Texture2D>("Controls/Options_hover"), 1500, 800);
