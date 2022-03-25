@@ -117,6 +117,7 @@ namespace FinalProject
             //Debug.WriteLine(playerObject.Position);
             //Debug.WriteLine("add velocity is " + addVelocity);
 
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -139,6 +140,8 @@ namespace FinalProject
 
             _batch.Begin();
             _gameStateManager.Display(_batch);
+            _gameStateManager.Fade(_batch, .5f, .5f);
+
             _batch.End();
 
             // Draw the actual lit scene.
