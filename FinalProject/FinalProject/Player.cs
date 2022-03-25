@@ -151,6 +151,59 @@ namespace FinalProject
             }
         }
 
+        public void Move(float dt)
+        {
+            float speed = 5;
+            KeyboardState kb = Keyboard.GetState();
+
+            switch (currentState)
+            {
+                case PlayerState.WalkingState:
+                    speed = 5;
+                    break;
+                case PlayerState.AfraidState:
+                    speed = speed / 2;
+                    break;
+                case PlayerState.ShockState:
+                    speed = 1;
+                    break;
+                case PlayerState.ChaseState:
+                    speed *= 2;
+                    break;
+                case PlayerState.DeadState:
+                    speed = 0;
+                    break;
+            }
+
+            //get keyboard inputs
+            bool aDown = kb.IsKeyDown(Keys.A);
+            bool dDown = kb.IsKeyDown(Keys.D);
+            bool wDown = kb.IsKeyDown(Keys.W);
+            bool sDown = kb.IsKeyDown(Keys.S);
+
+
+            Vector2 addVelocity = Vector2.Zero;
+            if (aDown) { addVelocity += -Vector2.UnitX; }
+            if (dDown) { addVelocity += Vector2.UnitX; }
+            if (wDown) { addVelocity += -Vector2.UnitY; }
+            if (sDown) { addVelocity += Vector2.UnitY; }
+
+            // Ensures speed remains the same when moving diagonally
+            if (addVelocity.LengthSquared() > 0)
+            {
+                addVelocity.Normalize();
+                addVelocity *= speed;
+            }
+
+            //adds acceleration/smoothing by lerping
+            Velocity = Vector2.Lerp(Velocity, addVelocity, 0.1f);
+
+            Position += Velocity;
+            //Debug.WriteLine(playerObject.Position);
+            //Debug.WriteLine("add velocity is " + addVelocity);
+
+        }
+
         /// <summary>
         /// Set player into afraid state
         /// </summary>

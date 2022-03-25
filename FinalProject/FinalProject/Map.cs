@@ -92,6 +92,7 @@ namespace FinalProject
         public void Update(float dTime)
         {
 
+            _player.Move(dTime);
             _player.Update(dTime);
 
             foreach(Wall wall in _walls)
