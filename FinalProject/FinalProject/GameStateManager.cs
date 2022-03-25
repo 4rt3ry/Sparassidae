@@ -44,7 +44,6 @@ namespace FinalProject
         private Texture2D menuNoLight_Texture;
         private Texture2D menuLight_Texture;
         private Texture2D instruction_Texture;
-
         private Texture2D pauseMask;
         private Texture2D fade_Texture;
 

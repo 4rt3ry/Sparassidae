@@ -26,8 +26,10 @@ namespace FinalProject
 
         protected override void Initialize()
         {
-            _graphics.PreferredBackBufferWidth = 1920;
-            _graphics.PreferredBackBufferHeight = 1080;
+            _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            _graphics.IsFullScreen = true;
+            _graphics.HardwareModeSwitch = true;
             _graphics.ApplyChanges();
 
             // Create lighting component and register it as a service so that subsystem can access it
@@ -37,9 +39,8 @@ namespace FinalProject
             };
             //Services.AddService(_penumbra);
 
-            //creates the player
-            _player = new Player();
-            _fadeTransition = new Fade();
+
+
             _penumbra.Initialize();
 
             base.Initialize();
@@ -53,82 +54,21 @@ namespace FinalProject
             //Load menu and button content
             //Initialized the gameStateManager
             _fadeTransition.LoadContent(Content);
-            _gameStateManager = new GameStateManager(Content, _player, _penumbra);
+            _gameStateManager = new GameStateManager(Content, _player, _penumbra, _graphics);
 
         }
-        float Lerp(float firstFloat, float secondFloat, float by)
-        {
-            return firstFloat * (1 - by) + secondFloat * by;
-        }
-        Vector2 Lerp(Vector2 firstVector, Vector2 secondVector, float by)
-        {
-            float retX = Lerp(firstVector.X, secondVector.X, by);
-            float retY = Lerp(firstVector.Y, secondVector.Y, by);
-            return new Vector2(retX, retY);
-        }
-
-        void PlayerMovement(float dt)
-        {
-            float speed = 5;
-            KeyboardState kb = Keyboard.GetState();
-
-            switch (_player.CurrentState)
-            {
-                case PlayerState.WalkingState:
-                    speed = 5;
-                    break;
-                case PlayerState.AfraidState:
-                    speed = speed/2;
-                    break;
-                case PlayerState.ShockState:
-                    speed = 1;
-                    break;
-                case PlayerState.ChaseState:
-                    speed *= 2;
-                    break;
-                case PlayerState.DeadState:
-                    speed = 0;
-                    break;
-            }
-
-            //get keyboard inputs
-            bool aDown = kb.IsKeyDown(Keys.A);
-            bool dDown = kb.IsKeyDown(Keys.D);
-            bool wDown = kb.IsKeyDown(Keys.W);
-            bool sDown = kb.IsKeyDown(Keys.S);
-
-
-            Vector2 addVelocity = Vector2.Zero;
-            if (aDown) { addVelocity += -Vector2.UnitX; }
-            if (dDown) { addVelocity += Vector2.UnitX; }
-            if (wDown) { addVelocity += -Vector2.UnitY; }
-            if (sDown) { addVelocity += Vector2.UnitY; }
-
-            // Ensures speed remains the same when moving diagonally
-            if (addVelocity.LengthSquared() > 0)
-            {
-                addVelocity.Normalize();
-                addVelocity *= speed;
-            }
-
-            //adds acceleration/smoothing by lerping
-            _player.Velocity = Lerp(_player.Velocity, addVelocity,.1f);
-
-            _player.Position += _player.Velocity;
-            //Debug.WriteLine(playerObject.Position);
-            //Debug.WriteLine("add velocity is " + addVelocity);
-
-
-        }
+        
 
         protected override void Update(GameTime gameTime)
         {
             //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             //    Exit();
             float updateTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             PlayerMovement(updateTime);
             _gameStateManager.Update(updateTime);
             _fadeTransition.Update(updateTime);
+
             base.Update(gameTime);
         }
         
