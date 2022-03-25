@@ -27,6 +27,7 @@ namespace FinalProject
         {
             _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1080;
+            _graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
 
             // Create lighting component and register it as a service so that subsystem can access it
