@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
 using System;
 using Penumbra;
+using Microsoft.Xna.Framework.Content;
 namespace FinalProject
 {
     public class Game1 : Game
@@ -30,11 +31,13 @@ namespace FinalProject
 
             base.Initialize();
 
+            // Create lighting component and register it as a service so that subsystem can access it
             penumbra = new PenumbraComponent(this)
             {
                 AmbientColor = Color.Black
             };
-          
+            Services.AddService(penumbra);
+
             penumbra.Initialize();
         }
 
@@ -116,8 +119,8 @@ namespace FinalProject
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            //    Exit();
 
             gameStateManager.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
             PlayerMovement((float) gameTime.ElapsedGameTime.TotalSeconds);
