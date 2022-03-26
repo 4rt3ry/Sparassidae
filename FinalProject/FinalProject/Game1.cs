@@ -54,7 +54,7 @@ namespace FinalProject
             //Load menu and button content
             //Initialized the gameStateManager
             _fadeTransition.LoadContent(Content);
-            _gameStateManager = new GameStateManager(Content, _player, _penumbra, _graphics);
+            _gameStateManager = new GameStateManager(Content, _penumbra, _graphics);
 
         }
         
