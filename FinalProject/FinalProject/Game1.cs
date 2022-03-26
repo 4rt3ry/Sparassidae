@@ -25,8 +25,8 @@ namespace FinalProject
 
         protected override void Initialize()
         {
-            _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            _graphics.PreferredBackBufferWidth = 1920;
+            _graphics.PreferredBackBufferHeight = 1080;
             _graphics.IsFullScreen = true;
             _graphics.HardwareModeSwitch = true;
             _graphics.ApplyChanges();
@@ -66,7 +66,7 @@ namespace FinalProject
             float updateTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             //PlayerMovement(updateTime);
-            _gameStateManager.Update(updateTime);
+            _gameStateManager.Update(updateTime, _penumbra);
             _fadeTransition.Update(updateTime);
 
             base.Update(gameTime);
@@ -77,7 +77,7 @@ namespace FinalProject
             // Everything after this call will be affected by the lighting system.
            _penumbra.BeginDraw();
 
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             _batch.Begin();
             _gameStateManager.Display(_batch);

@@ -201,7 +201,7 @@ namespace FinalProject
         /// (State switching, motion/animation/state switch detection)
         /// </summary>
         /// <param name="dTime">Time passed (seconds)</param>
-        public void Update(float dTime)
+        public void Update(float dTime, PenumbraComponent penumbra)
         {
             ks = Keyboard.GetState();
            
@@ -209,6 +209,9 @@ namespace FinalProject
             switch (currentState)
             {
                 case GameState.IntroState:
+
+                    penumbra.Visible = false;
+
                     introTimer -= dTime;
                     if(introTimer <= 0)
                     {
@@ -217,6 +220,9 @@ namespace FinalProject
                     break;
 
                 case GameState.MenuState:
+
+                    penumbra.Visible = false;
+
                     //Switch between no light menu and lighted menu background
                     menuLightTimer -= dTime;
                     if(menuLightTimer <= 0)
@@ -241,14 +247,23 @@ namespace FinalProject
                     break;
 
                 case GameState.OptionState:
+
+                    penumbra.Visible = false;
+
                     backMainButton.Update();
                     break;
 
                 case GameState.InstructionState:
+
+                    penumbra.Visible = false;
+
                     backMainButton.Update();
                     break;
 
                 case GameState.PlayState:
+
+                    penumbra.Visible = true;
+
 
                     map.Update(dTime);
 
@@ -260,6 +275,9 @@ namespace FinalProject
                     break;
 
                 case GameState.PauseState:
+
+                    penumbra.Visible = true;
+
                     // Press start(gamepad) or P(keyboard) to unpause
                     if (ks.IsKeyDown(Keys.P) && previousKs.IsKeyUp(Keys.P))
                     {
@@ -269,6 +287,9 @@ namespace FinalProject
 
                     break;
                 case GameState.GameOverState:
+
+                    penumbra.Visible = false;
+
                     mainMenuButton.Update();
                     break;
             }
