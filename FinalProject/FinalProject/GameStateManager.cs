@@ -46,6 +46,7 @@ namespace FinalProject
         private Texture2D instruction_Texture;
         private Texture2D pauseMask;
         private Texture2D fade_Texture;
+        private Texture2D black_Texture;
 
         private Button playButton;
         private Button optionButton;
@@ -175,10 +176,12 @@ namespace FinalProject
                     break;
 
                 case GameState.OptionState:
+                    batch.Draw(black_Texture, new Rectangle(0, 0, black_Texture.Width, black_Texture.Height), Color.White);
                     backMainButton.Draw(batch);
                     break;
 
                 case GameState.InstructionState:
+                    batch.Draw(black_Texture, new Rectangle(0, 0, black_Texture.Width, black_Texture.Height), Color.White);
                     backMainButton.Draw(batch);
                     break;
 
@@ -308,6 +311,7 @@ namespace FinalProject
             instruction_Texture = content.Load<Texture2D>("Instruction");
             pauseMask = content.Load<Texture2D>("PauseMask");
             fade_Texture = content.Load<Texture2D>("blackbox2");
+            black_Texture = content.Load<Texture2D>("Blackbackground");
 
             playButton = new Button(content.Load<Texture2D>("Controls/Play"), content.Load<Texture2D>("Controls/Play_hover"), 1500, 700);
             optionButton = new Button(content.Load<Texture2D>("Controls/Options"), content.Load<Texture2D>("Controls/Options_hover"), 1500, 800);
