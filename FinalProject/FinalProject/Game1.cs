@@ -77,7 +77,7 @@ namespace FinalProject
             // Everything after this call will be affected by the lighting system.
            _penumbra.BeginDraw();
 
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.AntiqueWhite);
 
             _batch.Begin();
             _gameStateManager.Display(_batch);
