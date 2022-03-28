@@ -1,7 +1,6 @@
 ﻿// Runi Jiang
 // 3/7/2022
-// Puporse: 
-// TODO: Add events
+// Puporse: Button class can hold two textures and link to method
 
 using System;
 using System.Collections.Generic;
@@ -37,14 +36,12 @@ namespace FinalProject
 
         //Constructor
         /// <summary>
-        /// 
+        /// Construct a button
         /// </summary>
-        /// <param name="buttonNorm"></param>
-        /// <param name="buttonHover"></param>
-        /// <param name="x_value"></param>
-        /// <param name="y_value"></param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
+        /// <param name="buttonNorm">normal texture</param>
+        /// <param name="buttonHover">texture when mouse is hovering over button</param>
+        /// <param name="x_value">the x value of the position</param>
+        /// <param name="y_value">the y value of the position</param>
         public Button(Texture2D buttonNorm, Texture2D buttonHover, 
             int x_value, int y_value)
         {
@@ -61,11 +58,12 @@ namespace FinalProject
         /// <param name="sb"></param>
         public void Draw( SpriteBatch sb)
         {
+            //Draw the hovering texture when the mouse is hovring on the button
             if(isHovering)
             {
                 sb.Draw(buttonHover, buttonRectangle, Color.White);
             }
-            else
+            else // Draw normal texture
             {
                 sb.Draw(buttonNorm, buttonRectangle, Color.White);
             }
@@ -77,16 +75,20 @@ namespace FinalProject
         /// </summary>
         public void Update()
         {
+            // Update the mouse state and hover state
             currentMouse = Mouse.GetState();
             isHovering = false;
 
+            // Check if the mouse is in/ovre the button
             if(buttonRectangle.Contains(currentMouse.X, currentMouse.Y))
             {
                 isHovering = true;
 
+                // If mouse is over the button, check if the player click the button
                 if(currentMouse.LeftButton == ButtonState.Released &&
                     previousMouse.LeftButton == ButtonState.Pressed)
                 {
+                    // If the click event is not null, call the method
                     if(Click != null)
                     {
                         Click(this, new EventArgs());
@@ -94,7 +96,7 @@ namespace FinalProject
                 }
             }
 
-
+            // Set the previous mouse state
             previousMouse = currentMouse;
         }
 
