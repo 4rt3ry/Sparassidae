@@ -198,6 +198,41 @@ namespace FinalProject_LevelEditor
             return name;
         }
 
+        public string FileIOToString()
+        {
+            string name = "";
+            int x = pBox.Location.X / bWidth;
+            int y = pBox.Location.Y / bHeight;
+
+            int w = pBox.Width / bWidth;
+            int h = pBox.Height / bHeight;
+
+            if (tileType == TileType.RoamPoint)
+            {
+                return "roampoint," + x + "," + y + ",";
+            }
+
+            switch (tileType)
+            {
+                case TileType.Wall:
+                    name += "wall,"+x+","+y+","+w+","+h;
+                    break;
+                case TileType.Enemy:
+                    name += "enemy," + x + "," + y + "," + 1 + "," + 1;
+                    break;
+                case TileType.Spawn:
+                    name += "spawn," + x + "," + y + "," + 1 + "," + 1; 
+                    break;
+                case TileType.Objective:
+                    name += "objective," + x + "," + y + "," + w + "," + h;
+                    break;
+                case TileType.Exit:
+                    name += "exit," + x + "," + y + "," + w + "," + h;
+                    break;
+            }
+            return name;
+        }
+
         public void AddRoamPoint(Component comp)
         {
             roamPoints.Add(comp);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -328,6 +329,86 @@ namespace FinalProject_LevelEditor
                         NewPieceButton.PerformClick();
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Writes all data to a string, which will be exported to a text file
+        /// ORDER:
+        /// |tiletype,x,y,width,height,roampoints|
+        /// enemy tiles will contain a collection of child roam nodes, others will just say "empty"
+        /// Roam Point Notation:
+        /// [roampoint,x,y,index[
+        /// </summary>
+        /// <returns></returns>
+        public string WriteToString()
+        {
+            String final = "|";
+            foreach(Component comp in EditMenu.Items)
+            {
+                string addition = "";
+                if (comp.TileType == TileType.RoamPoint)
+                {
+                    continue;
+                }
+                if (comp.TileType == TileType.Enemy)
+                {
+                    addition += comp.FileIOToString();
+                    addition += ",";
+                    addition += "[";
+                    for (int i = 0; i < comp.RoamPoints.Count; i ++)
+                    {
+                        Component rp = comp.RoamPoints[i];
+                        addition += rp.FileIOToString();
+                        addition += i;
+                        addition += "[";
+                    }
+                }
+                else
+                {
+                    addition += comp.FileIOToString();
+                    addition += ",empty";
+                }
+                addition += "|";
+                final += addition;
+            }
+
+            return final;
+        }
+
+        /// <summary>
+        /// Handles the literaly writing of the data
+        /// </summary>
+        /// <param name="filePath">Path of the file to write to</param>
+        public void WriteToFile(string filePath)
+        {
+            //try
+            //{
+                string data = WriteToString();
+                File.WriteAllText(filePath, data);
+            //}
+            //catch(Exception e)
+            //{
+            //    Console.WriteLine(e.Message);
+            //}
+        }
+
+        /// <summary>
+        /// Activates when the save button is clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SaveButton_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog dialog;
+            dialog = new SaveFileDialog();
+            dialog.FileName = "level";
+            dialog.Title = "Save File";
+            dialog.DefaultExt = "lvl";
+            DialogResult result = dialog.ShowDialog();
+            if (result.Equals(DialogResult.OK))
+            {
+                WriteToFile(dialog.FileName);
             }
         }
     }
