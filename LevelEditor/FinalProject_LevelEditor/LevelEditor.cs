@@ -48,25 +48,20 @@ namespace FinalProject_LevelEditor
             prevSelectedIndex = -1;
             selectedComp = null;
 
-            //Detect ratio and determine width (capped at 1920)
-            if(ratio*760 <= (1920-minWidth))
-            {
-                this.Width = (int)(ratio * 760) + minWidth;
-                Level.Width = (int)(ratio * 760);
-            }
-            else
-            {
-                this.Width = 1920;
-                Level.Width = 1920 - minWidth;
-            }
+            //Set Width
+            this.Width = 760 + minWidth;
+            Level.Width = 760;
+
             //Set positions of all menu items
             EditMenu.Location = new Point(this.Width - EditMenu.Width-22, 5);
             PlaceMenu.Location = new Point(5, 5);
             Level.Location = new Point(PlaceMenu.Location.X + PlaceMenu.Width + 5, 5);
             this.Height = 760;
-            EditMenu.Height = this.Height - 10 - 40 - 65;
+            EditMenu.Height = this.Height - SaveButton.Height - ZoomBar.Height - 70;
             PlaceMenu.Height = this.Height - 10 - 40;
             Level.Height = this.Height - 10 - 40;
+            SaveButton.Location = new Point(EditMenu.Location.X + EditMenu.Width / 2 - SaveButton.Width / 2, EditMenu.Location.Y + EditMenu.Height + ZoomBar.Height + 10);
+            ZoomBar.Location = new Point(EditMenu.Location.X, SaveButton.Location.Y - ZoomBar.Height - 5);
 
             //Keep box size variables
             bWidth = Level.Width / width;
@@ -409,6 +404,16 @@ namespace FinalProject_LevelEditor
             if (result.Equals(DialogResult.OK))
             {
                 WriteToFile(dialog.FileName);
+            }
+        }
+
+        private void ZoomBar_Scroll(object sender, EventArgs e)
+        {
+            bWidth = ((TrackBar)sender).Value;
+            bHeight = ((TrackBar)sender).Value;
+            foreach (Component comp in EditMenu.Items)
+            {
+                comp.ReAdjust(bWidth, bHeight);
             }
         }
     }

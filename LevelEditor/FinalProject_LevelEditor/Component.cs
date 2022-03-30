@@ -242,5 +242,22 @@ namespace FinalProject_LevelEditor
         {
             return parentEnemy;
         }
+
+        public void ReAdjust(int width, int height)
+        {
+            pBox.Location = new Point(pBox.Location.X/bWidth, pBox.Location.Y/bHeight);
+            pBox.Width = pBox.Width / bWidth;
+            pBox.Height = pBox.Height / bHeight;
+            this.bWidth = width;
+            this.bHeight = height;
+            pBox.Width = pBox.Width * bWidth;
+            pBox.Height = pBox.Height * bHeight;
+            pBox.Location = new Point(pBox.Location.X * bWidth, pBox.Location.Y * bHeight);
+        }
+
+        public void ChangeScroll(int xOffset, int yOffset)
+        {
+
+        }
     }
 }

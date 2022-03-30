@@ -48,8 +48,10 @@ namespace FinalProject_LevelEditor
             this.WallLabel = new System.Windows.Forms.Label();
             this.WallButton = new System.Windows.Forms.Button();
             this.EditMenu = new System.Windows.Forms.ListBox();
+            this.ZoomBar = new System.Windows.Forms.TrackBar();
             HeightLabel = new System.Windows.Forms.Label();
             this.PlaceMenu.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomBar)).BeginInit();
             this.SuspendLayout();
             // 
             // HeightLabel
@@ -63,7 +65,7 @@ namespace FinalProject_LevelEditor
             // 
             // SaveButton
             // 
-            this.SaveButton.Location = new System.Drawing.Point(1064, 654);
+            this.SaveButton.Location = new System.Drawing.Point(1016, 654);
             this.SaveButton.Name = "SaveButton";
             this.SaveButton.Size = new System.Drawing.Size(131, 55);
             this.SaveButton.TabIndex = 10;
@@ -245,18 +247,30 @@ namespace FinalProject_LevelEditor
             this.EditMenu.ItemHeight = 15;
             this.EditMenu.Location = new System.Drawing.Point(954, 15);
             this.EditMenu.Name = "EditMenu";
-            this.EditMenu.Size = new System.Drawing.Size(241, 634);
+            this.EditMenu.Size = new System.Drawing.Size(241, 574);
             this.EditMenu.Sorted = true;
             this.EditMenu.TabIndex = 11;
             this.EditMenu.SelectedIndexChanged += new System.EventHandler(this.EditMenu_SelectedIndexChanged);
             this.EditMenu.KeyDown += new System.Windows.Forms.KeyEventHandler(this.EditMenu_KeyDown);
             this.EditMenu.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.EditMenu_KeyPress);
             // 
+            // ZoomBar
+            // 
+            this.ZoomBar.Location = new System.Drawing.Point(954, 595);
+            this.ZoomBar.Maximum = 30;
+            this.ZoomBar.Minimum = 5;
+            this.ZoomBar.Name = "ZoomBar";
+            this.ZoomBar.Size = new System.Drawing.Size(241, 45);
+            this.ZoomBar.TabIndex = 16;
+            this.ZoomBar.Value = 5;
+            this.ZoomBar.Scroll += new System.EventHandler(this.ZoomBar_Scroll);
+            // 
             // LevelEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1207, 721);
+            this.Controls.Add(this.ZoomBar);
             this.Controls.Add(this.EditMenu);
             this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.PlaceMenu);
@@ -265,7 +279,9 @@ namespace FinalProject_LevelEditor
             this.Text = "LevelEditor";
             this.PlaceMenu.ResumeLayout(false);
             this.PlaceMenu.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomBar)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -290,5 +306,6 @@ namespace FinalProject_LevelEditor
         private System.Windows.Forms.TextBox WidthTextBox;
         private System.Windows.Forms.TextBox HeightTextBox;
         private System.Windows.Forms.ListBox EditMenu;
+        private System.Windows.Forms.TrackBar ZoomBar;
     }
 }
