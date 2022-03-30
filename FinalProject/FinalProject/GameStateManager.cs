@@ -1,4 +1,5 @@
 ﻿/*
+ * Authors: Runi Jiang, Arthur Powers
  * Game State Manager class
  * Handles game states and transitions
  */
@@ -55,7 +56,7 @@ namespace FinalProject
         private Button mainMenuButton;
         private Button backGameButton;
 
-                private Fade _fadeTransition;
+        private Fade _fadeTransition;
 
 
         //Buttons
@@ -63,7 +64,7 @@ namespace FinalProject
 
         private Random rng = new Random();
         //Properties
-        public GameState CurrentState { get => currentState; } 
+        public GameState CurrentState { get => currentState; }
 
         //Constructors
         public GameStateManager(ContentManager content, PenumbraComponent penumbra, GraphicsDeviceManager graphics)
@@ -93,9 +94,9 @@ namespace FinalProject
             buttons.Add(instructionButton);
 
             // Load map
-            map = new Map( penumbra);
+            map = new Map(penumbra);
 
-        
+
         }
 
         //Methods
@@ -113,7 +114,7 @@ namespace FinalProject
                     break;
 
                 case GameState.MenuState:
-               
+
                     break;
 
                 //
@@ -207,31 +208,30 @@ namespace FinalProject
         public void Update(float dTime, PenumbraComponent penumbra)
         {
             ks = Keyboard.GetState();
-           
+
             //Current state actions
             switch (currentState)
             {
                 case GameState.IntroState:
 
-                    penumbra.Visible = false;
-
                     introTimer -= dTime;
-                    if(introTimer <= 0)
+                    if (introTimer <= 0)
                     {
                         currentState = GameState.MenuState;
                     }
+
+                    // Update lighting effects after buttons have been updated
+                    UpdatePenumbraState(penumbra);
                     break;
 
                 case GameState.MenuState:
 
-                    penumbra.Visible = false;
-
                     //Switch between no light menu and lighted menu background
                     menuLightTimer -= dTime;
-                    if(menuLightTimer <= 0)
+                    if (menuLightTimer <= 0)
                     {
                         menuLightTimer = rng.Next(1, 3);
-                        if(isMenuLighted)
+                        if (isMenuLighted)
                         {
                             isMenuLighted = false;
                         }
@@ -247,26 +247,27 @@ namespace FinalProject
                         buttons[i].Update();
                     }
 
+                    // Update lighting effects after buttons have been updated
+                    UpdatePenumbraState(penumbra);
                     break;
 
                 case GameState.OptionState:
 
-                    penumbra.Visible = false;
-
                     backMainButton.Update();
+
+                    // Update lighting effects after buttons have been updated
+                    UpdatePenumbraState(penumbra);
                     break;
 
                 case GameState.InstructionState:
 
-                    penumbra.Visible = false;
-
                     backMainButton.Update();
+
+                    // Update lighting effects after buttons have been updated
+                    UpdatePenumbraState(penumbra);
                     break;
 
                 case GameState.PlayState:
-
-                    penumbra.Visible = true;
-
 
                     map.Update(dTime);
 
@@ -275,11 +276,12 @@ namespace FinalProject
                     {
                         currentState = GameState.PauseState;
                     }
+
+                    // Update lighting effects after buttons have been updated
+                    UpdatePenumbraState(penumbra);
                     break;
 
                 case GameState.PauseState:
-
-                    penumbra.Visible = true;
 
                     // Press start(gamepad) or P(keyboard) to unpause
                     if (ks.IsKeyDown(Keys.P) && previousKs.IsKeyUp(Keys.P))
@@ -288,12 +290,15 @@ namespace FinalProject
                     }
                     mainMenuButton.Update();
 
+                    // Update lighting effects after buttons have been updated
+                    UpdatePenumbraState(penumbra);
                     break;
                 case GameState.GameOverState:
 
-                    penumbra.Visible = false;
-
                     mainMenuButton.Update();
+
+                    // Update lighting effects after buttons have been updated
+                    UpdatePenumbraState(penumbra);
                     break;
             }
 
@@ -319,11 +324,11 @@ namespace FinalProject
 
             Texture2D back = content.Load<Texture2D>("Controls/Back");
             Texture2D back_Hover = content.Load<Texture2D>("Controls/Back_Hover");
-            backMainButton = new Button(back, back_Hover, _graphics.PreferredBackBufferWidth/2 - back.Width/2, 700);
+            backMainButton = new Button(back, back_Hover, _graphics.PreferredBackBufferWidth / 2 - back.Width / 2, 700);
             backGameButton = new Button(back, back_Hover, _graphics.PreferredBackBufferWidth / 2 - back.Width / 2, 700);
             Texture2D mainMain = content.Load<Texture2D>("Controls/MainMenu");
             Texture2D mainMain_Hover = content.Load<Texture2D>("Controls/MainMenu_hover");
-            mainMenuButton = new Button(mainMain, mainMain_Hover, _graphics.PreferredBackBufferWidth / 2 - mainMain.Width/2, 800); 
+            mainMenuButton = new Button(mainMain, mainMain_Hover, _graphics.PreferredBackBufferWidth / 2 - mainMain.Width / 2, 800);
         }
 
         /// <summary>
@@ -331,7 +336,7 @@ namespace FinalProject
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-       public void Click_ToInstruction(object sender, System.EventArgs e)
+        public void Click_ToInstruction(object sender, System.EventArgs e)
         {
             currentState = GameState.InstructionState;
         }
@@ -362,6 +367,17 @@ namespace FinalProject
             currentState = GameState.MenuState;
         }
 
-
+        /// <summary>
+        /// Decide when to show penumbra lighting.
+        /// Should be used whenever <see cref="currentState"/> is changed.
+        /// </summary>
+        /// <param name="penumbra"></param>
+        private void UpdatePenumbraState(PenumbraComponent penumbra) =>
+            penumbra.Visible = currentState switch
+            {
+                GameState.PlayState => true,
+                GameState.PauseState => true,
+                _ => false
+            };
     }
 }

@@ -70,6 +70,11 @@ namespace FinalProject
             // Center wall
             _walls.Add(new Wall(new Vector2(_width / 2, _height / 2), 500, 500));
 
+            foreach(Wall wall in _walls)
+            {
+                wall.PhysicsCollider.SetDebugTexture(penumbra.GraphicsDevice, Color.White);
+            }
+
             // Set up lighting after walls are created
             SetupPenumbraLighting();
             
@@ -84,6 +89,10 @@ namespace FinalProject
         public void Draw(SpriteBatch batch)
         {
             // Probably where enemies, stones, and stone reveal areas would be drawn
+            foreach(Wall wall in _walls)
+            {
+                wall.PhysicsCollider.DrawDebugTexture(batch, Color.White);
+            }
         }
 
         /// <summary>

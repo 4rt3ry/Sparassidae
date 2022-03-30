@@ -78,6 +78,7 @@ namespace FinalProject
                 Position = this.Position,
                 Scale = new Vector2(800), //Range of the light source
                 ShadowType = ShadowType.Solid,
+                Color = Color.CornflowerBlue,
                 ConeDecay = 2.0f
             };
 
