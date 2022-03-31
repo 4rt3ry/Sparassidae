@@ -45,6 +45,7 @@ namespace FinalProject_LevelEditor
             this.LoadFileButton.TabIndex = 0;
             this.LoadFileButton.Text = "Choose File";
             this.LoadFileButton.UseVisualStyleBackColor = true;
+            this.LoadFileButton.Click += new System.EventHandler(this.LoadFileButton_Click);
             // 
             // CreateLevelButton
             // 

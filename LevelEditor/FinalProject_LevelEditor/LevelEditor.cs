@@ -83,6 +83,82 @@ namespace FinalProject_LevelEditor
             currentTile = TileType.Wall;
         }
 
+        public LevelEditor(int width, int height, String filePath) : this(width, height)
+        {
+            /// |tiletype,x,y,width,height,roampoints|
+            /// enemy tiles will contain a collection of child roam nodes, others will just say "empty"
+            /// Roam Point Notation:
+            /// [roampoint,x,y,index[
+            /// 
+            StreamReader reader = new StreamReader(filePath);
+            String data = reader.ReadToEnd();
+            reader.Close();
+            String[] a1 = data.Split('|');
+            foreach(String s in a1)
+            {
+                if(s == "")
+                {
+                    continue;
+                }
+                String[] a2 = s.Split(',');
+                TileType t = TileType.Wall;
+                Color c = Color.White;
+                switch (a2[0])
+                {
+                    case "wall":
+                        t = TileType.Wall;
+                        c = Color.Black;
+                        break;
+                    case "enemy":
+                        t = TileType.Enemy;
+                        c = Color.FromArgb(192, 0, 0);
+                        break;
+                    case "spawn":
+                        t = TileType.Spawn;
+                        c = Color.FromArgb(192, 192, 0);
+                        break;
+                    case "objective":
+                        t = TileType.Objective;
+                        c = Color.SteelBlue;
+                        break;
+                    case "exit":
+                        t = TileType.Exit;
+                        c = Color.Green;
+                        break;
+                }
+                int x = Convert.ToInt32(a2[1]);
+                int y = Convert.ToInt32(a2[2]);
+                int w = Convert.ToInt32(a2[3]);
+                int h = Convert.ToInt32(a2[4]);
+
+                Component comp = new Component(new Point(x*bWidth, y*bHeight), t, w, h, bWidth, bHeight, c, new Point(-HBar.Value, -VBar.Value));
+
+                Level.Controls.Add(comp.GetBox());
+                EditMenu.Items.Add(comp);
+
+                if (a2[5].Equals("empty"))
+                {
+
+                }
+                else
+                {
+                    String[] b1 = a2[5].Split('[');
+                    foreach(String rp in b1)
+                    {
+                        if(rp != "")
+                        {
+                            String[] b2 = rp.Split(']');
+                            int rx = Convert.ToInt32(b2[1]);
+                            int ry = Convert.ToInt32(b2[2]);
+                            Component roampoint = new Component(new Point(rx*bWidth, ry*bHeight), TileType.RoamPoint, 1, 1, bWidth, bHeight, Color.FromArgb(200, 130, 130), new Point(-HBar.Value, -VBar.Value), comp);
+                            Level.Controls.Add(roampoint.GetBox());
+                            EditMenu.Items.Add(roampoint);
+                        }
+                    }
+                }
+            }
+        }
+
 
 
         //Methods
@@ -343,7 +419,7 @@ namespace FinalProject_LevelEditor
         /// <returns></returns>
         public string WriteToString()
         {
-            String final = "|";
+            String final = "";
             foreach(Component comp in EditMenu.Items)
             {
                 string addition = "";
@@ -355,7 +431,7 @@ namespace FinalProject_LevelEditor
                 {
                     addition += comp.FileIOToString();
                     addition += ",";
-                    addition += "[";
+                    addition += "";
                     for (int i = 0; i < comp.RoamPoints.Count; i ++)
                     {
                         Component rp = comp.RoamPoints[i];

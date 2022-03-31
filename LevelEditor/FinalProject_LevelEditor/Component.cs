@@ -30,6 +30,7 @@ namespace FinalProject_LevelEditor
         private int height;
         private PictureBox pBox;
         private Point adjustment;
+        int index;
 
         private Component parentEnemy;
         private List<Component> roamPoints;
@@ -48,6 +49,8 @@ namespace FinalProject_LevelEditor
             this.height = height;
             this.adjustment = adjustment;
 
+            index = 1;
+
             roamPoints = null;
             parentEnemy = null;
 
@@ -57,7 +60,6 @@ namespace FinalProject_LevelEditor
             }
 
             pBox = new PictureBox();
-
             pBox.Location = location;
             pBox.Width = width*bWidth;
             pBox.Height = height*bHeight;
@@ -68,12 +70,6 @@ namespace FinalProject_LevelEditor
         public Component(Point location, TileType tileType, int width, int height, int bWidth, int bHeight, Color c, Point adjustment, Component parent) : this(location, tileType, width, height, bWidth, bHeight, c, adjustment)
         {
             parentEnemy = parent;
-            pBox.Location = parent.GetBox().Location;
-        }
-
-        public Component(Point location, TileType tileType, List<PictureBox> boxes)
-        {
-
         }
 
         //Methods
@@ -211,7 +207,7 @@ namespace FinalProject_LevelEditor
 
             if (tileType == TileType.RoamPoint)
             {
-                return "roampoint," + x + "," + y + ",";
+                return "roampoint]" + x + "]" + y + "]";
             }
 
             switch (tileType)
