@@ -29,6 +29,7 @@ namespace FinalProject_LevelEditor
         private int width;
         private int height;
         private PictureBox pBox;
+        private Point adjustment;
 
         private Component parentEnemy;
         private List<Component> roamPoints;
@@ -38,13 +39,14 @@ namespace FinalProject_LevelEditor
         internal List<Component> RoamPoints { get => roamPoints; set => roamPoints = value; }
 
         //Constructors
-        public Component(Point location, TileType tileType, int width, int height, int bWidth, int bHeight, Color c)
+        public Component(Point location, TileType tileType, int width, int height, int bWidth, int bHeight, Color c, Point adjustment)
         {
             this.tileType = tileType;
             this.bHeight = bHeight;
             this.bWidth = bWidth;
             this.width = width;
             this.height = height;
+            this.adjustment = adjustment;
 
             roamPoints = null;
             parentEnemy = null;
@@ -63,7 +65,7 @@ namespace FinalProject_LevelEditor
             pBox.BackColor = Color.FromArgb(100, c.R, c.G, c.B);
         }
 
-        public Component(Point location, TileType tileType, int width, int height, int bWidth, int bHeight, Color c, Component parent) : this(location, tileType, width, height, bWidth, bHeight, c)
+        public Component(Point location, TileType tileType, int width, int height, int bWidth, int bHeight, Color c, Point adjustment, Component parent) : this(location, tileType, width, height, bWidth, bHeight, c, adjustment)
         {
             parentEnemy = parent;
             pBox.Location = parent.GetBox().Location;
@@ -201,8 +203,8 @@ namespace FinalProject_LevelEditor
         public string FileIOToString()
         {
             string name = "";
-            int x = pBox.Location.X / bWidth;
-            int y = pBox.Location.Y / bHeight;
+            int x = (pBox.Location.X / bWidth)-adjustment.X;
+            int y = (pBox.Location.Y / bHeight)-adjustment.Y;
 
             int w = pBox.Width / bWidth;
             int h = pBox.Height / bHeight;
@@ -257,7 +259,12 @@ namespace FinalProject_LevelEditor
 
         public void ChangeScroll(int xOffset, int yOffset)
         {
+            int dX = xOffset * bWidth;
+            int dY = yOffset * bHeight;
 
+            pBox.Location = new Point(pBox.Location.X + (dX - adjustment.X*bWidth), pBox.Location.Y + (dY - adjustment.Y*bHeight));
+
+            adjustment = new Point(xOffset, yOffset);
         }
     }
 }

@@ -49,6 +49,8 @@ namespace FinalProject_LevelEditor
             this.WallButton = new System.Windows.Forms.Button();
             this.EditMenu = new System.Windows.Forms.ListBox();
             this.ZoomBar = new System.Windows.Forms.TrackBar();
+            this.HBar = new System.Windows.Forms.HScrollBar();
+            this.VBar = new System.Windows.Forms.VScrollBar();
             HeightLabel = new System.Windows.Forms.Label();
             this.PlaceMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomBar)).BeginInit();
@@ -77,7 +79,7 @@ namespace FinalProject_LevelEditor
             // 
             this.Level.Location = new System.Drawing.Point(265, 12);
             this.Level.Name = "Level";
-            this.Level.Size = new System.Drawing.Size(683, 697);
+            this.Level.Size = new System.Drawing.Size(659, 673);
             this.Level.TabIndex = 2;
             this.Level.TabStop = false;
             this.Level.Enter += new System.EventHandler(this.Level_Enter);
@@ -262,14 +264,34 @@ namespace FinalProject_LevelEditor
             this.ZoomBar.Name = "ZoomBar";
             this.ZoomBar.Size = new System.Drawing.Size(241, 45);
             this.ZoomBar.TabIndex = 16;
-            this.ZoomBar.Value = 5;
+            this.ZoomBar.Value = 15;
             this.ZoomBar.Scroll += new System.EventHandler(this.ZoomBar_Scroll);
+            // 
+            // HBar
+            // 
+            this.HBar.Location = new System.Drawing.Point(265, 692);
+            this.HBar.Name = "HBar";
+            this.HBar.Size = new System.Drawing.Size(669, 17);
+            this.HBar.TabIndex = 17;
+            this.HBar.Scroll += new System.Windows.Forms.ScrollEventHandler(this.HBar_Scroll);
+            this.HBar.DragDrop += new System.Windows.Forms.DragEventHandler(this.HBar_DragDrop);
+            // 
+            // VBar
+            // 
+            this.VBar.Location = new System.Drawing.Point(927, 15);
+            this.VBar.Name = "VBar";
+            this.VBar.Size = new System.Drawing.Size(17, 670);
+            this.VBar.TabIndex = 18;
+            this.VBar.Scroll += new System.Windows.Forms.ScrollEventHandler(this.VBar_Scroll);
+            this.VBar.DragDrop += new System.Windows.Forms.DragEventHandler(this.VBar_DragDrop);
             // 
             // LevelEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1207, 721);
+            this.Controls.Add(this.VBar);
+            this.Controls.Add(this.HBar);
             this.Controls.Add(this.ZoomBar);
             this.Controls.Add(this.EditMenu);
             this.Controls.Add(this.SaveButton);
@@ -307,5 +329,7 @@ namespace FinalProject_LevelEditor
         private System.Windows.Forms.TextBox HeightTextBox;
         private System.Windows.Forms.ListBox EditMenu;
         private System.Windows.Forms.TrackBar ZoomBar;
+        private System.Windows.Forms.HScrollBar HBar;
+        private System.Windows.Forms.VScrollBar VBar;
     }
 }

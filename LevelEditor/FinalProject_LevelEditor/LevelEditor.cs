@@ -50,7 +50,7 @@ namespace FinalProject_LevelEditor
 
             //Set Width
             this.Width = 760 + minWidth;
-            Level.Width = 760;
+            Level.Width = 760 - VBar.Width;
 
             //Set positions of all menu items
             EditMenu.Location = new Point(this.Width - EditMenu.Width-22, 5);
@@ -59,13 +59,17 @@ namespace FinalProject_LevelEditor
             this.Height = 760;
             EditMenu.Height = this.Height - SaveButton.Height - ZoomBar.Height - 70;
             PlaceMenu.Height = this.Height - 10 - 40;
-            Level.Height = this.Height - 10 - 40;
+            Level.Height = this.Height - 10 - 40 - HBar.Height;
             SaveButton.Location = new Point(EditMenu.Location.X + EditMenu.Width / 2 - SaveButton.Width / 2, EditMenu.Location.Y + EditMenu.Height + ZoomBar.Height + 10);
             ZoomBar.Location = new Point(EditMenu.Location.X, SaveButton.Location.Y - ZoomBar.Height - 5);
+            HBar.Location = new Point(Level.Location.X, Level.Location.Y + Level.Height);
+            VBar.Location = new Point(Level.Location.X + Level.Width, VBar.Location.Y);
 
             //Keep box size variables
             bWidth = Level.Width / width;
             bHeight = Level.Height / height;
+            ZoomBar.Value = bWidth;
+
 
             //Highlighter setup
             highlighter = new PictureBox();
@@ -118,6 +122,7 @@ namespace FinalProject_LevelEditor
         private void NewPieceButton_Click(object sender, EventArgs e)
         {
             Color c = Color.White;
+            Point adjust = new Point(-HBar.Value, -VBar.Value);
             switch (currentTile)
             {
                 case TileType.Wall:
@@ -141,7 +146,7 @@ namespace FinalProject_LevelEditor
             }
             if(currentTile == TileType.RoamPoint)
             {
-                Component roamPointComp = new Component(new Point(0, 0), currentTile, Convert.ToInt32(WidthTextBox.Text), Convert.ToInt32(HeightTextBox.Text), bWidth, bHeight, c, (Component)EditMenu.SelectedItem);
+                Component roamPointComp = new Component(new Point(0, 0), currentTile, Convert.ToInt32(WidthTextBox.Text), Convert.ToInt32(HeightTextBox.Text), bWidth, bHeight, c, adjust, (Component)EditMenu.SelectedItem);
                 ((Component)EditMenu.Items[EditMenu.SelectedIndex]).AddRoamPoint(roamPointComp);
                 Level.Controls.Add(roamPointComp.GetBox());
                 EditMenu.Items.Add(roamPointComp);
@@ -149,7 +154,7 @@ namespace FinalProject_LevelEditor
                 EditMenu.SelectedItem = roamPointComp;
                 return;
             }
-            Component comp = new Component(highlighter.Location, currentTile, Convert.ToInt32(WidthTextBox.Text), Convert.ToInt32(HeightTextBox.Text), bWidth, bHeight, c);
+            Component comp = new Component(highlighter.Location, currentTile, Convert.ToInt32(WidthTextBox.Text), Convert.ToInt32(HeightTextBox.Text), bWidth, bHeight, c, adjust);
             Level.Controls.Add(comp.GetBox());
             EditMenu.Items.Add(comp);
             EditMenu.Focus();
@@ -414,6 +419,32 @@ namespace FinalProject_LevelEditor
             foreach (Component comp in EditMenu.Items)
             {
                 comp.ReAdjust(bWidth, bHeight);
+            }
+        }
+
+        private void VBar_DragDrop(object sender, DragEventArgs e)
+        {
+            
+        }
+
+        private void HBar_DragDrop(object sender, DragEventArgs e)
+        {
+            
+        }
+
+        private void HBar_Scroll(object sender, ScrollEventArgs e)
+        {
+            foreach (Component comp in EditMenu.Items)
+            {
+                comp.ChangeScroll(-((HScrollBar)sender).Value, -VBar.Value);
+            }
+        }
+
+        private void VBar_Scroll(object sender, ScrollEventArgs e)
+        {
+            foreach (Component comp in EditMenu.Items)
+            {
+                comp.ChangeScroll(-HBar.Value, -((VScrollBar)sender).Value);
             }
         }
     }
