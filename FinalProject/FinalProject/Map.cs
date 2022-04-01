@@ -124,27 +124,70 @@ namespace FinalProject
         /// // Note: When use it in the Game1, pass "Services" as the serviceProvider
         public void Load(string filepath, IServiceProvider serviceProvider)
         {
-            // Open the file for reading
-            StreamReader input = null;
-            try
-            {
-                input = new StreamReader(filepath);
-                string line = null;
+            /// |tiletype,x,y,width,height,roampoints|
+            /// enemy tiles will contain a collection of child roam nodes, others will just say "empty"
+            /// Roam Point Notation:
+            /// [roampoint,x,y,index[
+            
+            //Create reader and grab the data
+            StreamReader reader = new StreamReader(filePath);
+            String data = reader.ReadToEnd();
+            reader.Close();
+            //Close the reader
 
-                // The first line of level file is width and height of the map
-                if((line = input.ReadLine())!= null)
+            String[] a1 = data.Split('|');
+            foreach(String s in a1)
+            {
+                if(s == "")
                 {
-                    string[] peices = line.Split(',');
-                    _width = int.Parse(peices[0]);
-                    _height = int.Parse(peices[1]);
+                    continue;
+                }
+                String[] a2 = s.Split(',');
+                
+                //X, Y, Width, Height variables
+                int x = Convert.ToInt32(a2[1]);
+                int y = Convert.ToInt32(a2[2]);
+                int w = Convert.ToInt32(a2[3]);
+                int h = Convert.ToInt32(a2[4]);
+
+                //Switch for all different types of placeables
+                switch (a2[0])
+                {
+                    case "wall":
+                        break;
+                    case "enemy":
+                        break;
+                    case "spawn":
+                        break;
+                    case "objective":
+                        break;
+                    case "exit":
+                        break;
                 }
 
-                // The second line will be the player info
-            }
-            catch
-            {
+                //Set up for the roam points, do nothing if empty
+                if (a2[5].Equals("empty"))
+                {
 
+                }
+                else
+                {
+                    String[] b1 = a2[5].Split('[');
+                    foreach(String rp in b1)
+                    {
+                        if(rp != "")
+                        {
+                            //Set up code for roam points within a given enemy
+                            String[] b2 = rp.Split(']');
+                            int rx = Convert.ToInt32(b2[1]);
+                            int ry = Convert.ToInt32(b2[2]);
+                            int index = Convert.ToInt32(b2[3]);
+
+                        }
+                    }
+                }
             }
+
 
 
             // Create a new content manager to load content used just by this map
