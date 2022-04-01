@@ -85,6 +85,11 @@ namespace FinalProject
             _physicsCollider = new CircleCollider(this, new Vector2(0, 0), 20f, false);
         }
 
+        public Player(Vector2 position): this()
+        {
+            Position = position;
+        }
+
 
         //Methods
         /// <summary>

@@ -95,7 +95,7 @@ namespace FinalProject
 
             // Load map
             map = new Map(penumbra);
-
+            map.LoadTutorial();
 
         }
 
