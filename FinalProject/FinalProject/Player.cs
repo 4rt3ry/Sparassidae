@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework.Input;
 using Penumbra;
+using System.Diagnostics;
 
 namespace FinalProject
 {
@@ -39,12 +40,14 @@ namespace FinalProject
         //Light
         private Spotlight flashlight;
 
-        //MouseState
-        private MouseState ms;
+        // Input
+        private KeyboardState kb;
+        private MouseState currentMouse;
+        private MouseState previousMouse;
 
         //Properties
         public PlayerState CurrentState { get => currentState; set => currentState = value; }
-  
+
         public Spotlight Flashlight { get => flashlight; set => flashlight = value; }
 
         // Set position should also update the position of flashlight
@@ -59,7 +62,7 @@ namespace FinalProject
         }
 
         //Constructors
-        public Player(): base()
+        public Player() : base()
         {
             //Set standards for different speeds
             walkingSpeed = 0;
@@ -85,7 +88,7 @@ namespace FinalProject
             _physicsCollider = new CircleCollider(this, new Vector2(0, 0), 20f, false);
         }
 
-        public Player(Vector2 position): this()
+        public Player(Vector2 position) : this()
         {
             Position = position;
         }
@@ -128,9 +131,10 @@ namespace FinalProject
         {
             //This will make more sense if player's position can be set in the property
             //flashlight.Position = this.Position;
-            ms = Mouse.GetState();
+            currentMouse = Mouse.GetState();
+
             //Rotate the flashlight direction based on the mouse position
-            flashlight.Rotation = MathF.Atan2(ms.Y -  this.Position.Y, ms.X - this.Position.X);
+            flashlight.Rotation = MathF.Atan2(currentMouse.Y - this.Position.Y, currentMouse.X - this.Position.X);
 
             switch (CurrentState)
             {
@@ -138,7 +142,7 @@ namespace FinalProject
 
                     break;
                 case PlayerState.AfraidState:
-                    
+
                     break;
                 case PlayerState.ShockState:
                     if (shockTimer <= 0)
@@ -160,28 +164,20 @@ namespace FinalProject
         public void Move(float dt)
         {
             float speed = 5;
-            KeyboardState kb = Keyboard.GetState();
+            kb = Keyboard.GetState();
 
-            switch (currentState)
+            // Change player's speed based on their state
+            speed = currentState switch
             {
-                case PlayerState.WalkingState:
-                    speed = 5;
-                    break;
-                case PlayerState.AfraidState:
-                    speed = speed / 2;
-                    break;
-                case PlayerState.ShockState:
-                    speed = 1;
-                    break;
-                case PlayerState.ChaseState:
-                    speed *= 2;
-                    break;
-                case PlayerState.DeadState:
-                    speed = 0;
-                    break;
-            }
+                PlayerState.WalkingState => speed,
+                PlayerState.AfraidState => speed / 2,
+                PlayerState.ShockState => 1,
+                PlayerState.ChaseState => speed * 2,
+                PlayerState.DeadState => 0,
+                _ => 0
+            };
 
-            //get keyboard inputs
+            // Get keyboard inputs
             bool aDown = kb.IsKeyDown(Keys.A);
             bool dDown = kb.IsKeyDown(Keys.D);
             bool wDown = kb.IsKeyDown(Keys.W);
@@ -201,13 +197,36 @@ namespace FinalProject
                 addVelocity *= speed;
             }
 
-            //adds acceleration/smoothing by lerping
+            // Adds acceleration/smoothing by lerping
             Velocity = Vector2.Lerp(Velocity, addVelocity, 0.1f);
 
             Position += Velocity;
             //Debug.WriteLine(playerObject.Position);
             //Debug.WriteLine("add velocity is " + addVelocity);
+        }
 
+        /// <summary>
+        /// Throw a stone when the left mouse button is pressed
+        /// </summary>
+        /// <param name="stones"></param>
+        /// <param name="penumbra"></param>
+        public void ThrowStone(List<Stone> stones, PenumbraComponent penumbra)
+        {
+            currentMouse = Mouse.GetState();
+
+            // Throw a stone when left mouse button is pressed
+            if (currentMouse.LeftButton == ButtonState.Pressed && 
+                previousMouse.LeftButton == ButtonState.Released)
+            {
+                Stone stone = new Stone(_position);
+                Vector2 throwDirection = new Vector2(MathF.Cos(flashlight.Rotation), MathF.Sin(flashlight.Rotation));
+                Debug.WriteLine("Throw: " + throwDirection);
+                stone.Throw(throwDirection);
+                stones.Add(stone);
+                penumbra.Lights.Add(stone.Light);
+            }
+
+            previousMouse = currentMouse;
         }
 
         /// <summary>
@@ -237,7 +256,7 @@ namespace FinalProject
         public void DeAgro()
         {
             numTargets -= 1;
-            if(numTargets <= 0)
+            if (numTargets <= 0)
             {
                 SetWalkingState();
             }
