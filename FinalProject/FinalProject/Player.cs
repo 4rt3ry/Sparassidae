@@ -133,8 +133,8 @@ namespace FinalProject
         {
             //This will make more sense if player's position can be set in the property
             //flashlight.Position = this.Position;
-            ms = Mouse.GetState();
-            Vector2 mousePos = new Vector2(ms.Position.X, ms.Position.Y);
+            currentMouse = Mouse.GetState();
+            Vector2 mousePos = new Vector2(currentMouse.Position.X, currentMouse.Position.Y);
             mousePos = camera.ScreenToWorldSpace(mousePos);
             //Rotate the flashlight direction based on the mouse position
             flashlight.Rotation = MathF.Atan2(mousePos.Y -  this.Position.Y, mousePos.X - this.Position.X);

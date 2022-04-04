@@ -19,7 +19,7 @@ namespace FinalProject
         // Constants
         private const float _maxThrowSpeed = 800; // Pixels per second
         private const float _drag = 600f; // Pixels per second
-        private const float _collisionSpeedReduction = 0.25f; // Percent of current speed
+        private const float _collisionSpeedReduction = 0.75f; // Percent of current speed
 
         // Lighting
         private PointLight _pointLight;
