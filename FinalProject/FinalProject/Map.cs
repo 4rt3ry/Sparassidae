@@ -43,6 +43,7 @@ namespace FinalProject
 
         //Properties
         public ContentManager Content => _content;
+        public Player Player => _player;
 
         //Constructors
 
@@ -92,10 +93,12 @@ namespace FinalProject
             foreach (Wall wall in _walls)
             {
                 ColliderHitInfo hit;
+   
                 if (wall.PhysicsCollider.CheckCollision(_player, out hit))
                 {
                     _player.Position = hit.HitPoint + hit.Normal * ((CircleCollider)_player.PhysicsCollider).Radius;
                 }
+
             }
             foreach (Enemy enemy in _enemies)
             {
@@ -245,6 +248,7 @@ namespace FinalProject
                 _penumbra.Hulls.Add(wall.Hull);
             }
             _penumbra.Lights.Add(_player.Flashlight);
+            
         }
 
         /// <summary>

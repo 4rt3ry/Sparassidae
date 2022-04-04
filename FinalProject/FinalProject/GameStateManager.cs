@@ -66,6 +66,7 @@ namespace FinalProject
         private Random rng = new Random();
         //Properties
         public GameState CurrentState { get => currentState; }
+        public Map Map => map;
 
         //Constructors
         public GameStateManager(ContentManager content, PenumbraComponent penumbra, GraphicsDeviceManager graphics)
