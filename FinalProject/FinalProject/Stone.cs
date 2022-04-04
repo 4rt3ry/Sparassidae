@@ -7,27 +7,72 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Penumbra;
 
 namespace FinalProject
 {
-    class Stone: GameObject
+    class Stone : GameObject
     {
 
         // Fields
-        private const float _maxThrowSpeed = 400; // Pixels per second
-        private const float _drag = 20f; // Pixels per second
-        private const float _collisionSpeedReduction = 0.5f; // Percent of current speed
 
-        private int _hitCount = 1;
+        // Constants
+        private const float _maxThrowSpeed = 800; // Pixels per second
+        private const float _drag = 600f; // Pixels per second
+        private const float _collisionSpeedReduction = 0.25f; // Percent of current speed
+
+        // Lighting
+        private PointLight _pointLight;
+
+        // Stone throw info
         private Vector2 _direction;
         private float _currentSpeed = _maxThrowSpeed; // Pixels per second
+        private int _hitCount = 1;
+
 
         // Properties
+        /// <summary>
+        /// How many times the stone can bounce
+        /// </summary>
         public int HitCount { get => _hitCount; set => _hitCount = value; }
 
-        public Stone(): base()
+        /// <summary>
+        /// A small sphere of light that reveals the current stone.
+        /// </summary>
+        public PointLight Light { get => _pointLight; set => _pointLight = value; }
+
+        /// <summary>
+        /// The stone's position
+        /// </summary>
+        public new Vector2 Position
         {
+            get => _position;
+            set
+            {
+                _position = value;
+                _pointLight.Position = value;
+            }
+        }
+
+        /// <summary>
+        /// Creates a new stone, adding a point light to <paramref name="penumbra"/>.
+        /// </summary>
+        /// <param name="penumbra"></param>
+
+        public Stone(Vector2 position) : base()
+        {
+            // Position information
+            _position = position;
             _physicsCollider = new CircleCollider(this, new Vector2(0, 0), 10, false);
+
+            // Lighting
+            _pointLight = new PointLight
+            {
+                Position = _position,
+                Scale = new Vector2(50),
+                ShadowType = ShadowType.Solid,
+                Color = Color.CornflowerBlue,
+            };
         }
 
         /// <summary>
@@ -37,8 +82,10 @@ namespace FinalProject
         public void Update(float dTime)
         {
             _currentSpeed -= _drag * dTime;
+            if (_currentSpeed <= 0) _currentSpeed = 0;
+
             _velocity = _direction * _currentSpeed;
-            _position += _velocity * dTime;
+            Position += _velocity * dTime;
         }
 
         /// <summary>
@@ -47,7 +94,7 @@ namespace FinalProject
         /// <param name="normal"></param>
         public void Bounce(Vector2 normal)
         {
-            if (_hitCount <= 0)
+            if (_hitCount < 0)
             {
                 _velocity = Vector2.Zero;
                 _currentSpeed = 0;
@@ -58,6 +105,8 @@ namespace FinalProject
             if (normal.LengthSquared() != 0) normal.Normalize();
 
             Vector2 reflection = _direction - 2 * Vector2.Dot(_direction, normal) * normal;
+            _direction = reflection;
+            _currentSpeed *= _collisionSpeedReduction;
             _velocity = reflection * _currentSpeed;
             _hitCount--;
         }
@@ -67,7 +116,7 @@ namespace FinalProject
         /// </summary>
         public void Draw()
         {
-
+            // Possibly draw the stone's texture
         }
 
         /// <summary>

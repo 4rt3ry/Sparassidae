@@ -20,13 +20,14 @@ namespace FinalProject
     {
         //Fields
 
-        private Player _player;
-        private List<Enemy> _enemies;
-        private List<Wall> _walls;
-        private List<Vector2> _stoneRevealAreas;
+        private readonly Player _player;
+        private readonly List<Enemy> _enemies;
+        private readonly List<Wall> _walls;
+        private readonly List<Stone> _stones;
+        private readonly List<Vector2> _stoneRevealAreas;
 
-        private PenumbraComponent _penumbra;
-        private ContentManager _content;
+        private readonly PenumbraComponent _penumbra;
+        private readonly ContentManager _content;
 
         private const float _defaultWidth = 1920;
         private const float _defaultHeight = 1080;
@@ -48,13 +49,14 @@ namespace FinalProject
         //Constructors
 
 
-        public Map(PenumbraComponent penumbra, ContentManager content)
+        public Map(PenumbraComponent penumbra, ContentManager content,Camera2D camera)
         {
             _content = content;
             LoadContent();
-            _player = new Player(new Vector2(500, 500));
+            _player = new Player(new Vector2(500, 500),camera);
             _enemies = new List<Enemy>();
             _walls = new List<Wall>();
+            _stones = new List<Stone>();
             _stoneRevealAreas = new List<Vector2>();
             _penumbra = penumbra;
         }
@@ -87,19 +89,35 @@ namespace FinalProject
         public void Update(float dTime)
         {
 
+            // Player 
             _player.Move(dTime);
             _player.Update(dTime);
+            _player.ThrowStone(_stones, _penumbra);
 
+            foreach (Stone stone in _stones) stone.Update(dTime);
+
+            // Wall collisions
             foreach (Wall wall in _walls)
             {
+                // Player collision
                 ColliderHitInfo hit;
-   
                 if (wall.PhysicsCollider.CheckCollision(_player, out hit))
                 {
                     _player.Position = hit.HitPoint + hit.Normal * ((CircleCollider)_player.PhysicsCollider).Radius;
                 }
 
+                // Stone collisions
+                foreach (Stone stone in _stones)
+                {
+                    if (wall.PhysicsCollider.CheckCollision(stone, out hit))
+                    {
+                        stone.Position = hit.HitPoint + hit.Normal * ((CircleCollider)stone.PhysicsCollider).Radius;
+                        stone.Bounce(hit.Normal);
+                    }
+                }
             }
+
+            // Enemy 
             foreach (Enemy enemy in _enemies)
             {
                 enemy.Update(dTime);
@@ -248,7 +266,6 @@ namespace FinalProject
                 _penumbra.Hulls.Add(wall.Hull);
             }
             _penumbra.Lights.Add(_player.Flashlight);
-            
         }
 
         /// <summary>
