@@ -22,6 +22,7 @@ namespace FinalProject
         private MouseState previousMouse;
 
         private bool isHovering; //Hovering over the indicator
+        private bool isHoveringSlider; // Hovering over the entire slider;
         private Rectangle sliderRec;
         private Rectangle indicatorRec;
 
@@ -51,6 +52,8 @@ namespace FinalProject
         public Slider(Texture2D indicator, Texture2D widget, int x_value, int y_value,
             double initialValue, double totalValue)
         {
+            isHovering = false;
+            isHoveringSlider = false;
             this.indicator = indicator;
             this.widget = widget;
             curValue = initialValue;
@@ -82,31 +85,49 @@ namespace FinalProject
 
             if(sliderRec.Contains(currentMouse.X, currentMouse.Y))
             {
+                isHoveringSlider = true;
+
                 //Click
                 if (currentMouse.LeftButton == ButtonState.Pressed &&
                    previousMouse.LeftButton == ButtonState.Released)
                 {
-                    indicatorRec = new Rectangle(currentMouse.X - indicator.Width/2, indicatorRec.Y, indicator.Width, indicator.Height);
-                 
+                    indicatorRec = new Rectangle(currentMouse.X - indicator.Width / 2, indicatorRec.Y, indicator.Width, indicator.Height);
+
                     // If the click event is not null, call the method
                     if (Click != null)
                     {
                         Click(this, new EventArgs());
                     }
+                    isHoveringSlider = false;
                 }
+            }
 
+
+            if (isHoveringSlider)
+            {
                 //Drag
-                if(indicatorRec.Contains(currentMouse.X, currentMouse.Y))
+                if (indicatorRec.Contains(currentMouse.X, currentMouse.Y) && currentMouse.LeftButton == ButtonState.Pressed)
                 {
                     isHovering = true;
                 }
 
-                if(isHovering)
+                if (isHovering)
                 {
                     if (currentMouse.LeftButton == ButtonState.Pressed &&
                         previousMouse.LeftButton == ButtonState.Pressed)
                     {
-                        indicatorRec = new Rectangle(currentMouse.X - indicator.Width / 2, indicatorRec.Y, indicator.Width, indicator.Height);
+                        if(currentMouse.X < sliderRec.X)
+                        {
+                            indicatorRec = new Rectangle(sliderRec.X - indicator.Width / 2, indicatorRec.Y, indicator.Width, indicator.Height);
+                        }
+                        else if(currentMouse.X > sliderRec.X + sliderRec.Width)
+                        {
+                            indicatorRec = new Rectangle(sliderRec.X + sliderRec.Width - indicator.Width / 2, indicatorRec.Y, indicator.Width, indicator.Height);
+                        }
+                        else
+                        {
+                            indicatorRec = new Rectangle(currentMouse.X - indicator.Width / 2, indicatorRec.Y, indicator.Width, indicator.Height);
+                        }
 
                         // If the click event is not null, call the method
                         if (Click != null)
@@ -115,13 +136,16 @@ namespace FinalProject
                         }
                     }
 
-                    if(currentMouse.LeftButton == ButtonState.Released &&
+                    if (currentMouse.LeftButton == ButtonState.Released &&
                         previousMouse.LeftButton == ButtonState.Pressed)
                     {
                         isHovering = false;
+                        isHoveringSlider = false;
                     }
                 }
             }
+
+           
 
             percentage = (double)((indicatorRec.X + indicator.Width/2) - sliderRec.X) / sliderRec.Width;
             curValue = Math.Round(percentage * totalValue);

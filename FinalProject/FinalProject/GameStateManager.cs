@@ -60,7 +60,7 @@ namespace FinalProject
         private Fade _fadeTransition;
 
         //Font
-        private SpriteFont testFont;
+        private SpriteFont syneTactileFont;
 
         //Buttons for the main menu
         private List<Button> buttons = new List<Button>();
@@ -186,7 +186,7 @@ namespace FinalProject
                     backMainButton.Draw(batch);
                     volumeSlider.Draw(batch);
                     // Test volume number 
-                    batch.DrawString(testFont, volumeSlider.CurValue.ToString(), new Vector2 (800, 300), Color.White);
+                    batch.DrawString(syneTactileFont, volumeSlider.CurValue.ToString(), new Vector2 (800, 300), Color.White);
 
                     break;
 
@@ -346,7 +346,7 @@ namespace FinalProject
             Texture2D sliderIndicator = content.Load<Texture2D>("SliderIndicator");
             volumeSlider = new Slider(sliderIndicator, sliderWidget, _graphics.PreferredBackBufferWidth / 2 - sliderWidget.Width / 2, 400, 60, 100);
 
-            testFont = content.Load<SpriteFont>("TestFont");
+            syneTactileFont = content.Load<SpriteFont>("SyneTactile24");
 
 
         }
