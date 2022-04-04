@@ -55,6 +55,7 @@ namespace FinalProject
         private Button backMainButton;
         private Button mainMenuButton;
         private Button backGameButton;
+        private Slider volumeSlider;
 
         private Fade _fadeTransition;
 
@@ -179,6 +180,7 @@ namespace FinalProject
                 case GameState.OptionState:
                     batch.Draw(black_Texture, new Rectangle(0, 0, black_Texture.Width, black_Texture.Height), Color.White);
                     backMainButton.Draw(batch);
+                    volumeSlider.Draw(batch);
                     break;
 
                 case GameState.InstructionState:
@@ -192,6 +194,7 @@ namespace FinalProject
                 case GameState.PauseState:
                     batch.Draw(pauseMask, Vector2.Zero, Color.White);
                     mainMenuButton.Draw(batch);
+                    volumeSlider.Draw(batch);
                     break;
 
                 case GameState.GameOverState:
@@ -254,6 +257,7 @@ namespace FinalProject
                 case GameState.OptionState:
 
                     backMainButton.Update();
+                    volumeSlider.Update();
 
                     // Update lighting effects after buttons have been updated
                     UpdatePenumbraState(penumbra);
@@ -288,6 +292,7 @@ namespace FinalProject
                     {
                         currentState = GameState.PlayState;
                     }
+                    volumeSlider.Update();
                     mainMenuButton.Update();
 
                     // Update lighting effects after buttons have been updated
@@ -329,6 +334,11 @@ namespace FinalProject
             Texture2D mainMain = content.Load<Texture2D>("Controls/MainMenu");
             Texture2D mainMain_Hover = content.Load<Texture2D>("Controls/MainMenu_hover");
             mainMenuButton = new Button(mainMain, mainMain_Hover, _graphics.PreferredBackBufferWidth / 2 - mainMain.Width / 2, 800);
+
+            Texture2D sliderWidget = content.Load<Texture2D>("SliderBackground");
+            Texture2D sliderIndicator = content.Load<Texture2D>("SliderIndicator");
+            volumeSlider = new Slider(sliderIndicator, sliderWidget, _graphics.PreferredBackBufferWidth / 2 - sliderWidget.Width / 2, 400, 60, 100);
+       
         }
 
         /// <summary>
