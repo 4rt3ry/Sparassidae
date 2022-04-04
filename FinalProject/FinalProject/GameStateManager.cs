@@ -59,8 +59,10 @@ namespace FinalProject
 
         private Fade _fadeTransition;
 
+        //Font
+        private SpriteFont testFont;
 
-        //Buttons
+        //Buttons for the main menu
         private List<Button> buttons = new List<Button>();
 
         private Random rng = new Random();
@@ -90,6 +92,7 @@ namespace FinalProject
             backMainButton.Click += Click_ToMenu;
             mainMenuButton.Click += Click_ToMenu;
             backGameButton.Click += Click_ToPlay;
+            volumeSlider.Click += Click_UpdateVolume;
 
             buttons.Add(playButton);
             buttons.Add(optionButton);
@@ -182,6 +185,9 @@ namespace FinalProject
                     batch.Draw(black_Texture, new Rectangle(0, 0, black_Texture.Width, black_Texture.Height), Color.White);
                     backMainButton.Draw(batch);
                     volumeSlider.Draw(batch);
+                    // Test volume number 
+                    batch.DrawString(testFont, volumeSlider.CurValue.ToString(), new Vector2 (800, 300), Color.White);
+
                     break;
 
                 case GameState.InstructionState:
@@ -339,7 +345,10 @@ namespace FinalProject
             Texture2D sliderWidget = content.Load<Texture2D>("SliderBackground");
             Texture2D sliderIndicator = content.Load<Texture2D>("SliderIndicator");
             volumeSlider = new Slider(sliderIndicator, sliderWidget, _graphics.PreferredBackBufferWidth / 2 - sliderWidget.Width / 2, 400, 60, 100);
-       
+
+            testFont = content.Load<SpriteFont>("TestFont");
+
+
         }
 
         /// <summary>
@@ -373,9 +382,26 @@ namespace FinalProject
             currentState = GameState.PlayState;
         }
 
+        /// <summary>
+        /// Change the state to the Main Menu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void Click_ToMenu(object sender, System.EventArgs e)
         {
             currentState = GameState.MenuState;
+        }
+
+        /// <summary>
+        /// Update the volume
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void Click_UpdateVolume(object sender, System.EventArgs e)
+        {
+            Slider cur = (Slider)sender;
+            // Can use slider.Percentage / slider.CurValue to access the number
+            // And then change the volume
         }
 
         /// <summary>
