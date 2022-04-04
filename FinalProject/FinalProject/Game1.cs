@@ -43,6 +43,8 @@ namespace FinalProject
 
 
             _penumbra.Initialize();
+            _penumbra.SpriteBatchTransformEnabled = true;
+
             _camera = new Camera2D(GraphicsDevice.Viewport);
 
             base.Initialize();
@@ -84,7 +86,6 @@ namespace FinalProject
         {
             // Everything after this call will be affected by the lighting system.
             _penumbra.BeginDraw();
-            _penumbra.SpriteBatchTransformEnabled = true;
             Matrix transMatrix = _camera.GetViewMatrix();
             _penumbra.Transform = transMatrix;
             GraphicsDevice.Clear(Color.White);

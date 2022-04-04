@@ -36,6 +36,7 @@ namespace FinalProject
                 Matrix.CreateTranslation(new Vector3(Origin, 0.0f));
         }
 
+        //mouse position
         public Vector2 ScreenToWorldSpace(in Vector2 point)
         {
             Matrix invertedMatrix = Matrix.Invert(GetViewMatrix());
