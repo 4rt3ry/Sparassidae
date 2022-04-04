@@ -15,6 +15,7 @@ namespace FinalProject
         private GameStateManager _gameStateManager;
         private Fade _fadeTransition;
         private PenumbraComponent _penumbra;
+        private Camera2D _camera;
 
         public Game1()
         {
@@ -42,6 +43,9 @@ namespace FinalProject
 
 
             _penumbra.Initialize();
+            _penumbra.SpriteBatchTransformEnabled = true;
+
+            _camera = new Camera2D(GraphicsDevice.Viewport);
 
             base.Initialize();
 
@@ -66,6 +70,12 @@ namespace FinalProject
             float updateTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             //PlayerMovement(updateTime);
+            if (_gameStateManager.CurrentState == GameState.PlayState)
+            {
+                _camera.Position = _gameStateManager.Map.Player.Position + new Vector2(-_graphics.PreferredBackBufferWidth/2, -_graphics.PreferredBackBufferHeight/2);
+
+            }
+
             _gameStateManager.Update(updateTime, _penumbra);
             _fadeTransition.Update(updateTime);
 
@@ -75,11 +85,12 @@ namespace FinalProject
         protected override void Draw(GameTime gameTime)
         {
             // Everything after this call will be affected by the lighting system.
-           _penumbra.BeginDraw();
-
+            _penumbra.BeginDraw();
+            Matrix transMatrix = _camera.GetViewMatrix();
+            _penumbra.Transform = transMatrix;
             GraphicsDevice.Clear(Color.White);
 
-            _batch.Begin();
+            _batch.Begin(transformMatrix: transMatrix);
             _gameStateManager.Display(_batch);
             _batch.End();
 
@@ -87,7 +98,7 @@ namespace FinalProject
             _penumbra.Draw(gameTime);
 
             // Draw stuff that is not affected by lighting (UI, etc).
-            _batch.Begin();
+            _batch.Begin(transformMatrix: transMatrix);
 
             _gameStateManager.DrawUI(_batch);
             _fadeTransition.StartFade(_batch, 1f, 1f);

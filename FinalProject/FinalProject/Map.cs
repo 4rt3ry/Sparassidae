@@ -44,6 +44,7 @@ namespace FinalProject
 
         //Properties
         public ContentManager Content => _content;
+        public Player Player => _player;
 
         //Constructors
 

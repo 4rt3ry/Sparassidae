@@ -10,10 +10,7 @@ namespace FinalProject
     /// Runi Jiang
     /// 4/1/2022
     /// Slider class
-    /// To do:  Methods update the value
-    ///         Create event
-    ///         Color fill
-    ///         Drag problem
+    /// To do:  Color fill
     class Slider
     {
         //Fields
@@ -24,13 +21,15 @@ namespace FinalProject
         private MouseState currentMouse;
         private MouseState previousMouse;
 
-        private bool isHovering;
+        private bool isHovering; //Hovering over the indicator
         private Rectangle sliderRec;
         private Rectangle indicatorRec;
 
         private double curValue;
         private double totalValue;
         private double percentage;
+
+        public event EventHandler Click;
 
         //Properties
 
@@ -54,11 +53,13 @@ namespace FinalProject
         {
             this.indicator = indicator;
             this.widget = widget;
-            sliderRec = new Rectangle(x_value, y_value, widget.Width, widget.Height);
-            indicatorRec = new Rectangle((int)(initialValue / totalValue * x_value + x_value), y_value + widget.Height/2 - indicator.Height/2, indicator.Width, indicator.Height);
             curValue = initialValue;
             this.totalValue = totalValue;
             percentage = initialValue / totalValue;
+            sliderRec = new Rectangle(x_value, y_value, widget.Width, widget.Height);
+            indicatorRec = new Rectangle((int)(percentage * widget.Width + x_value - indicator.Width/2),
+                y_value + widget.Height/2 - indicator.Height/2, indicator.Width, indicator.Height);
+           
         }
 
         /// <summary>
@@ -86,21 +87,45 @@ namespace FinalProject
                    previousMouse.LeftButton == ButtonState.Released)
                 {
                     indicatorRec = new Rectangle(currentMouse.X - indicator.Width/2, indicatorRec.Y, indicator.Width, indicator.Height);
+                 
+                    // If the click event is not null, call the method
+                    if (Click != null)
+                    {
+                        Click(this, new EventArgs());
+                    }
                 }
 
                 //Drag
-                // Still working on it
                 if(indicatorRec.Contains(currentMouse.X, currentMouse.Y))
                 {
-                    if(currentMouse.LeftButton == ButtonState.Pressed &&
+                    isHovering = true;
+                }
+
+                if(isHovering)
+                {
+                    if (currentMouse.LeftButton == ButtonState.Pressed &&
                         previousMouse.LeftButton == ButtonState.Pressed)
                     {
                         indicatorRec = new Rectangle(currentMouse.X - indicator.Width / 2, indicatorRec.Y, indicator.Width, indicator.Height);
+
+                        // If the click event is not null, call the method
+                        if (Click != null)
+                        {
+                            Click(this, new EventArgs());
+                        }
+                    }
+
+                    if(currentMouse.LeftButton == ButtonState.Released &&
+                        previousMouse.LeftButton == ButtonState.Pressed)
+                    {
+                        isHovering = false;
                     }
                 }
             }
 
-
+            percentage = (double)((indicatorRec.X + indicator.Width/2) - sliderRec.X) / sliderRec.Width;
+            curValue = Math.Round(percentage * totalValue);
+            
             // Set the previous mouse state
             previousMouse = currentMouse;
         }
