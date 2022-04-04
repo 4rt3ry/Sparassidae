@@ -271,3 +271,10 @@
 /processorParam:TextureFormat=Color
 /build:Stone_Reveal_Mask.png
 
+#begin TestFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:TestFont.spritefont
+
