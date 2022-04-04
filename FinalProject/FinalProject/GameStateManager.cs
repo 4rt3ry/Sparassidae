@@ -71,7 +71,7 @@ namespace FinalProject
         public Map Map => map;
 
         //Constructors
-        public GameStateManager(ContentManager content, PenumbraComponent penumbra, GraphicsDeviceManager graphics)
+        public GameStateManager(ContentManager content, PenumbraComponent penumbra, GraphicsDeviceManager graphics,Camera2D camera)
         {
             _graphics = graphics;
 
@@ -99,7 +99,7 @@ namespace FinalProject
             buttons.Add(instructionButton);
 
             // Load map
-            map = new Map(penumbra, content);
+            map = new Map(penumbra, content, camera);
             map.LoadTutorial();
 
         }

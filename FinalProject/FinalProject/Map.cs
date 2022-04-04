@@ -48,11 +48,11 @@ namespace FinalProject
         //Constructors
 
 
-        public Map(PenumbraComponent penumbra, ContentManager content)
+        public Map(PenumbraComponent penumbra, ContentManager content,Camera2D camera)
         {
             _content = content;
             LoadContent();
-            _player = new Player(new Vector2(500, 500));
+            _player = new Player(new Vector2(500, 500),camera);
             _enemies = new List<Enemy>();
             _walls = new List<Wall>();
             _stoneRevealAreas = new List<Vector2>();

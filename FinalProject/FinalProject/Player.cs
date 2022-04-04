@@ -28,6 +28,7 @@ namespace FinalProject
         private PlayerState currentState;
         private float shockTimer;
         private int numTargets;
+        private Camera2D camera;
 
         //Speed Variables
         private float currentSpeed;
@@ -85,9 +86,10 @@ namespace FinalProject
             _physicsCollider = new CircleCollider(this, new Vector2(0, 0), 20f, false);
         }
 
-        public Player(Vector2 position): this()
+        public Player(Vector2 position,Camera2D camera): this()
         {
             Position = position;
+            this.camera = camera;
         }
 
 
@@ -129,8 +131,10 @@ namespace FinalProject
             //This will make more sense if player's position can be set in the property
             //flashlight.Position = this.Position;
             ms = Mouse.GetState();
+            Vector2 mousePos = new Vector2(ms.Position.X, ms.Position.Y);
+            mousePos = camera.ScreenToWorldSpace(mousePos);
             //Rotate the flashlight direction based on the mouse position
-            flashlight.Rotation = MathF.Atan2(ms.Y -  this.Position.Y, ms.X - this.Position.X);
+            flashlight.Rotation = MathF.Atan2(mousePos.Y -  this.Position.Y, mousePos.X - this.Position.X);
 
             switch (CurrentState)
             {
