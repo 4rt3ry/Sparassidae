@@ -36,6 +36,7 @@ namespace FinalProject
         // Textures and Effects
         private Effect _maskEffect;
         private Texture2D _stoneRevealMask;
+        private Texture2D _enemyTexture;
 
         // Imported using LoadMap()
         private Texture2D _mapTexture;
@@ -46,8 +47,10 @@ namespace FinalProject
         //Constructors
 
 
-        public Map(PenumbraComponent penumbra)
+        public Map(PenumbraComponent penumbra, ContentManager content)
         {
+            _content = content;
+            LoadContent();
             _player = new Player(new Vector2(500, 500));
             _enemies = new List<Enemy>();
             _walls = new List<Wall>();
@@ -68,6 +71,12 @@ namespace FinalProject
             {
                 wall.PhysicsCollider.DrawDebugTexture(batch, Color.White);
             }
+
+            foreach (Enemy enemy in _enemies)
+            {
+                enemy.Display(batch);
+            }
+            
         }
 
         /// <summary>
@@ -87,6 +96,10 @@ namespace FinalProject
                 {
                     _player.Position = hit.HitPoint + hit.Normal * ((CircleCollider)_player.PhysicsCollider).Radius;
                 }
+            }
+            foreach (Enemy enemy in _enemies)
+            {
+                enemy.Update(dTime);
             }
         }
 
@@ -113,6 +126,11 @@ namespace FinalProject
             //{
             //    wall.PhysicsCollider.SetDebugTexture(_penumbra.GraphicsDevice, Color.White);
             //}
+
+            //Create Roam Points
+            Vector2[] roamPoints = new Vector2[2] { new Vector2(1500, 100), new Vector2(1500, 700) };
+            _enemies.Add(new Enemy(new Vector2(1500, 100), roamPoints, 50, _enemyTexture, 200, 200));
+            //_enemies.Add(new Enemy(new Vector2(1500, 100), _enemyTexture, 200, 200));
 
             // Set up lighting after walls are created
             SetupPenumbraLighting();
@@ -227,6 +245,15 @@ namespace FinalProject
                 _penumbra.Hulls.Add(wall.Hull);
             }
             _penumbra.Lights.Add(_player.Flashlight);
+        }
+
+        /// <summary>
+        /// Load Method for map. Load basic texutures
+        /// </summary>
+        /// <param name="content">ContentManager</param>
+        private void LoadContent()
+        {
+            _enemyTexture = _content.Load<Texture2D>("Enemy");
         }
     }
 }

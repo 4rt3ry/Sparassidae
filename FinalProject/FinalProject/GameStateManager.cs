@@ -94,7 +94,7 @@ namespace FinalProject
             buttons.Add(instructionButton);
 
             // Load map
-            map = new Map(penumbra);
+            map = new Map(penumbra, content);
             map.LoadTutorial();
 
         }

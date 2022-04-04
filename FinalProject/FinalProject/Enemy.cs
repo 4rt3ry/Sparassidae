@@ -78,10 +78,11 @@ namespace FinalProject
         /// </summary>
         /// <param name="position">Standing position of enemy</param>
         /// <param name="enemyTexture">Enemy visual texture</param>
-        public Enemy(Vector2 position, Texture2D enemyTexture) : this(position)
+        /// 
+        public Enemy(Vector2 position, Texture2D enemyTexture, int width, int height) : this(position)
         {
             this.enemyTexture = enemyTexture;
-            displayRectangle = new Rectangle(new Point((int)position.X, (int)position.Y), new Point(enemyTexture.Width, enemyTexture.Height));
+            displayRectangle = new Rectangle(new Point((int)position.X, (int)position.Y), new Point(width, height));
         }
 
         /// <summary>
@@ -112,10 +113,12 @@ namespace FinalProject
         /// <param name="roamLocations">Array of positions to roam to</param>
         /// <param name="detectionRadius">Radius for detecting player</param>
         /// <param name="enemyTexture">Visual texture</param>
-        public Enemy(Vector2 position, Vector2[] roamLocations, float detectionRadius, Texture2D enemyTexture) : this(position, roamLocations, detectionRadius)
+        public Enemy(Vector2 position, Vector2[] roamLocations, float detectionRadius, Texture2D enemyTexture, int width, int height) : this(position, roamLocations, detectionRadius)
         {
             this.enemyTexture = enemyTexture;
-            displayRectangle = new Rectangle(new Point((int)position.X, (int)position.Y), new Point(enemyTexture.Width, enemyTexture.Height));
+            displayRectangle = new Rectangle(new Point((int)position.X, (int)position.Y), new Point(width, height));
+            moving = false;
+            moveTime = 5;
         }
 
         //Methods
@@ -160,75 +163,78 @@ namespace FinalProject
             {
                 case EnemyState.RoamingState:
                     //No locations (Stand still)
-                    if(roamLocations != null)
+                    if(roamLocations == null)
                     {
                         
                     }
-                    //One location (Roam about a single point)
-                    if (roamLocations.Length == 1)
+                    else
                     {
-                        //Movement code
-                        if (moving)
+                        //One location (Roam about a single point)
+                        if (roamLocations.Length == 1)
                         {
-                            //Move enemy
-
-                            //Time Increment
-                            moveTime -= dTime;
-                            if (moveTime <= 0)
+                            //Movement code
+                            if (moving)
                             {
-                                downTime = 1f;
-                                moving = false;
+                                //Move enemy
+
+                                //Time Increment
+                                moveTime -= dTime;
+                                if (moveTime <= 0)
+                                {
+                                    downTime = 1f;
+                                    moving = false;
+                                }
+                            }
+                            else
+                            {
+                                //Time Increment
+                                downTime -= dTime;
+                                if (downTime <= 0)
+                                {
+                                    moveTime = 1.5f;
+                                    moving = true;
+                                }
                             }
                         }
-                        else
+                        //Multiple locations (Roam between locations)
+                        if (roamLocations.Length > 1)
                         {
-                            //Time Increment
-                            downTime -= dTime;
-                            if (downTime <= 0)
+                            //Check distance to target pos
+                            if (Math.Abs((_position - roamLocations[roamTarget]).Length()) <= roamCheckDistance)
                             {
-                                moveTime = 1.5f;
-                                moving = true;
+                                //Increment and ensure target location is within array
+                                roamTarget += 1;
+                                roamTarget = roamTarget % (roamLocations.Length - 1);
+                            }
+
+                            //Movement code
+                            if (moving)
+                            {
+                                //Move enemy
+
+                                //Time Increment
+                                moveTime -= dTime;
+                                if (moveTime <= 0)
+                                {
+                                    downTime = 1f;
+                                    moving = false;
+                                }
+                            }
+                            else
+                            {
+                                //Time Increment
+                                downTime -= dTime;
+                                if (downTime <= 0)
+                                {
+                                    moveTime = 1.5f;
+                                    moving = true;
+                                }
                             }
                         }
                     }
-                    //Multiple locations (Roam between locations)
-                    if(roamLocations.Length > 1)
-                    {
-                        //Check distance to target pos
-                        if (Math.Abs((_position - roamLocations[roamTarget]).Length()) <= roamCheckDistance)
-                        {
-                            //Increment and ensure target location is within array
-                            roamTarget += 1;
-                            roamTarget = roamTarget % (roamLocations.Length - 1);
-                        }
-
-                        //Movement code
-                        if (moving)
-                        {
-                            //Move enemy
-
-                            //Time Increment
-                            moveTime -= dTime;
-                            if (moveTime <= 0)
-                            {
-                                downTime = 1f;
-                                moving = false;
-                            }
-                        }
-                        else
-                        {
-                            //Time Increment
-                            downTime -= dTime;
-                            if(downTime <= 0)
-                            {
-                                moveTime = 1.5f;
-                                moving = true;
-                            }
-                        }
-                    }
+                    
                     break;
                 case EnemyState.InvestigateState:
-
 
                     //Movement code
 
