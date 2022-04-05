@@ -49,6 +49,12 @@
 /processorParam:TextureFormat=Color
 /build:blackfade.png
 
+#begin CatchAmbience.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:CatchAmbience.ogg
+
 #begin Controls/Back.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -181,6 +187,24 @@
 /processorParam:TextureFormat=Color
 /build:Enemy.png
 
+#begin HeartbeatFrantic.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:HeartbeatFrantic.ogg
+
+#begin HeartbeatNormal.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:HeartbeatNormal.ogg
+
+#begin HeartbeatRushed.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:HeartbeatRushed.ogg
+
 #begin Image_Mask.hlsl
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -258,6 +282,36 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:SliderIndicator.png
+
+#begin SpiderClick1.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:SpiderClick1.ogg
+
+#begin SpiderClick2.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:SpiderClick2.ogg
+
+#begin SpiderClick3.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:SpiderClick3.ogg
+
+#begin SpiderClick4.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:SpiderClick4.ogg
+
+#begin SpiderScratchAmbience.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:SpiderScratchAmbience.ogg
 
 #begin Stone_Reveal_Mask.png
 /importer:TextureImporter
