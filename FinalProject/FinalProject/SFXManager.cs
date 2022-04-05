@@ -23,7 +23,11 @@ namespace FinalProject
         SAmbience,
         HBNormal,
         HBRushed,
-        HBFrantic
+        HBFrantic,
+        BrNormal,
+        BrMedium,
+        BrHeavy,
+        BrSigh
     }
     public static class SFXManager
     {
@@ -34,6 +38,8 @@ namespace FinalProject
         /// 1-4 - Spider Clicking Sounds
         /// 5 - Spider Ambience
         /// 6-8 - Heartbeats (Normal, Rushed, Frantic)
+        /// 9-11 - Breathing (Normal, Medium, Heavy)
+        /// 12 - Sigh
         /// </summary>
         static List<SoundEffect> sounds = null;
         static List<SoundEffectInstance> instances = null;
@@ -107,6 +113,27 @@ namespace FinalProject
             }
         }
 
+        /// <summary>
+        /// Stops all instances of HeartBeat sound effects
+        /// </summary>
+        public static void StopAllHB()
+        {
+            StopInstancedSound(Sounds.HBNormal);
+            StopInstancedSound(Sounds.HBRushed);
+            StopInstancedSound(Sounds.HBFrantic);
+        }
+
+        /// <summary>
+        /// Stops all instances of breathing sound effects
+        /// </summary>
+        public static void StopAllBr()
+        {
+            StopInstancedSound(Sounds.BrNormal);
+            StopInstancedSound(Sounds.BrMedium);
+            StopInstancedSound(Sounds.BrHeavy);
+            StopInstancedSound(Sounds.BrSigh);
+        }
+
 
 
         //Sets global volume of all sound effects (Must be a float 0.0f-1.0f);
@@ -153,6 +180,14 @@ namespace FinalProject
                     return 7;
                 case Sounds.HBFrantic:
                     return 8;
+                case Sounds.BrNormal:
+                    return 9;
+                case Sounds.BrMedium:
+                    return 10;
+                case Sounds.BrHeavy:
+                    return 11;
+                case Sounds.BrSigh:
+                    return 12;
             }
             return 1;
         }

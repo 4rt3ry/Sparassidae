@@ -82,6 +82,10 @@ namespace FinalProject
             soundEffects.Add(Content.Load<SoundEffect>("SoundFX/HeartbeatNormal"));
             soundEffects.Add(Content.Load<SoundEffect>("SoundFX/HeartbeatRushed"));
             soundEffects.Add(Content.Load<SoundEffect>("SoundFX/HeartbeatFrantic"));
+            soundEffects.Add(Content.Load<SoundEffect>("SoundFX/NormalBreathing"));
+            soundEffects.Add(Content.Load<SoundEffect>("SoundFX/MediumBreathing"));
+            soundEffects.Add(Content.Load<SoundEffect>("SoundFX/HeavyBreathing"));
+            soundEffects.Add(Content.Load<SoundEffect>("SoundFX/Sigh"));
 
             //Give manager the sounds
             SFXManager.GiveSFX(soundEffects);

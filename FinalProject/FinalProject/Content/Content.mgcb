@@ -283,6 +283,30 @@
 /processorParam:Quality=Best
 /build:SoundFX/HeartbeatRushed.wav
 
+#begin SoundFX/HeavyBreathing.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundFX/HeavyBreathing.wav
+
+#begin SoundFX/MediumBreathing.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundFX/MediumBreathing.wav
+
+#begin SoundFX/NormalBreathing.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundFX/NormalBreathing.wav
+
+#begin SoundFX/Sigh.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundFX/Sigh.wav
+
 #begin SoundFX/SpiderAmbience.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

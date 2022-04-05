@@ -39,6 +39,9 @@ namespace FinalProject
         private MouseState currentMouse;
         private MouseState previousMouse;
 
+        //Sound Variables
+        float sighTimer;
+
         //Properties
         public PlayerState CurrentState { get => currentState; set => currentState = value; }
 
@@ -73,6 +76,8 @@ namespace FinalProject
             };
 
             _physicsCollider = new CircleCollider(this, new Vector2(0, 0), 20f, false);
+
+            sighTimer = 3.1f;
         }
 
         public Player(Vector2 position, Camera2D camera): this()
@@ -128,7 +133,12 @@ namespace FinalProject
             switch (CurrentState)
             {
                 case PlayerState.WalkingState:
-
+                    sighTimer -= dTime;
+                    if(sighTimer <= 0 && sighTimer > -10)
+                    {
+                        SFXManager.LoopInstancedSound(Sounds.BrNormal, false);
+                        sighTimer = -10;
+                    }
                     break;
                 case PlayerState.AfraidState:
 
@@ -151,14 +161,14 @@ namespace FinalProject
 
         public void Move(float dt)
         {
-            float speed = 4;
+            float speed = 3;
             kb = Keyboard.GetState();
 
             // Change player's speed based on their state
             speed = currentState switch
             {
                 PlayerState.WalkingState => speed,
-                PlayerState.AfraidState => speed / 2,
+                PlayerState.AfraidState => speed / 2f,
                 PlayerState.ShockState => 1,
                 PlayerState.ChaseState => speed * 1.5f,
                 PlayerState.DeadState => 0,
@@ -239,10 +249,11 @@ namespace FinalProject
         public void SetAfraidState()
         {
             currentState = PlayerState.AfraidState;
-            SFXManager.StopInstancedSound(Sounds.HBNormal);
-            SFXManager.StopInstancedSound(Sounds.HBFrantic);
+            SFXManager.StopAllHB();
+            SFXManager.StopAllBr();
             SFXManager.LoopInstancedSound(Sounds.HBRushed, false);
             SFXManager.LoopInstancedSound(Sounds.SAmbience, false);
+            SFXManager.LoopInstancedSound(Sounds.BrMedium, false);
             numTargets += 1;
         }
 
@@ -253,9 +264,9 @@ namespace FinalProject
         {
             currentState = PlayerState.ShockState;
             SFXManager.PlaySound(Sounds.Catch);
-            SFXManager.StopInstancedSound(Sounds.HBFrantic);
+            SFXManager.StopAllHB();
+            SFXManager.StopAllBr();
             SFXManager.StopInstancedSound(Sounds.SAmbience);
-            SFXManager.StopInstancedSound(Sounds.HBRushed);
             shockTimer = 4.5f;
         }
 
@@ -278,10 +289,12 @@ namespace FinalProject
         public void SetWalkingState()
         {
             currentState = PlayerState.WalkingState;
-            SFXManager.StopInstancedSound(Sounds.HBRushed);
+            SFXManager.StopAllHB();
+            SFXManager.StopAllBr(); 
             SFXManager.StopInstancedSound(Sounds.SAmbience);
-            SFXManager.StopInstancedSound(Sounds.HBFrantic);
             SFXManager.LoopInstancedSound(Sounds.HBNormal, true);
+            SFXManager.PlaySound(Sounds.BrSigh);
+            sighTimer = 3.1f;
         }
 
         /// <summary>
@@ -290,10 +303,12 @@ namespace FinalProject
         public void SetChaseState()
         {
             currentState = PlayerState.ChaseState;
+            SFXManager.StopAllHB();
+            SFXManager.StopAllBr();
             SFXManager.LoopInstancedSound(Sounds.SAmbience, false);
-            SFXManager.StopInstancedSound(Sounds.HBNormal);
-            SFXManager.StopInstancedSound(Sounds.HBRushed);
             SFXManager.LoopInstancedSound(Sounds.HBFrantic, false);
+            SFXManager.LoopInstancedSound(Sounds.BrHeavy, false);
+
         }
 
         /// <summary>
