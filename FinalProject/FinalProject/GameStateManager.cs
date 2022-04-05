@@ -368,6 +368,8 @@ namespace FinalProject
         /// <param name="e"></param>
         public void Click_ToOption(object sender, System.EventArgs e)
         {
+            SFXManager.LoopInstancedSound(Sounds.HBNormal, false);
+            SFXManager.LoopInstancedSound(Sounds.SAmbience, false);
             currentState = GameState.OptionState;
         }
 
@@ -378,7 +380,7 @@ namespace FinalProject
         /// <param name="e"></param>
         public void Click_ToPlay(object sender, System.EventArgs e)
         {
-
+            SFXManager.LoopInstancedSound(Sounds.HBNormal, true);
             currentState = GameState.PlayState;
         }
 
@@ -389,6 +391,7 @@ namespace FinalProject
         /// <param name="e"></param>
         public void Click_ToMenu(object sender, System.EventArgs e)
         {
+            SFXManager.StopAllInstances();
             currentState = GameState.MenuState;
         }
 
@@ -400,6 +403,7 @@ namespace FinalProject
         public void Click_UpdateVolume(object sender, System.EventArgs e)
         {
             Slider cur = (Slider)sender;
+            SFXManager.SetGlobalVolume((float)cur.Percentage);
             // Can use slider.Percentage / slider.CurValue to access the number
             // And then change the volume
         }

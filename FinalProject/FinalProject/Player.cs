@@ -31,13 +31,6 @@ namespace FinalProject
         private int numTargets;
         private Camera2D camera;
 
-        //Speed Variables
-        private float currentSpeed;
-        private float walkingSpeed;
-        private float afraidSpeed;
-        private float shockSpeed;
-        private float chaseSpeed;
-
         //Light
         private Spotlight flashlight;
 
@@ -65,14 +58,7 @@ namespace FinalProject
         //Constructors
         public Player() : base()
         {
-            //Set standards for different speeds
-            walkingSpeed = 0;
-            afraidSpeed = 0;
-            shockSpeed = 0;
-            chaseSpeed = 0;
-
             //Initialize variables
-            currentSpeed = walkingSpeed;
             currentState = PlayerState.WalkingState;
 
             //Creaet the spotlight
@@ -89,7 +75,7 @@ namespace FinalProject
             _physicsCollider = new CircleCollider(this, new Vector2(0, 0), 20f, false);
         }
 
-        public Player(Vector2 position,Camera2D camera): this()
+        public Player(Vector2 position, Camera2D camera): this()
         {
             Position = position;
             this.camera = camera;
@@ -150,8 +136,7 @@ namespace FinalProject
                 case PlayerState.ShockState:
                     if (shockTimer <= 0)
                     {
-                        currentState = PlayerState.ChaseState;
-                        currentSpeed = chaseSpeed;
+                        SetChaseState();
                     }
                     shockTimer -= dTime;
                     break;
@@ -166,7 +151,7 @@ namespace FinalProject
 
         public void Move(float dt)
         {
-            float speed = 5;
+            float speed = 4;
             kb = Keyboard.GetState();
 
             // Change player's speed based on their state
@@ -175,7 +160,7 @@ namespace FinalProject
                 PlayerState.WalkingState => speed,
                 PlayerState.AfraidState => speed / 2,
                 PlayerState.ShockState => 1,
-                PlayerState.ChaseState => speed * 2,
+                PlayerState.ChaseState => speed * 1.5f,
                 PlayerState.DeadState => 0,
                 _ => 0
             };
@@ -227,6 +212,22 @@ namespace FinalProject
                 stone.Throw(throwDirection);
                 stones.Add(stone);
                 penumbra.Lights.Add(stone.Light);
+                switch (currentState)
+                {
+                    case PlayerState.WalkingState:
+                        SetAfraidState();
+                        break;
+                    case PlayerState.AfraidState:
+                        SetShockState();
+                        break;
+                    case PlayerState.ShockState:
+                        break;
+                    case PlayerState.ChaseState:
+                        SetWalkingState();
+                        break;
+                    case PlayerState.DeadState:
+                        break;
+                }
             }
 
             previousMouse = currentMouse;
@@ -238,7 +239,10 @@ namespace FinalProject
         public void SetAfraidState()
         {
             currentState = PlayerState.AfraidState;
-            currentSpeed = afraidSpeed;
+            SFXManager.StopInstancedSound(Sounds.HBNormal);
+            SFXManager.StopInstancedSound(Sounds.HBFrantic);
+            SFXManager.LoopInstancedSound(Sounds.HBRushed, false);
+            SFXManager.LoopInstancedSound(Sounds.SAmbience, false);
             numTargets += 1;
         }
 
@@ -248,8 +252,11 @@ namespace FinalProject
         public void SetShockState()
         {
             currentState = PlayerState.ShockState;
-            currentSpeed = shockSpeed;
-            shockTimer = 2f;
+            SFXManager.PlaySound(Sounds.Catch);
+            SFXManager.StopInstancedSound(Sounds.HBFrantic);
+            SFXManager.StopInstancedSound(Sounds.SAmbience);
+            SFXManager.StopInstancedSound(Sounds.HBRushed);
+            shockTimer = 4.5f;
         }
 
         /// <summary>
@@ -271,7 +278,22 @@ namespace FinalProject
         public void SetWalkingState()
         {
             currentState = PlayerState.WalkingState;
-            currentSpeed = walkingSpeed;
+            SFXManager.StopInstancedSound(Sounds.HBRushed);
+            SFXManager.StopInstancedSound(Sounds.SAmbience);
+            SFXManager.StopInstancedSound(Sounds.HBFrantic);
+            SFXManager.LoopInstancedSound(Sounds.HBNormal, true);
+        }
+
+        /// <summary>
+        /// Sets the player into the chase state
+        /// </summary>
+        public void SetChaseState()
+        {
+            currentState = PlayerState.ChaseState;
+            SFXManager.LoopInstancedSound(Sounds.SAmbience, false);
+            SFXManager.StopInstancedSound(Sounds.HBNormal);
+            SFXManager.StopInstancedSound(Sounds.HBRushed);
+            SFXManager.LoopInstancedSound(Sounds.HBFrantic, false);
         }
 
         /// <summary>

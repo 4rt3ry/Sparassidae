@@ -49,12 +49,6 @@
 /processorParam:TextureFormat=Color
 /build:blackfade.png
 
-#begin CatchAmbience.ogg
-/importer:OggImporter
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:CatchAmbience.ogg
-
 #begin Controls/Back.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -187,24 +181,6 @@
 /processorParam:TextureFormat=Color
 /build:Enemy.png
 
-#begin HeartbeatFrantic.ogg
-/importer:OggImporter
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:HeartbeatFrantic.ogg
-
-#begin HeartbeatNormal.ogg
-/importer:OggImporter
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:HeartbeatNormal.ogg
-
-#begin HeartbeatRushed.ogg
-/importer:OggImporter
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:HeartbeatRushed.ogg
-
 #begin Image_Mask.hlsl
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -283,35 +259,59 @@
 /processorParam:TextureFormat=Color
 /build:SliderIndicator.png
 
-#begin SpiderClick1.ogg
-/importer:OggImporter
-/processor:SongProcessor
+#begin SoundFX/CatchAmbience.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:SpiderClick1.ogg
+/build:SoundFX/CatchAmbience.wav
 
-#begin SpiderClick2.ogg
-/importer:OggImporter
-/processor:SongProcessor
+#begin SoundFX/HeartbeatFrantic.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:SpiderClick2.ogg
+/build:SoundFX/HeartbeatFrantic.wav
 
-#begin SpiderClick3.ogg
-/importer:OggImporter
-/processor:SongProcessor
+#begin SoundFX/HeartbeatNormal.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:SpiderClick3.ogg
+/build:SoundFX/HeartbeatNormal.wav
 
-#begin SpiderClick4.ogg
-/importer:OggImporter
-/processor:SongProcessor
+#begin SoundFX/HeartbeatRushed.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:SpiderClick4.ogg
+/build:SoundFX/HeartbeatRushed.wav
 
-#begin SpiderScratchAmbience.ogg
-/importer:OggImporter
-/processor:SongProcessor
+#begin SoundFX/SpiderAmbience.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:SpiderScratchAmbience.ogg
+/build:SoundFX/SpiderAmbience.wav
+
+#begin SoundFX/SpiderClick1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundFX/SpiderClick1.wav
+
+#begin SoundFX/SpiderClick2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundFX/SpiderClick2.wav
+
+#begin SoundFX/SpiderClick3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundFX/SpiderClick3.wav
+
+#begin SoundFX/SpiderClick4.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundFX/SpiderClick4.wav
 
 #begin Stone_Reveal_Mask.png
 /importer:TextureImporter

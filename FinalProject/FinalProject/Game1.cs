@@ -2,9 +2,13 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
+using System.Collections;
 using System;
 using Penumbra;
 using Microsoft.Xna.Framework.Content;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework.Audio;
+
 namespace FinalProject
 {
     public class Game1 : Game
@@ -17,11 +21,19 @@ namespace FinalProject
         private PenumbraComponent _penumbra;
         private Camera2D _camera;
 
+        //List of all sound effects,
+        //
+        //
+        //
+        //
+        public List<SoundEffect> soundEffects;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            soundEffects = new List<SoundEffect>();
         }
 
         protected override void Initialize()
@@ -60,6 +72,19 @@ namespace FinalProject
             _fadeTransition.LoadContent(Content);
             _gameStateManager = new GameStateManager(Content, _penumbra, _graphics,_camera);
 
+            //Add sound effects
+            soundEffects.Add(Content.Load<SoundEffect>("SoundFX/CatchAmbience"));
+            soundEffects.Add(Content.Load<SoundEffect>("SoundFX/SpiderClick1"));
+            soundEffects.Add(Content.Load<SoundEffect>("SoundFX/SpiderClick2"));
+            soundEffects.Add(Content.Load<SoundEffect>("SoundFX/SpiderClick3"));
+            soundEffects.Add(Content.Load<SoundEffect>("SoundFX/SpiderClick4"));
+            soundEffects.Add(Content.Load<SoundEffect>("SoundFX/SpiderAmbience"));
+            soundEffects.Add(Content.Load<SoundEffect>("SoundFX/HeartbeatNormal"));
+            soundEffects.Add(Content.Load<SoundEffect>("SoundFX/HeartbeatRushed"));
+            soundEffects.Add(Content.Load<SoundEffect>("SoundFX/HeartbeatFrantic"));
+
+            //Give manager the sounds
+            SFXManager.GiveSFX(soundEffects);
         }
         
 
