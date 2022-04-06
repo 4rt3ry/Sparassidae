@@ -87,6 +87,8 @@ namespace FinalProject
             soundEffects.Add(Content.Load<SoundEffect>("SoundFX/HeavyBreathing"));
             soundEffects.Add(Content.Load<SoundEffect>("SoundFX/Sigh"));
 
+            
+
             //Give manager the sounds
             SFXManager.GiveSFX(soundEffects);
         }

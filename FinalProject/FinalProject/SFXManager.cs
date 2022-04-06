@@ -41,16 +41,15 @@ namespace FinalProject
         /// 9-11 - Breathing (Normal, Medium, Heavy)
         /// 12 - Sigh
         /// </summary>
-        static List<SoundEffect> sounds = null;
-        static List<SoundEffectInstance> instances = null;
+        static Dictionary<Sounds, SoundEffectInstance> instances = null;
+        static Dictionary<Sounds, SoundEffect> sounds = null;
 
         //Methods
 
         //SFX Calls
         public static void PlaySound(Sounds s)
         {
-            int index = EnumToIndex(s);
-            sounds[index].Play();
+            sounds[s].Play();
         }
 
         /// <summary>
@@ -60,15 +59,14 @@ namespace FinalProject
         /// <param name="ovride">True if overriding previously played sound</param>
         public static void LoopInstancedSound(Sounds s, bool ovride)
         {
-            int index = EnumToIndex(s);
             //If the selected index is null
-            if(instances[index] != null)
+            if(instances[s] != null)
             {
                 //If overriding, stop the current sound and set spot to null
                 if (ovride)
                 {
-                    instances[index].Stop();
-                    instances[index] = null;
+                    instances[s].Stop();
+                    instances[s] = null;
                 }
                 else
                 {
@@ -77,9 +75,9 @@ namespace FinalProject
                 }
             }
             //Selected index is null, simply create instance at index
-            instances[index] = sounds[index].CreateInstance();
-            instances[index].IsLooped = true;
-            instances[index].Play();
+            instances[s] = sounds[s].CreateInstance();
+            instances[s].IsLooped = true;
+            instances[s].Play();
         }
 
         /// <summary>
@@ -88,12 +86,11 @@ namespace FinalProject
         /// <param name="index"></param>
         public static void StopInstancedSound(Sounds s)
         {
-            int index = EnumToIndex(s);
-            if (instances[index] != null)
-            {
-                instances[index].Stop();
-                instances[index].Dispose();
-                instances[index] = null;
+            if (instances[s] != null)
+            {             
+                instances[s].Stop();
+                instances[s].Dispose();
+                instances[s] = null;
             }
         }
 
@@ -102,13 +99,15 @@ namespace FinalProject
         /// </summary>
         public static void StopAllInstances()
         {
+            
             for(int i = 0; i < instances.Count; i++)
             {
-                if(instances[i] != null)
+                Sounds s = IndexToEnum(i);
+                if (instances[s] != null)
                 {
-                    instances[i].Stop();
-                    instances[i].Dispose();
-                    instances[i] = null;
+                    instances[s].Stop();
+                    instances[s].Dispose();
+                    instances[s] = null;
                 }
             }
         }
@@ -145,13 +144,30 @@ namespace FinalProject
         //Run at game creation, gives this class the sound effects
         public static void GiveSFX(List<SoundEffect> snds)
         {
-            sounds = snds;
-            instances = new List<SoundEffectInstance>(sounds.Count);
+            sounds = new Dictionary<Sounds, SoundEffect>();
+
+            //Add sounds to dictionary
+            sounds[Sounds.Catch] = snds[0];
+            sounds[Sounds.SClick1] = snds[1];
+            sounds[Sounds.SClick2] = snds[2];
+            sounds[Sounds.SClick3] = snds[3];
+            sounds[Sounds.SClick4] = snds[4];
+            sounds[Sounds.SAmbience] = snds[5];
+            sounds[Sounds.HBNormal] = snds[6];
+            sounds[Sounds.HBRushed] = snds[7];
+            sounds[Sounds.HBFrantic] = snds[8];
+            sounds[Sounds.BrNormal] = snds[9];
+            sounds[Sounds.BrMedium] = snds[10];
+            sounds[Sounds.BrHeavy] = snds[11];
+            sounds[Sounds.BrSigh] = snds[12];
+
+            instances = new Dictionary<Sounds, SoundEffectInstance>(sounds.Count);
             for(int i = 0; i < sounds.Count; i++)
             {
-                instances.Add(null);
+                Sounds s = IndexToEnum(i);
+                instances[s] = null;
             }
-        }
+        }          
 
         /// <summary>
         /// Class helper method that converts a given enum type into an index within the sound list
@@ -190,6 +206,40 @@ namespace FinalProject
                     return 12;
             }
             return 1;
+        }
+
+        private static Sounds IndexToEnum(int i)
+        {
+            switch (i) {
+
+                case 0:
+                    return Sounds.Catch;
+                case 1:
+                    return Sounds.SClick1;
+                case 2:
+                    return Sounds.SClick2;
+                case 3:
+                    return Sounds.SClick3;
+                case 4:
+                    return Sounds.SClick4;
+                case 5:
+                    return Sounds.SAmbience;
+                case 6:
+                    return Sounds.HBNormal;
+                case 7:
+                    return Sounds.HBRushed;
+                case 8:
+                    return Sounds.HBFrantic;
+                case 9:
+                    return Sounds.BrNormal;
+                case 10:
+                    return Sounds.BrMedium;
+                case 11:
+                    return Sounds.BrHeavy;
+                case 12:
+                    return Sounds.BrSigh;
+            }
+            return Sounds.SClick1;
         }
     }
 }
