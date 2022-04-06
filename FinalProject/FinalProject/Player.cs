@@ -147,7 +147,7 @@ namespace FinalProject
                     sighTimer -= dTime;
                     if(sighTimer <= 0 && sighTimer > -10)
                     {
-                        SFXManager.LoopInstancedSound(Sounds.BrNormal, false);
+                        //SFXManager.LoopInstancedSound(Sounds.BrNormal, false);
                         sighTimer = -10;
                     }
                     break;
