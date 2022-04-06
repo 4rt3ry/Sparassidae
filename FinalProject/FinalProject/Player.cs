@@ -33,6 +33,7 @@ namespace FinalProject
 
         //Light
         private Spotlight flashlight;
+        private float targetScale;
 
         // Input
         private KeyboardState kb;
@@ -74,6 +75,7 @@ namespace FinalProject
                 Color = Color.CornflowerBlue,
                 ConeDecay = 2.0f
             };
+            targetScale = 800;
 
             _physicsCollider = new CircleCollider(this, new Vector2(0, 0), 20f, false);
 
@@ -129,6 +131,15 @@ namespace FinalProject
             mousePos = camera.ScreenToWorldSpace(mousePos);
             //Rotate the flashlight direction based on the mouse position
             flashlight.Rotation = MathF.Atan2(mousePos.Y -  this.Position.Y, mousePos.X - this.Position.X);
+
+            if(flashlight.Scale.X > targetScale)
+            {
+                flashlight.Scale = new Vector2(flashlight.Scale.X - (10 + Math.Abs((targetScale-flashlight.Scale.X)/2)) * dTime);
+            }
+            if(flashlight.Scale.X < targetScale)
+            {
+                flashlight.Scale = new Vector2(flashlight.Scale.X + (10 + Math.Abs((targetScale - flashlight.Scale.X) / 2)) * dTime);
+            }
 
             switch (CurrentState)
             {
@@ -255,6 +266,7 @@ namespace FinalProject
             SFXManager.LoopInstancedSound(Sounds.SAmbience, false);
             SFXManager.LoopInstancedSound(Sounds.BrMedium, false);
             numTargets += 1;
+            targetScale = 500;
         }
 
         /// <summary>
@@ -268,6 +280,7 @@ namespace FinalProject
             SFXManager.StopAllBr();
             SFXManager.StopInstancedSound(Sounds.SAmbience);
             shockTimer = 4.5f;
+            targetScale = 300;
         }
 
         /// <summary>
@@ -295,6 +308,7 @@ namespace FinalProject
             SFXManager.LoopInstancedSound(Sounds.HBNormal, true);
             SFXManager.PlaySound(Sounds.BrSigh);
             sighTimer = 3.1f;
+            targetScale = 800;
         }
 
         /// <summary>
@@ -308,7 +322,8 @@ namespace FinalProject
             SFXManager.LoopInstancedSound(Sounds.SAmbience, false);
             SFXManager.LoopInstancedSound(Sounds.HBFrantic, false);
             SFXManager.LoopInstancedSound(Sounds.BrHeavy, false);
-
+            targetScale = 150;
+            flashlight.Scale = new Vector2(150);
         }
 
         /// <summary>
