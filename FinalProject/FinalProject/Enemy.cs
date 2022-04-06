@@ -28,12 +28,14 @@ namespace FinalProject
         private float chaseWindupTimer;
 
         //Roam Variables
-        private Vector2[] roamLocations;
+        private Vector2[] roamLocations; // This should include spawn position
         private int roamTarget; //Int represent position in roam array that enemy is targeting
         private int roamCheckDistance; //Distance to mark a checkpoint as 'checked'
         private Boolean moving; //Is enemy currently moving?
         private float moveTime; //Time enemy will be moving towards roam point
         private float downTime; //Time enemy will wait before moving again
+        private float speed;
+        private Random rng = new Random();
 
         //Detection variables
         private float detectionRadius;
@@ -50,6 +52,7 @@ namespace FinalProject
 
         //Properties
         public EnemyState CurrentState { get => currentState;  }
+        public Rectangle DisplayRectangle { get => displayRectangle; }
 
         //Constructors
         /// <summary>
@@ -113,12 +116,15 @@ namespace FinalProject
         /// <param name="roamLocations">Array of positions to roam to</param>
         /// <param name="detectionRadius">Radius for detecting player</param>
         /// <param name="enemyTexture">Visual texture</param>
-        public Enemy(Vector2 position, Vector2[] roamLocations, float detectionRadius, Texture2D enemyTexture, int width, int height) : this(position, roamLocations, detectionRadius)
+        public Enemy(Vector2 position, Vector2[] roamLocations, float detectionRadius, Texture2D enemyTexture, int width, int height, float movingSpeed) : this(position, roamLocations, detectionRadius)
         {
             this.enemyTexture = enemyTexture;
             displayRectangle = new Rectangle(new Point((int)position.X, (int)position.Y), new Point(width, height));
-            moving = false;
+            moving = true;
             moveTime = 5;
+            roamTarget = 1;
+            roamCheckDistance = 10;
+            this.speed = movingSpeed;
         }
 
         //Methods
@@ -176,6 +182,7 @@ namespace FinalProject
                             if (moving)
                             {
                                 //Move enemy
+                                
 
                                 //Time Increment
                                 moveTime -= dTime;
@@ -211,6 +218,10 @@ namespace FinalProject
                             if (moving)
                             {
                                 //Move enemy
+                                Vector2 moveDir = roamLocations[roamTarget] - this._position;
+                                moveDir.Normalize();
+                                this._position += moveDir * speed * dTime;
+                                System.Diagnostics.Debug.WriteLine($"moving {_position}");
 
                                 //Time Increment
                                 moveTime -= dTime;
@@ -226,7 +237,7 @@ namespace FinalProject
                                 downTime -= dTime;
                                 if (downTime <= 0)
                                 {
-                                    moveTime = 1.5f;
+                                    moveTime = rng.Next(1,3);
                                     moving = true;
                                 }
                             }
@@ -293,6 +304,7 @@ namespace FinalProject
                     lastSeenPosition = playerDetectionLink.EndPosition;
                 }
             }
+
         }
 
         /// <summary>

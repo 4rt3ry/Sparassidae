@@ -42,6 +42,10 @@ namespace FinalProject
         // Imported using LoadMap()
         private Texture2D _mapTexture;
 
+        //Used for enemy test -- Delete later
+        private Texture2D whiteTexture;
+
+
         //Properties
         public ContentManager Content => _content;
         public Player Player => _player;
@@ -62,6 +66,18 @@ namespace FinalProject
         }
 
         //Methods
+        /// <summary>
+        /// This method is used to show the enemy.
+        /// </summary>
+        /// <param name="batch"></param>
+        public void DrawTest(SpriteBatch batch)
+        {
+            foreach(Enemy enemy in _enemies)
+            {
+                batch.Draw(whiteTexture, enemy.DisplayRectangle, Color.White);
+            }
+        }
+
 
         /// <summary>
         /// Draws all elements of the map, including the player and any walls
@@ -149,8 +165,8 @@ namespace FinalProject
             //}
 
             //Create Roam Points
-            Vector2[] roamPoints = new Vector2[2] { new Vector2(1500, 100), new Vector2(1500, 700) };
-            _enemies.Add(new Enemy(new Vector2(1500, 100), roamPoints, 50, _enemyTexture, 200, 200));
+            Vector2[] roamPoints = new Vector2[2] { new Vector2(100, 100), new Vector2(1500, 100) };
+            _enemies.Add(new Enemy(new Vector2(100, 100), roamPoints, 50, _enemyTexture, 200, 200, 100));
             //_enemies.Add(new Enemy(new Vector2(1500, 100), _enemyTexture, 200, 200));
 
             // Set up lighting after walls are created
@@ -275,6 +291,7 @@ namespace FinalProject
         private void LoadContent()
         {
             _enemyTexture = _content.Load<Texture2D>("Enemy");
+            whiteTexture = _content.Load<Texture2D>("blackbox2");
         }
     }
 }
