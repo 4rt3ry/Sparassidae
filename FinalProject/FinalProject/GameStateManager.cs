@@ -196,6 +196,7 @@ namespace FinalProject
                     break;
 
                 case GameState.PlayState:
+                    map.DrawTest(batch);
                     break;
 
                 case GameState.PauseState:
