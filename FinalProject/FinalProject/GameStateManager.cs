@@ -286,8 +286,20 @@ namespace FinalProject
                     // Press start(gamepad) or P(keyboard) to pause
                     if (ks.IsKeyDown(Keys.P) && previousKs.IsKeyUp(Keys.P))
                     {
+                        volumeSlider.UpdatePosition(map.Player.Position);
+                        System.Diagnostics.Debug.WriteLine(map.Player.Position);
+                        mainMenuButton.UpdatePosition(map.Player.Position);
+
                         currentState = GameState.PauseState;
+
                     }
+
+                    if(map.Player.CurrentState == PlayerState.DeadState)
+                    {
+                        currentState = GameState.GameOverState;
+                    }
+
+
 
                     // Update lighting effects after buttons have been updated
                     UpdatePenumbraState(penumbra);
@@ -300,6 +312,9 @@ namespace FinalProject
                     {
                         currentState = GameState.PlayState;
                     }
+
+                    
+
                     volumeSlider.Update();
                     mainMenuButton.Update();
 
@@ -331,24 +346,23 @@ namespace FinalProject
             fade_Texture = content.Load<Texture2D>("blackbox2");
             black_Texture = content.Load<Texture2D>("Blackbackground");
 
-            playButton = new Button(content.Load<Texture2D>("Controls/Play"), content.Load<Texture2D>("Controls/Play_hover"), 1500, 700);
-            optionButton = new Button(content.Load<Texture2D>("Controls/Options"), content.Load<Texture2D>("Controls/Options_hover"), 1500, 800);
-            instructionButton = new Button(content.Load<Texture2D>("Controls/Instruction"), content.Load<Texture2D>("Controls/Instruction_hover"), 1500, 900);
+            playButton = new Button(content.Load<Texture2D>("Controls/Play"), content.Load<Texture2D>("Controls/Play_hover"), 1500, 700, _graphics);
+            optionButton = new Button(content.Load<Texture2D>("Controls/Options"), content.Load<Texture2D>("Controls/Options_hover"), 1500, 800, _graphics);
+            instructionButton = new Button(content.Load<Texture2D>("Controls/Instruction"), content.Load<Texture2D>("Controls/Instruction_hover"), 1500, 900, _graphics);
 
             Texture2D back = content.Load<Texture2D>("Controls/Back");
             Texture2D back_Hover = content.Load<Texture2D>("Controls/Back_Hover");
-            backMainButton = new Button(back, back_Hover, _graphics.PreferredBackBufferWidth / 2 - back.Width / 2, 700);
-            backGameButton = new Button(back, back_Hover, _graphics.PreferredBackBufferWidth / 2 - back.Width / 2, 700);
+            backMainButton = new Button(back, back_Hover, _graphics.PreferredBackBufferWidth / 2 - back.Width / 2, 700, _graphics);
+            backGameButton = new Button(back, back_Hover, _graphics.PreferredBackBufferWidth / 2 - back.Width / 2, 700, _graphics);
             Texture2D mainMain = content.Load<Texture2D>("Controls/MainMenu");
             Texture2D mainMain_Hover = content.Load<Texture2D>("Controls/MainMenu_hover");
-            mainMenuButton = new Button(mainMain, mainMain_Hover, _graphics.PreferredBackBufferWidth / 2 - mainMain.Width / 2, 800);
+            mainMenuButton = new Button(mainMain, mainMain_Hover, _graphics.PreferredBackBufferWidth / 2 - mainMain.Width / 2, 800, _graphics);
 
             Texture2D sliderWidget = content.Load<Texture2D>("SliderBackground");
             Texture2D sliderIndicator = content.Load<Texture2D>("SliderIndicator");
-            volumeSlider = new Slider(sliderIndicator, sliderWidget, _graphics.PreferredBackBufferWidth / 2 - sliderWidget.Width / 2, 400, 60, 100);
-
+            volumeSlider = new Slider(sliderIndicator, sliderWidget, _graphics.PreferredBackBufferWidth / 2 - sliderWidget.Width / 2, 400, 60, 100, _graphics);
+            
             syneTactileFont = content.Load<SpriteFont>("SyneTactile24");
-
 
         }
 

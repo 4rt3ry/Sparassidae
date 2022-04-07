@@ -23,14 +23,20 @@ namespace FinalProject
 
         private bool isHovering; //Hovering over the indicator
         private bool isHoveringSlider; // Hovering over the entire slider;
+
+        // Slider Position and Rectangel
         private Rectangle sliderRec;
         private Rectangle indicatorRec;
+        private int x_value; // X_value of the slider relative to the center of the screen
+        private int y_value; // Y_value of the slider relative to the center of the screnn
 
+        // Slider Statistics
         private double curValue;
         private double totalValue;
         private double percentage;
 
         public event EventHandler Click;
+        private GraphicsDeviceManager graphics;
 
         //Properties
 
@@ -43,14 +49,14 @@ namespace FinalProject
         /// <summary>
         /// Construct slider having indicator and widget texture, with position and value
         /// </summary>
-        /// <param name="indicator"></param>
-        /// <param name="widget"></param>
-        /// <param name="x_value"></param>
-        /// <param name="y_value"></param>
-        /// <param name="initialValue"></param>
-        /// <param name="totalValue"></param>
+        /// <param name="indicator">The indicator texture</param>
+        /// <param name="widget">The widget texture</param>
+        /// <param name="x_value">The relative x position to the scene</param>
+        /// <param name="y_value">The relative y position to the scene</param>
+        /// <param name="initialValue">The initial Valuee of the SLider</param>
+        /// <param name="totalValue">The total value of the slider</param>
         public Slider(Texture2D indicator, Texture2D widget, int x_value, int y_value,
-            double initialValue, double totalValue)
+            double initialValue, double totalValue, GraphicsDeviceManager graphics)
         {
             isHovering = false;
             isHoveringSlider = false;
@@ -59,6 +65,9 @@ namespace FinalProject
             curValue = initialValue;
             this.totalValue = totalValue;
             percentage = initialValue / totalValue;
+            this.graphics = graphics;
+            this.x_value = x_value - graphics.PreferredBackBufferWidth/2;
+            this.y_value = y_value - graphics.PreferredBackBufferHeight/2;
             sliderRec = new Rectangle(x_value, y_value, widget.Width, widget.Height);
             indicatorRec = new Rectangle((int)(percentage * widget.Width + x_value - indicator.Width/2),
                 y_value + widget.Height/2 - indicator.Height/2, indicator.Width, indicator.Height);
@@ -153,5 +162,25 @@ namespace FinalProject
             // Set the previous mouse state
             previousMouse = currentMouse;
         }
+
+        /// <summary>
+        /// Update the slider position based on the center of the screen
+        /// </summary>
+        /// <param name="center"></param>
+        public void UpdatePosition(Vector2 center)
+        {
+            this.sliderRec = new Rectangle(
+                x_value + (int)center.X,  y_value + (int)center.Y,
+                sliderRec.Width, sliderRec.Height);
+
+            this.indicatorRec = new Rectangle(
+                (int)(percentage * this.sliderRec.Width) + this.SliderRec.X - this.indicatorRec.Width / 2,
+                this.sliderRec.Y + this.sliderRec.Height / 2 - this.indicatorRec.Height / 2,
+                this.indicatorRec.Width, this.indicatorRec.Height);
+            System.Diagnostics.Debug.WriteLine(sliderRec);
+        }
+
     }
+
+  
 }

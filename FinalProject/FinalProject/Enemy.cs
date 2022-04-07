@@ -140,7 +140,8 @@ namespace FinalProject
             this.target = target;
             this.walls = walls;
             RoamDetectionTrigger = new CircleCollider(this, new Vector2(width / 2, height / 2), detectionRadius, true);
-            playerDetectionLink = new LineCollider(this, Vector2.Zero, target.Position);
+            playerDetectionLink = new LineCollider(this, new Vector2(width /2, height/2), target.Position);
+            chaseStartDistance = 500;
         }
 
         //Methods
@@ -195,12 +196,14 @@ namespace FinalProject
                             if (playerDetectionLink.CheckCollision(wall))
                             {
                                 isDetected = false;
+                                System.Diagnostics.Debug.WriteLine($"{wall.Position}");
                             }
                         }
                         if(isDetected)
                         {
-                            System.Diagnostics.Debug.WriteLine("Dececting");
-                            moveingTowards = target.Position;
+                            //System.Diagnostics.Debug.WriteLine("Dececting");
+                            moveingTowards = new Vector2(target.Position.X - this.displayRectangle.Width /2,
+                                target.Position.Y - this.displayRectangle.Height /2);
                             currentState = EnemyState.InvestigateState;
                         }
                     }
@@ -315,6 +318,7 @@ namespace FinalProject
                         currentState = EnemyState.ChaseWindupState;
                         chaseWindupTimer = 4f;
                         target.SetShockState();
+                        System.Diagnostics.Debug.WriteLine("Chase Wind Up");
                     }
                     break;
                 case EnemyState.ChaseWindupState:
@@ -322,6 +326,7 @@ namespace FinalProject
                     if (chaseWindupTimer <= 0)
                     {
                         currentState = EnemyState.ChaseState;
+                        System.Diagnostics.Debug.WriteLine("Chase start");
                     }
                     break;
                 case EnemyState.ChaseState:
@@ -331,9 +336,15 @@ namespace FinalProject
                     // IFF the line does not collide with a wall
                     // If the enemy reaches its target position && player line is colliding with a wall
                     // Then the chase is broken
+
+                    if (this.PhysicsCollider.CheckCollision(target))
+                    {
+                        currentState = EnemyState.PlayerDeadState;
+                    }
                     break;
                 case EnemyState.PlayerDeadState:
                     // Check collision of bodies for detection
+                    target.SetDeadState();
                     break;
                 case EnemyState.ReturnState:
                     // Path back to start
@@ -351,7 +362,7 @@ namespace FinalProject
             if(target != null)
             {
                 playerDetectionLink.EndPosition = target.Position;
-                playerDetectionLink.Position = _position;
+                //playerDetectionLink.Position = _position;
                 //SOME SORT OF DETECTION OF LINES COLLISION WITH MAP OBJECTS
                 //playerDetectionLink.CheckCollision();
 

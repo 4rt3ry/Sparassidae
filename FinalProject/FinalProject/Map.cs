@@ -171,8 +171,10 @@ namespace FinalProject
             //}
 
             //Create Roam Points
-            List<Vector2> roamPoints = new List<Vector2> { new Vector2(1500, 700), new Vector2(1500, 100), new Vector2(100, 100) };
-            _enemies.Add(new Enemy(roamPoints[0], roamPoints, 800, _enemyTexture, 150, 150, 100, Player, _walls));
+            //List<Vector2> roamPoints = new List<Vector2> { new Vector2(1500, 700), new Vector2(1500, 100), new Vector2(100, 100) };
+            //_enemies.Add(new Enemy(roamPoints[0], roamPoints, 800, _enemyTexture, 150, 150, 100, Player, _walls));
+            List<Vector2> roamPoints2 = null;
+            _enemies.Add(new Enemy(new Vector2(1550, 100), roamPoints2, 800, _enemyTexture, 150, 150, 100, Player, _walls));
             //_enemies.Add(new Enemy(new Vector2(1500, 100), _enemyTexture, 200, 200));
 
             // Set up lighting after walls are created

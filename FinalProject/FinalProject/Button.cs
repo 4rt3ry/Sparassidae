@@ -20,13 +20,16 @@ namespace FinalProject
 
         private bool isHovering;
         private Rectangle buttonRectangle;
+        private int x_value;
+        private int y_value;
+        private GraphicsDeviceManager graphics;
 
         private Texture2D buttonNorm;
         private Texture2D buttonHover;
 
         //Properties
         public event EventHandler Click;
-        public bool Clicked;
+        //public bool Clicked;
         public Rectangle ButtonRectangle
         {
             get { return buttonRectangle; }
@@ -43,11 +46,14 @@ namespace FinalProject
         /// <param name="x_value">the x value of the position</param>
         /// <param name="y_value">the y value of the position</param>
         public Button(Texture2D buttonNorm, Texture2D buttonHover, 
-            int x_value, int y_value)
+            int x_value, int y_value, GraphicsDeviceManager graphics)
         {
             this.buttonNorm = buttonNorm;
             this.buttonHover = buttonHover;
             buttonRectangle = new Rectangle(x_value, y_value, buttonNorm.Width, buttonNorm.Height);
+            this.graphics = graphics;
+            this.x_value = x_value - graphics.PreferredBackBufferWidth / 2;
+            this.y_value = y_value - graphics.PreferredBackBufferHeight / 2;
         }
 
         //Methods
@@ -100,5 +106,11 @@ namespace FinalProject
             previousMouse = currentMouse;
         }
 
+        public void UpdatePosition(Vector2 center)
+        {
+            buttonRectangle = new Rectangle(
+                (int)center.X + x_value, (int)center.Y + y_value,
+                buttonRectangle.Width, buttonRectangle.Height);
+        }
     }
 }
