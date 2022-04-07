@@ -75,6 +75,8 @@ namespace FinalProject
             foreach(Enemy enemy in _enemies)
             {
                 batch.Draw(whiteTexture, enemy.DisplayRectangle, Color.White);
+
+                ShapeBatch.Circle(new Vector2(enemy.DisplayRectangle.X, enemy.DisplayRectangle.Y), enemy.DetectionRadius, Color.Red);
             }
         }
 
@@ -165,8 +167,8 @@ namespace FinalProject
             //}
 
             //Create Roam Points
-            Vector2[] roamPoints = new Vector2[2] { new Vector2(100, 100), new Vector2(1500, 100) };
-            _enemies.Add(new Enemy(new Vector2(100, 100), roamPoints, 50, _enemyTexture, 200, 200, 100));
+            List<Vector2> roamPoints = new List<Vector2> { new Vector2(1500, 700), new Vector2(1500, 100), new Vector2(100, 100) };
+            _enemies.Add(new Enemy(roamPoints[0], roamPoints, 50, _enemyTexture, 200, 200, 100));
             //_enemies.Add(new Enemy(new Vector2(1500, 100), _enemyTexture, 200, 200));
 
             // Set up lighting after walls are created

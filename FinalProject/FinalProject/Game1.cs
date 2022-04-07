@@ -133,8 +133,10 @@ namespace FinalProject
             // Draw stuff that is not affected by lighting (UI, etc).
             _batch.Begin(transformMatrix: transMatrix);
 
+            ShapeBatch.Begin(GraphicsDevice);
             _gameStateManager.DrawUI(_batch);
             _fadeTransition.StartFade(_batch, 1f, 1f);
+            ShapeBatch.End();
 
             _batch.End();
 

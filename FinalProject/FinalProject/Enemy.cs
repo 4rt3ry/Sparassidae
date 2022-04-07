@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace FinalProject
 {
@@ -28,7 +29,7 @@ namespace FinalProject
         private float chaseWindupTimer;
 
         //Roam Variables
-        private Vector2[] roamLocations; // This should include spawn position
+        private List<Vector2> roamLocations; // This should include spawn position
         private int roamTarget; //Int represent position in roam array that enemy is targeting
         private int roamCheckDistance; //Distance to mark a checkpoint as 'checked'
         private Boolean moving; //Is enemy currently moving?
@@ -36,6 +37,7 @@ namespace FinalProject
         private float downTime; //Time enemy will wait before moving again
         private float speed;
         private Random rng = new Random();
+        private int isForward; // Let a bool, 0 = move forward, 1 = move backward
 
         //Detection variables
         private float detectionRadius;
@@ -53,6 +55,7 @@ namespace FinalProject
         //Properties
         public EnemyState CurrentState { get => currentState;  }
         public Rectangle DisplayRectangle { get => displayRectangle; }
+        public float DetectionRadius { get => detectionRadius; set => detectionRadius = value; }
 
         //Constructors
         /// <summary>
@@ -93,7 +96,7 @@ namespace FinalProject
         /// </summary>
         /// <param name="position">Starting position</param>
         /// <param name="roamLocations">Array of locations for the enemy to roam to</param>
-        public Enemy(Vector2 position, Vector2[] roamLocations) : this(position)
+        public Enemy(Vector2 position, List<Vector2> roamLocations) : this(position)
         {
             this.roamLocations = roamLocations;
         }
@@ -104,9 +107,9 @@ namespace FinalProject
         /// <param name="position">Enemy starting position</param>
         /// <param name="roamLocations">Array of positions to roam to</param>
         /// <param name="detectionRadius">Radius for detecting player</param>
-        public Enemy(Vector2 position, Vector2[] roamLocations, float detectionRadius) : this(position, roamLocations)
+        public Enemy(Vector2 position, List<Vector2> roamLocations, float detectionRadius) : this(position, roamLocations)
         {
-            this.detectionRadius = detectionRadius;
+            this.DetectionRadius = detectionRadius;
         }
 
         /// <summary>
@@ -116,7 +119,7 @@ namespace FinalProject
         /// <param name="roamLocations">Array of positions to roam to</param>
         /// <param name="detectionRadius">Radius for detecting player</param>
         /// <param name="enemyTexture">Visual texture</param>
-        public Enemy(Vector2 position, Vector2[] roamLocations, float detectionRadius, Texture2D enemyTexture, int width, int height, float movingSpeed) : this(position, roamLocations, detectionRadius)
+        public Enemy(Vector2 position, List<Vector2> roamLocations, float detectionRadius, Texture2D enemyTexture, int width, int height, float movingSpeed) : this(position, roamLocations, detectionRadius)
         {
             this.enemyTexture = enemyTexture;
             displayRectangle = new Rectangle(new Point((int)position.X, (int)position.Y), new Point(width, height));
@@ -125,6 +128,7 @@ namespace FinalProject
             roamTarget = 1;
             roamCheckDistance = 10;
             this.speed = movingSpeed;
+            isForward = 0; // Move forward
         }
 
         //Methods
@@ -157,6 +161,7 @@ namespace FinalProject
             }
             //Constant display of enemy texture (For current version, not including animations)
             batch.Draw(enemyTexture, displayRectangle, Color.White);
+
         }
 
         /// <summary>
@@ -176,7 +181,7 @@ namespace FinalProject
                     else
                     {
                         //One location (Roam about a single point)
-                        if (roamLocations.Length == 1)
+                        if (roamLocations.Count == 1)
                         {
                             //Movement code
                             if (moving)
@@ -204,14 +209,29 @@ namespace FinalProject
                             }
                         }
                         //Multiple locations (Roam between locations)
-                        if (roamLocations.Length > 1)
+                        if (roamLocations.Count > 1)
                         {
                             //Check distance to target pos
-                            if (Math.Abs((_position - roamLocations[roamTarget]).Length()) <= roamCheckDistance)
+                            if (Math.Abs((_position - roamLocations.ElementAt(roamTarget)).Length()) <= roamCheckDistance)
                             {
-                                //Increment and ensure target location is within array
-                                roamTarget += 1;
-                                roamTarget = roamTarget % (roamLocations.Length - 1);
+                                isForward = rng.Next(0, 2);
+                                //Update target location
+                                if (roamTarget == 0)
+                                {
+                                    roamTarget += 1;
+                                }
+                                else if(roamTarget == roamLocations.Count -1)
+                                {
+                                    roamTarget -= 1;
+                                }
+                                else if(isForward == 0)
+                                {
+                                    roamTarget += 1;
+                                }
+                                else
+                                {
+                                    roamTarget -= 1;
+                                }
                             }
 
                             //Movement code
@@ -221,7 +241,7 @@ namespace FinalProject
                                 Vector2 moveDir = roamLocations[roamTarget] - this._position;
                                 moveDir.Normalize();
                                 this._position += moveDir * speed * dTime;
-                                System.Diagnostics.Debug.WriteLine($"moving {_position}");
+                               
 
                                 //Time Increment
                                 moveTime -= dTime;
@@ -237,7 +257,7 @@ namespace FinalProject
                                 downTime -= dTime;
                                 if (downTime <= 0)
                                 {
-                                    moveTime = rng.Next(1,3);
+                                    moveTime = rng.Next(1,6);
                                     moving = true;
                                 }
                             }
