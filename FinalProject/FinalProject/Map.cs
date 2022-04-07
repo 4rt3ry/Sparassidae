@@ -44,7 +44,7 @@ namespace FinalProject
 
         //Used for enemy test -- Delete later
         private Texture2D whiteTexture;
-
+        private Texture2D circleTexture;
 
         //Properties
         public ContentManager Content => _content;
@@ -75,8 +75,12 @@ namespace FinalProject
             foreach(Enemy enemy in _enemies)
             {
                 batch.Draw(whiteTexture, enemy.DisplayRectangle, Color.White);
+                enemy.RoamDetectionTrigger.DrawDebugTexture(batch, Color.Red);
+                batch.Draw(circleTexture,
+                    new Rectangle((int)enemy.Position.X - (int)enemy.DetectionRadius + enemy.DisplayRectangle.Width / 2,
+                    (int)enemy.Position.Y - (int)enemy.DetectionRadius + enemy.DisplayRectangle.Height / 2,
+                    (int)enemy.DetectionRadius *2 , (int)enemy.DetectionRadius *2), Color.White);
 
-                ShapeBatch.Circle(new Vector2(enemy.DisplayRectangle.X, enemy.DisplayRectangle.Y), enemy.DetectionRadius, Color.Red);
             }
         }
 
@@ -168,7 +172,7 @@ namespace FinalProject
 
             //Create Roam Points
             List<Vector2> roamPoints = new List<Vector2> { new Vector2(1500, 700), new Vector2(1500, 100), new Vector2(100, 100) };
-            _enemies.Add(new Enemy(roamPoints[0], roamPoints, 50, _enemyTexture, 200, 200, 100));
+            _enemies.Add(new Enemy(roamPoints[0], roamPoints, 800, _enemyTexture, 150, 150, 100, Player, _walls));
             //_enemies.Add(new Enemy(new Vector2(1500, 100), _enemyTexture, 200, 200));
 
             // Set up lighting after walls are created
@@ -293,7 +297,10 @@ namespace FinalProject
         private void LoadContent()
         {
             _enemyTexture = _content.Load<Texture2D>("Enemy");
+
+            //Test purpose
             whiteTexture = _content.Load<Texture2D>("blackbox2");
+            circleTexture = _content.Load<Texture2D>("TestCircleRange");
         }
     }
 }

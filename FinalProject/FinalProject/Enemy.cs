@@ -43,10 +43,14 @@ namespace FinalProject
         private float detectionRadius;
         private float chaseStartDistance;
         private LineCollider playerDetectionLink;
+        private CircleCollider roamDetectionTrigger;
         private Vector2 lastSeenPosition;
+        private List<Wall> walls;
+        private bool isDetected;
 
         //Reference holder for target player
         private Player target;
+        private Vector2 moveingTowards;
 
         //Visual Variables
         private Texture2D enemyTexture;
@@ -56,6 +60,7 @@ namespace FinalProject
         public EnemyState CurrentState { get => currentState;  }
         public Rectangle DisplayRectangle { get => displayRectangle; }
         public float DetectionRadius { get => detectionRadius; set => detectionRadius = value; }
+        internal CircleCollider RoamDetectionTrigger { get => roamDetectionTrigger; set => roamDetectionTrigger = value; }
 
         //Constructors
         /// <summary>
@@ -119,9 +124,12 @@ namespace FinalProject
         /// <param name="roamLocations">Array of positions to roam to</param>
         /// <param name="detectionRadius">Radius for detecting player</param>
         /// <param name="enemyTexture">Visual texture</param>
-        public Enemy(Vector2 position, List<Vector2> roamLocations, float detectionRadius, Texture2D enemyTexture, int width, int height, float movingSpeed) : this(position, roamLocations, detectionRadius)
+        public Enemy(Vector2 position, List<Vector2> roamLocations, float detectionRadius, Texture2D enemyTexture, int width, int height, float movingSpeed,
+            Player target, List<Wall> walls) 
+            : this(position, roamLocations, detectionRadius)
         {
             this.enemyTexture = enemyTexture;
+            this._physicsCollider = new RectangleCollider(this, Vector2.Zero, new Vector2(width, height));
             displayRectangle = new Rectangle(new Point((int)position.X, (int)position.Y), new Point(width, height));
             moving = true;
             moveTime = 5;
@@ -129,6 +137,10 @@ namespace FinalProject
             roamCheckDistance = 10;
             this.speed = movingSpeed;
             isForward = 0; // Move forward
+            this.target = target;
+            this.walls = walls;
+            RoamDetectionTrigger = new CircleCollider(this, new Vector2(width / 2, height / 2), detectionRadius, true);
+            playerDetectionLink = new LineCollider(this, Vector2.Zero, target.Position);
         }
 
         //Methods
@@ -173,6 +185,27 @@ namespace FinalProject
             switch (currentState)
             {
                 case EnemyState.RoamingState:
+                    //Check if the player is enter the detection range
+                    //Still needs to add stone detection
+                    if (RoamDetectionTrigger.CheckCollision(target))
+                    {
+                        isDetected = true;
+                        foreach (Wall wall in walls)
+                        {
+                            if (playerDetectionLink.CheckCollision(wall))
+                            {
+                                isDetected = false;
+                            }
+                        }
+                        if(isDetected)
+                        {
+                            System.Diagnostics.Debug.WriteLine("Dececting");
+                            moveingTowards = target.Position;
+                            currentState = EnemyState.InvestigateState;
+                        }
+                    }
+                   
+
                     //No locations (Stand still)
                     if(roamLocations == null)
                     {
@@ -268,10 +301,13 @@ namespace FinalProject
                 case EnemyState.InvestigateState:
 
                     //Movement code
+                    Vector2 moveDir2 = moveingTowards - this._position;
+                    moveDir2.Normalize();
+                    this._position += moveDir2 * speed * dTime;
 
                     //Detection code
                     ///Run something here that updates the Enemy/Player link (needs additional help)
-                    
+
                     // If player is within chase start distance
                     // THIS IS TEMP CODE, WE CAN REPLACE WITH RAYTRACING/SENSOR COLLISIONS
                     if (Math.Abs((_position - target.Position).Length()) <= chaseStartDistance)
@@ -317,6 +353,7 @@ namespace FinalProject
                 playerDetectionLink.EndPosition = target.Position;
                 playerDetectionLink.Position = _position;
                 //SOME SORT OF DETECTION OF LINES COLLISION WITH MAP OBJECTS
+                //playerDetectionLink.CheckCollision();
 
                 //if no collision with map objects
                 if (true)
@@ -359,6 +396,16 @@ namespace FinalProject
         {
             currentState = EnemyState.PlayerDeadState;
             target.SetDeadState();
+        }
+
+        public void StoneDetection(Stone stone)
+        {
+
+        }
+
+        public void WallDetection(Stone stone)
+        {
+
         }
     }
 }
