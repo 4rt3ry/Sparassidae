@@ -259,6 +259,12 @@
 /processorParam:TextureFormat=Color
 /build:SliderIndicator.png
 
+#begin SoundFX/Alert.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundFX/Alert.wav
+
 #begin SoundFX/CatchAmbience.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -312,6 +318,12 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:SoundFX/SpiderAmbience.wav
+
+#begin SoundFX/SpiderAmbienceChase.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundFX/SpiderAmbienceChase.wav
 
 #begin SoundFX/SpiderClick1.wav
 /importer:WavImporter

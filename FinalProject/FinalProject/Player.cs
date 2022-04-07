@@ -42,6 +42,7 @@ namespace FinalProject
 
         //Sound Variables
         float sighTimer;
+        float alertTimer;
 
         //Properties
         public PlayerState CurrentState { get => currentState; set => currentState = value; }
@@ -80,6 +81,7 @@ namespace FinalProject
             _physicsCollider = new CircleCollider(this, new Vector2(0, 0), 20f, false);
 
             sighTimer = 3.1f;
+            alertTimer = 2f;
         }
 
         public Player(Vector2 position, Camera2D camera): this()
@@ -162,7 +164,13 @@ namespace FinalProject
                     shockTimer -= dTime;
                     break;
                 case PlayerState.ChaseState:
-
+                    if(alertTimer <= 0 && alertTimer > -5)
+                    {
+                        SFXManager.PlaySound(Sounds.Alert);
+                        SFXManager.LoopInstancedSound(Sounds.SAmbChase, false);
+                        alertTimer = -10;
+                    }
+                    alertTimer -= dTime;
                     break;
                 case PlayerState.DeadState:
 
@@ -278,7 +286,6 @@ namespace FinalProject
             SFXManager.PlaySound(Sounds.Catch);
             SFXManager.StopAllHB();
             SFXManager.StopAllBr();
-            SFXManager.StopInstancedSound(Sounds.SAmbience);
             shockTimer = 4.5f;
             targetScale = 300;
         }
@@ -304,7 +311,6 @@ namespace FinalProject
             currentState = PlayerState.WalkingState;
             SFXManager.StopAllHB();
             SFXManager.StopAllBr(); 
-            SFXManager.StopInstancedSound(Sounds.SAmbience);
             SFXManager.LoopInstancedSound(Sounds.HBNormal, true);
             SFXManager.PlaySound(Sounds.BrSigh);
             sighTimer = 3.1f;
@@ -319,9 +325,9 @@ namespace FinalProject
             currentState = PlayerState.ChaseState;
             SFXManager.StopAllHB();
             SFXManager.StopAllBr();
-            SFXManager.LoopInstancedSound(Sounds.SAmbience, false);
             SFXManager.LoopInstancedSound(Sounds.HBFrantic, false);
             SFXManager.LoopInstancedSound(Sounds.BrHeavy, false);
+            alertTimer = 2f;
             targetScale = 150;
             flashlight.Scale = new Vector2(150);
         }

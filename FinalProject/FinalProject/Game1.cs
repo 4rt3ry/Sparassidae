@@ -86,8 +86,10 @@ namespace FinalProject
             soundEffects.Add(Content.Load<SoundEffect>("SoundFX/MediumBreathing"));
             soundEffects.Add(Content.Load<SoundEffect>("SoundFX/HeavyBreathing"));
             soundEffects.Add(Content.Load<SoundEffect>("SoundFX/Sigh"));
+            soundEffects.Add(Content.Load<SoundEffect>("SoundFX/Alert"));
+            soundEffects.Add(Content.Load<SoundEffect>("SoundFX/SpiderAmbienceChase"));
 
-            
+
 
             //Give manager the sounds
             SFXManager.GiveSFX(soundEffects);

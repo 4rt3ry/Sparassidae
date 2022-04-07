@@ -27,7 +27,9 @@ namespace FinalProject
         BrNormal,
         BrMedium,
         BrHeavy,
-        BrSigh
+        BrSigh,
+        Alert,
+        SAmbChase
     }
     public static class SFXManager
     {
@@ -131,6 +133,8 @@ namespace FinalProject
             StopInstancedSound(Sounds.BrMedium);
             StopInstancedSound(Sounds.BrHeavy);
             StopInstancedSound(Sounds.BrSigh);
+            StopInstancedSound(Sounds.SAmbience);
+            StopInstancedSound(Sounds.SAmbChase);
         }
 
 
@@ -160,6 +164,8 @@ namespace FinalProject
             sounds[Sounds.BrMedium] = snds[10];
             sounds[Sounds.BrHeavy] = snds[11];
             sounds[Sounds.BrSigh] = snds[12];
+            sounds[Sounds.Alert] = snds[13];
+            sounds[Sounds.SAmbChase] = snds[14];
 
             instances = new Dictionary<Sounds, SoundEffectInstance>(sounds.Count);
             for(int i = 0; i < sounds.Count; i++)
@@ -176,70 +182,23 @@ namespace FinalProject
         /// <returns></returns>
         private static int EnumToIndex(Sounds s)
         {
-            switch (s)
+            int counter = 0;
+            foreach(Sounds snum in sounds.Keys)
             {
-                case Sounds.Catch:
-                    return 0;
-                case Sounds.SClick1:
-                    return 1;
-                case Sounds.SClick2:
-                    return 2;
-                case Sounds.SClick3:
-                    return 3;
-                case Sounds.SClick4:
-                    return 4;
-                case Sounds.SAmbience:
-                    return 5;
-                case Sounds.HBNormal:
-                    return 6;
-                case Sounds.HBRushed:
-                    return 7;
-                case Sounds.HBFrantic:
-                    return 8;
-                case Sounds.BrNormal:
-                    return 9;
-                case Sounds.BrMedium:
-                    return 10;
-                case Sounds.BrHeavy:
-                    return 11;
-                case Sounds.BrSigh:
-                    return 12;
+                if(snum == s)
+                {
+                    return counter;
+                }
+                counter += 1;
             }
             return 1;
         }
 
         private static Sounds IndexToEnum(int i)
         {
-            switch (i) {
-
-                case 0:
-                    return Sounds.Catch;
-                case 1:
-                    return Sounds.SClick1;
-                case 2:
-                    return Sounds.SClick2;
-                case 3:
-                    return Sounds.SClick3;
-                case 4:
-                    return Sounds.SClick4;
-                case 5:
-                    return Sounds.SAmbience;
-                case 6:
-                    return Sounds.HBNormal;
-                case 7:
-                    return Sounds.HBRushed;
-                case 8:
-                    return Sounds.HBFrantic;
-                case 9:
-                    return Sounds.BrNormal;
-                case 10:
-                    return Sounds.BrMedium;
-                case 11:
-                    return Sounds.BrHeavy;
-                case 12:
-                    return Sounds.BrSigh;
-            }
-            return Sounds.SClick1;
+            Sounds[] snds = new Sounds[sounds.Keys.Count];
+            sounds.Keys.CopyTo(snds, 0);
+            return snds[i];
         }
     }
 }
