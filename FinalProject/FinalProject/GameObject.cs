@@ -48,14 +48,11 @@ namespace FinalProject
             Velocity = new Vector2(0, 0);
         }
 
-
         //Methods
 
         public virtual void Draw(SpriteBatch sp,Rectangle rect,Texture2D texture,Color tint)
         {
             sp.Draw(texture,rect, tint);
         }
-
-
     }
 }
