@@ -14,6 +14,7 @@ using Penumbra;
 using Microsoft.Xna.Framework.Content;
 using System.IO;
 
+
 namespace FinalProject
 {
     class Map
@@ -25,7 +26,7 @@ namespace FinalProject
         private readonly List<Wall> _walls;
         private readonly List<Stone> _stones;
         private readonly List<Vector2> _stoneRevealAreas;
-
+        
         private readonly PenumbraComponent _penumbra;
         private readonly ContentManager _content;
 
@@ -181,6 +182,12 @@ namespace FinalProject
             SetupPenumbraLighting();
         }
 
+        public void LoadBackgroundTestLevel()
+        {
+            ResetMap();
+            SetupPenumbraLighting();
+            _player.Flashlight.Scale = new Vector2(2000);
+        }
 
         /// <summary>
         /// 

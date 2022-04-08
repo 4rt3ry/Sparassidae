@@ -126,7 +126,7 @@ namespace FinalProject
         protected override void Draw(GameTime gameTime)
         {
             // Everything after this call will be affected by the lighting system.
-            _penumbra.BeginDraw();
+            //_penumbra.BeginDraw();
             Matrix transMatrix = _camera.GetViewMatrix();
             _penumbra.Transform = transMatrix;
             GraphicsDevice.Clear(Color.White);
@@ -136,7 +136,7 @@ namespace FinalProject
             _batch.End();
 
             // Draw the actual lit scene.
-            _penumbra.Draw(gameTime);
+            //_penumbra.Draw(gameTime);
 
             // Draw stuff that is not affected by lighting (UI, etc).
             _batch.Begin(transformMatrix: transMatrix);

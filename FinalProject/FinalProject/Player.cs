@@ -73,7 +73,7 @@ namespace FinalProject
                 Position = this.Position,
                 Scale = new Vector2(800), //Range of the light source
                 ShadowType = ShadowType.Solid,
-                Color = Color.CornflowerBlue,
+                Color = new Color(200, 200, 255),
                 ConeDecay = 2.0f
             };
             targetScale = 650;
@@ -241,22 +241,22 @@ namespace FinalProject
                 stone.Throw(throwDirection);
                 stones.Add(stone);
                 penumbra.Lights.Add(stone.Light);
-                switch (currentState)
-                {
-                    case PlayerState.WalkingState:
-                        SetAfraidState();
-                        break;
-                    case PlayerState.AfraidState:
-                        SetShockState();
-                        break;
-                    case PlayerState.ShockState:
-                        break;
-                    case PlayerState.ChaseState:
-                        SetWalkingState();
-                        break;
-                    case PlayerState.DeadState:
-                        break;
-                }
+                //switch (currentState)
+                //{
+                //    case PlayerState.WalkingState:
+                //        SetAfraidState();
+                //        break;
+                //    case PlayerState.AfraidState:
+                //        SetShockState();
+                //        break;
+                //    case PlayerState.ShockState:
+                //        break;
+                //    case PlayerState.ChaseState:
+                //        SetWalkingState();
+                //        break;
+                //    case PlayerState.DeadState:
+                //        break;
+                //}
             }
 
             previousMouse = currentMouse;
