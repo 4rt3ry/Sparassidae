@@ -129,7 +129,7 @@ namespace FinalProject
             : this(position, roamLocations, detectionRadius)
         {
             this.enemyTexture = enemyTexture;
-            this._physicsCollider = new RectangleCollider(this, Vector2.Zero, new Vector2(width, height));
+            this._physicsCollider = new RectangleCollider(this, new Vector2(width/2, height/2), new Vector2(width, height));
             displayRectangle = new Rectangle(new Point((int)position.X, (int)position.Y), new Point(width, height));
             moving = true;
             moveTime = 5;
@@ -142,6 +142,7 @@ namespace FinalProject
             RoamDetectionTrigger = new CircleCollider(this, new Vector2(width / 2, height / 2), detectionRadius, true);
             playerDetectionLink = new LineCollider(this, new Vector2(width /2, height/2), target.Position);
             chaseStartDistance = 500;
+         
         }
 
         //Methods
@@ -339,6 +340,7 @@ namespace FinalProject
 
                     if (this.PhysicsCollider.CheckCollision(target))
                     {
+                        System.Diagnostics.Debug.WriteLine("Player died");
                         currentState = EnemyState.PlayerDeadState;
                     }
                     break;
