@@ -53,7 +53,7 @@ namespace FinalProject
         //Constructors
 
 
-        public Map(PenumbraComponent penumbra, ContentManager content,Camera2D camera)
+        public Map(PenumbraComponent penumbra, ContentManager content, Camera2D camera)
         {
             _content = content;
             LoadContent();

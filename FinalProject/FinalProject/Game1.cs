@@ -108,6 +108,13 @@ namespace FinalProject
                 _camera.Position = _gameStateManager.Map.Player.Position + new Vector2(-_graphics.PreferredBackBufferWidth/2, -_graphics.PreferredBackBufferHeight/2);
 
             }
+            else if(_gameStateManager.CurrentState == GameState.MenuState ||
+                _gameStateManager.CurrentState == GameState.IntroState ||
+                _gameStateManager.CurrentState == GameState.InstructionState)
+            {
+                //_camera.Position = new Vector2(-_graphics.PreferredBackBufferWidth / 2, -_graphics.PreferredBackBufferHeight / 2);
+                _camera.Position = Vector2.Zero;
+            }
 
             _gameStateManager.Update(updateTime, _penumbra);
             _fadeTransition.Update(updateTime);

@@ -17,12 +17,15 @@ namespace FinalProject
         //Field
         private MouseState currentMouse;
         private MouseState previousMouse;
+        private Vector2 mousePosition;
 
         private bool isHovering;
         private Rectangle buttonRectangle;
         private int x_value;
         private int y_value;
+
         private GraphicsDeviceManager graphics;
+        private Camera2D camera;
 
         private Texture2D buttonNorm;
         private Texture2D buttonHover;
@@ -56,6 +59,22 @@ namespace FinalProject
             this.y_value = y_value - graphics.PreferredBackBufferHeight / 2;
         }
 
+        /// <summary>
+        /// Constructor for the button that needs to be centered
+        /// </summary>
+        /// <param name="buttonNorm"></param>
+        /// <param name="buttonHover"></param>
+        /// <param name="x_value"></param>
+        /// <param name="y_value"></param>
+        /// <param name="graphics"></param>
+        /// <param name="camera"></param>
+        public Button(Texture2D buttonNorm, Texture2D buttonHover,
+          int x_value, int y_value, GraphicsDeviceManager graphics, Camera2D camera)
+            : this(buttonNorm, buttonHover, x_value, y_value, graphics)
+        {
+            this.camera = camera;
+        }
+
         //Methods
 
         /// <summary>
@@ -83,10 +102,17 @@ namespace FinalProject
         {
             // Update the mouse state and hover state
             currentMouse = Mouse.GetState();
+            mousePosition = new Vector2(currentMouse.X, currentMouse.Y);
+
             isHovering = false;
 
+            if(camera != null)
+            {
+                mousePosition = camera.ScreenToWorldSpace(mousePosition);
+            }
+
             // Check if the mouse is in/ovre the button
-            if(buttonRectangle.Contains(currentMouse.X, currentMouse.Y))
+            if(buttonRectangle.Contains(mousePosition.X, mousePosition.Y))
             {
                 isHovering = true;
 
@@ -106,6 +132,10 @@ namespace FinalProject
             previousMouse = currentMouse;
         }
 
+        /// <summary>
+        /// Update the position based on the center of the camera
+        /// </summary>
+        /// <param name="center"></param>
         public void UpdatePosition(Vector2 center)
         {
             buttonRectangle = new Rectangle(

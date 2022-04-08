@@ -20,6 +20,7 @@ namespace FinalProject
 
         private MouseState currentMouse;
         private MouseState previousMouse;
+        private Vector2 mousePosition;
 
         private bool isHovering; //Hovering over the indicator
         private bool isHoveringSlider; // Hovering over the entire slider;
@@ -36,7 +37,9 @@ namespace FinalProject
         private double percentage;
 
         public event EventHandler Click;
+
         private GraphicsDeviceManager graphics;
+        private Camera2D camera;
 
         //Properties
 
@@ -75,6 +78,24 @@ namespace FinalProject
         }
 
         /// <summary>
+        /// Constructor the slider that will based on the camera
+        /// </summary>
+        /// <param name="indicator"></param>
+        /// <param name="widget"></param>
+        /// <param name="x_value"></param>
+        /// <param name="y_value"></param>
+        /// <param name="initialValue"></param>
+        /// <param name="totalValue"></param>
+        /// <param name="graphics"></param>
+        /// <param name="camera"></param>
+        public Slider(Texture2D indicator, Texture2D widget, int x_value, int y_value,
+            double initialValue, double totalValue, GraphicsDeviceManager graphics, Camera2D camera) 
+            : this(indicator, widget, x_value, y_value, initialValue, totalValue, graphics)
+        {
+            this.camera = camera;
+        }
+
+        /// <summary>
         /// Draw the Slider
         /// </summary>
         /// <param name="sb">SpriteBatch</param>
@@ -91,8 +112,16 @@ namespace FinalProject
         {
             // Update the mouse state and hover state
             currentMouse = Mouse.GetState();
+            mousePosition = new Vector2(currentMouse.X, currentMouse.Y);
 
-            if(sliderRec.Contains(currentMouse.X, currentMouse.Y))
+            //Check if the slider needs to be centered
+            if(camera != null)
+            {
+                System.Diagnostics.Debug.WriteLine("Slider's camera");
+                mousePosition = camera.ScreenToWorldSpace(mousePosition);
+            }
+
+            if(sliderRec.Contains(mousePosition.X, mousePosition.Y))
             {
                 isHoveringSlider = true;
 
@@ -100,7 +129,8 @@ namespace FinalProject
                 if (currentMouse.LeftButton == ButtonState.Pressed &&
                    previousMouse.LeftButton == ButtonState.Released)
                 {
-                    indicatorRec = new Rectangle(currentMouse.X - indicator.Width / 2, indicatorRec.Y, indicator.Width, indicator.Height);
+                    indicatorRec = new Rectangle((int)mousePosition.X - indicator.Width / 2, indicatorRec.Y,
+                        indicator.Width, indicator.Height);
 
                     // If the click event is not null, call the method
                     if (Click != null)
@@ -115,7 +145,7 @@ namespace FinalProject
             if (isHoveringSlider)
             {
                 //Drag
-                if (indicatorRec.Contains(currentMouse.X, currentMouse.Y) && currentMouse.LeftButton == ButtonState.Pressed)
+                if (indicatorRec.Contains(mousePosition.X, mousePosition.Y) && currentMouse.LeftButton == ButtonState.Pressed)
                 {
                     isHovering = true;
                 }
@@ -125,17 +155,20 @@ namespace FinalProject
                     if (currentMouse.LeftButton == ButtonState.Pressed &&
                         previousMouse.LeftButton == ButtonState.Pressed)
                     {
-                        if(currentMouse.X < sliderRec.X)
+                        if(mousePosition.X < sliderRec.X)
                         {
-                            indicatorRec = new Rectangle(sliderRec.X - indicator.Width / 2, indicatorRec.Y, indicator.Width, indicator.Height);
+                            indicatorRec = new Rectangle(sliderRec.X - indicator.Width / 2, 
+                                indicatorRec.Y, indicator.Width, indicator.Height);
                         }
-                        else if(currentMouse.X > sliderRec.X + sliderRec.Width)
+                        else if(mousePosition.X > sliderRec.X + sliderRec.Width)
                         {
-                            indicatorRec = new Rectangle(sliderRec.X + sliderRec.Width - indicator.Width / 2, indicatorRec.Y, indicator.Width, indicator.Height);
+                            indicatorRec = new Rectangle(sliderRec.X + sliderRec.Width - indicator.Width / 2,
+                                indicatorRec.Y, indicator.Width, indicator.Height);
                         }
                         else
                         {
-                            indicatorRec = new Rectangle(currentMouse.X - indicator.Width / 2, indicatorRec.Y, indicator.Width, indicator.Height);
+                            indicatorRec = new Rectangle((int)mousePosition.X - indicator.Width / 2, 
+                                indicatorRec.Y, indicator.Width, indicator.Height);
                         }
 
                         // If the click event is not null, call the method
@@ -177,7 +210,9 @@ namespace FinalProject
                 (int)(percentage * this.sliderRec.Width) + this.SliderRec.X - this.indicatorRec.Width / 2,
                 this.sliderRec.Y + this.sliderRec.Height / 2 - this.indicatorRec.Height / 2,
                 this.indicatorRec.Width, this.indicatorRec.Height);
+
             System.Diagnostics.Debug.WriteLine(sliderRec);
+            System.Diagnostics.Debug.WriteLine(currentMouse.Position);
         }
 
     }

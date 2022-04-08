@@ -40,6 +40,7 @@ namespace FinalProject
 
         Map map;
         GraphicsDeviceManager _graphics;
+        private Camera2D _camera;
 
         //Texture2D for menu and buttons
         private Texture2D menuNoLight_Texture;
@@ -74,6 +75,7 @@ namespace FinalProject
         public GameStateManager(ContentManager content, PenumbraComponent penumbra, GraphicsDeviceManager graphics,Camera2D camera)
         {
             _graphics = graphics;
+            _camera = camera;
 
             //Set intro timer
             introTimer = 2f;
@@ -82,7 +84,7 @@ namespace FinalProject
             isMenuLighted = false;
 
             //Load Texture2d For menu and buttons
-            LoadMenuContent(content);
+            LoadMenuContent(content, camera);
 
             //Initialize buttons
 
@@ -337,7 +339,7 @@ namespace FinalProject
         /// Load the menu contents and create main buttons
         /// </summary>
         /// <param name="content"></param>
-        public void LoadMenuContent(ContentManager content)
+        public void LoadMenuContent(ContentManager content, Camera2D camera)
         {
             menuLight_Texture = content.Load<Texture2D>("Menu_Light");
             menuNoLight_Texture = content.Load<Texture2D>("Menu_noLight");
@@ -356,11 +358,11 @@ namespace FinalProject
             backGameButton = new Button(back, back_Hover, _graphics.PreferredBackBufferWidth / 2 - back.Width / 2, 700, _graphics);
             Texture2D mainMain = content.Load<Texture2D>("Controls/MainMenu");
             Texture2D mainMain_Hover = content.Load<Texture2D>("Controls/MainMenu_hover");
-            mainMenuButton = new Button(mainMain, mainMain_Hover, _graphics.PreferredBackBufferWidth / 2 - mainMain.Width / 2, 800, _graphics);
+            mainMenuButton = new Button(mainMain, mainMain_Hover, _graphics.PreferredBackBufferWidth / 2 - mainMain.Width / 2, 800, _graphics, camera);
 
             Texture2D sliderWidget = content.Load<Texture2D>("SliderBackground");
             Texture2D sliderIndicator = content.Load<Texture2D>("SliderIndicator");
-            volumeSlider = new Slider(sliderIndicator, sliderWidget, _graphics.PreferredBackBufferWidth / 2 - sliderWidget.Width / 2, 400, 60, 100, _graphics);
+            volumeSlider = new Slider(sliderIndicator, sliderWidget, _graphics.PreferredBackBufferWidth / 2 - sliderWidget.Width / 2, 400, 60, 100, _graphics, camera);
             
             syneTactileFont = content.Load<SpriteFont>("SyneTactile24");
 
@@ -385,6 +387,9 @@ namespace FinalProject
         {
             SFXManager.LoopInstancedSound(Sounds.HBNormal, false);
             SFXManager.LoopInstancedSound(Sounds.SAmbience, false);
+            volumeSlider.UpdatePosition(new Vector2(
+                _camera.Position.X + _graphics.PreferredBackBufferWidth/2,
+                _camera.Position.Y + _graphics.PreferredBackBufferHeight/2));
             currentState = GameState.OptionState;
         }
 
