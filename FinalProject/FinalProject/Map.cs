@@ -188,7 +188,7 @@ namespace FinalProject
         /// <param name="filepath"></param>
         /// <param name="serviceProvider">The service provider that will be used to construct a ContentManager.</param>
         /// // Note: When use it in the Game1, pass "Services" as the serviceProvider
-        public void LoadFromFile(string filepath, IServiceProvider serviceProvider)
+        public void LoadFromFile(string filepath)
         {
             /// |tiletype,x,y,width,height,roampoints|
             /// enemy tiles will contain a collection of child roam nodes, others will just say "empty"
@@ -213,20 +213,22 @@ namespace FinalProject
                 String[] tileData = currentLine.Split(',');
 
                 //X, Y, Width, Height variables
-                int x = Convert.ToInt32(tileData[1]);
-                int y = Convert.ToInt32(tileData[2]);
-                int w = Convert.ToInt32(tileData[3]);
-                int h = Convert.ToInt32(tileData[4]);
+                int indexToPixels = 200;
+                int x = Convert.ToInt32(tileData[1]) * indexToPixels;
+                int y = Convert.ToInt32(tileData[2]) * indexToPixels;
+                int w = Convert.ToInt32(tileData[3]) * indexToPixels;
+                int h = Convert.ToInt32(tileData[4]) * indexToPixels;
 
                 //Switch for all different types of placeables
                 switch (tileData[0])
                 {
                     case "wall":
-                        _walls.Add(new Wall(new Vector2(x, y), w, h));
+                        _walls.Add(new Wall(new Vector2(x + (w/2), y + (h/2)), w, h));
                         break;
                     case "enemy":
                         break;
                     case "spawn":
+                        Player.Position = new Vector2(x + (indexToPixels / 2), y + (indexToPixels/2));
                         break;
                     case "objective":
                         break;
@@ -234,9 +236,12 @@ namespace FinalProject
                         break;
                 }
 
+                
+
                 //Set up for the roam points, do nothing if empty
                 if (!tileData[5].Equals("empty"))
                 {
+                    List<Vector2> roamPoints2 = new List<Vector2>();
                     String[] roamPoints = tileData[5].Split('[');
                     foreach (String roamPoint in roamPoints)
                     {
@@ -247,10 +252,12 @@ namespace FinalProject
                             int rx = Convert.ToInt32(b2[1]);
                             int ry = Convert.ToInt32(b2[2]);
                             int index = Convert.ToInt32(b2[3]);
-
+                            roamPoints2.Add(new Vector2(rx * indexToPixels, ry * indexToPixels));
                         }
                     }
+                    _enemies.Add(new Enemy(new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2)), roamPoints2, 800, _enemyTexture, 150, 150, 100, Player, _walls));
                 }
+                
             }
 
 
