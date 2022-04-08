@@ -76,7 +76,7 @@ namespace FinalProject
                 Color = Color.CornflowerBlue,
                 ConeDecay = 2.0f
             };
-            targetScale = 800;
+            targetScale = 650;
 
             _physicsCollider = new CircleCollider(this, new Vector2(0, 0), 20f, false);
 
@@ -168,7 +168,7 @@ namespace FinalProject
                     {
                         SFXManager.PlaySound(Sounds.Alert);
                         SFXManager.LoopInstancedSound(Sounds.SAmbChase, false);
-                        alertTimer = -10;
+                        alertTimer = 5;
                     }
                     alertTimer -= dTime;
                     break;
@@ -274,7 +274,7 @@ namespace FinalProject
             SFXManager.LoopInstancedSound(Sounds.SAmbience, false);
             SFXManager.LoopInstancedSound(Sounds.BrMedium, false);
             numTargets += 1;
-            targetScale = 500;
+            targetScale = 400;
         }
 
         /// <summary>
@@ -314,7 +314,7 @@ namespace FinalProject
             SFXManager.LoopInstancedSound(Sounds.HBNormal, true);
             SFXManager.PlaySound(Sounds.BrSigh);
             sighTimer = 3.1f;
-            targetScale = 800;
+            targetScale = 650;
         }
 
         /// <summary>
