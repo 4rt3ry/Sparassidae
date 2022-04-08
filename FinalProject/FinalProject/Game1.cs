@@ -105,12 +105,13 @@ namespace FinalProject
             //PlayerMovement(updateTime);
             if (_gameStateManager.CurrentState == GameState.PlayState)
             {
-                _camera.Position = _gameStateManager.Map.Player.Position + new Vector2(-_graphics.PreferredBackBufferWidth/2, -_graphics.PreferredBackBufferHeight/2);
+                _camera.Position = _gameStateManager.Map.Player.Position + new Vector2(-_graphics.PreferredBackBufferWidth / 2, -_graphics.PreferredBackBufferHeight / 2);
 
             }
-            else if(_gameStateManager.CurrentState == GameState.MenuState ||
+            else if (_gameStateManager.CurrentState == GameState.MenuState ||
                 _gameStateManager.CurrentState == GameState.IntroState ||
-                _gameStateManager.CurrentState == GameState.InstructionState)
+                _gameStateManager.CurrentState == GameState.InstructionState ||
+                _gameStateManager.CurrentState == GameState.GameOverState)
             {
                 //_camera.Position = new Vector2(-_graphics.PreferredBackBufferWidth / 2, -_graphics.PreferredBackBufferHeight / 2);
                 _camera.Position = Vector2.Zero;

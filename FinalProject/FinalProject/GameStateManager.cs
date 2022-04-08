@@ -49,7 +49,8 @@ namespace FinalProject
         private Texture2D pauseMask;
         private Texture2D fade_Texture;
         private Texture2D black_Texture;
-
+        private Texture2D gameOver_Texture;
+        
         private Button playButton;
         private Button optionButton;
         private Button instructionButton;
@@ -208,6 +209,7 @@ namespace FinalProject
                     break;
 
                 case GameState.GameOverState:
+                    batch.Draw(gameOver_Texture, Vector2.Zero, Color.White);
                     mainMenuButton.Draw(batch);
                     break;
             }
@@ -347,6 +349,7 @@ namespace FinalProject
             pauseMask = content.Load<Texture2D>("PauseMask");
             fade_Texture = content.Load<Texture2D>("blackbox2");
             black_Texture = content.Load<Texture2D>("Blackbackground");
+            gameOver_Texture = content.Load<Texture2D>("GameEnd");
 
             playButton = new Button(content.Load<Texture2D>("Controls/Play"), content.Load<Texture2D>("Controls/Play_hover"), 1500, 700, _graphics);
             optionButton = new Button(content.Load<Texture2D>("Controls/Options"), content.Load<Texture2D>("Controls/Options_hover"), 1500, 800, _graphics);

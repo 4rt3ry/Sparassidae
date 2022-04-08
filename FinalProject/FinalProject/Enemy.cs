@@ -129,7 +129,7 @@ namespace FinalProject
             : this(position, roamLocations, detectionRadius)
         {
             this.enemyTexture = enemyTexture;
-            this._physicsCollider = new RectangleCollider(this, new Vector2(width/2, height/2), new Vector2(width, height));
+            this._physicsCollider = new RectangleCollider(this, new Vector2(width/2, height/2), new Vector2(width, height),true);
             displayRectangle = new Rectangle(new Point((int)position.X, (int)position.Y), new Point(width, height));
             moving = true;
             moveTime = 5;
@@ -322,6 +322,7 @@ namespace FinalProject
                         System.Diagnostics.Debug.WriteLine("Chase Wind Up");
                     }
                     break;
+
                 case EnemyState.ChaseWindupState:
                     chaseWindupTimer -= dTime;
                     if (chaseWindupTimer <= 0)
@@ -330,6 +331,7 @@ namespace FinalProject
                         System.Diagnostics.Debug.WriteLine("Chase start");
                     }
                     break;
+
                 case EnemyState.ChaseState:
                     // IDEA FOR CHASE STATE: Constant line between enemy and player
                     // Enemy is constantly pathing to a position
@@ -337,6 +339,8 @@ namespace FinalProject
                     // IFF the line does not collide with a wall
                     // If the enemy reaches its target position && player line is colliding with a wall
                     // Then the chase is broken
+
+
 
                     if (this.PhysicsCollider.CheckCollision(target))
                     {
