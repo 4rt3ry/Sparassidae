@@ -223,7 +223,7 @@ namespace FinalProject
                 switch (tileData[0])
                 {
                     case "wall":
-                        _walls.Add(new Wall(new Vector2(x + (w/2), y - (h/2)), w, h));
+                        _walls.Add(new Wall(new Vector2(x + (w/2), y + (h/2)), w, h));
                         break;
                     case "enemy":
                         break;
@@ -236,9 +236,12 @@ namespace FinalProject
                         break;
                 }
 
+                
+
                 //Set up for the roam points, do nothing if empty
                 if (!tileData[5].Equals("empty"))
                 {
+                    List<Vector2> roamPoints2 = new List<Vector2>();
                     String[] roamPoints = tileData[5].Split('[');
                     foreach (String roamPoint in roamPoints)
                     {
@@ -249,10 +252,12 @@ namespace FinalProject
                             int rx = Convert.ToInt32(b2[1]);
                             int ry = Convert.ToInt32(b2[2]);
                             int index = Convert.ToInt32(b2[3]);
-
+                            roamPoints2.Add(new Vector2(rx * indexToPixels, ry * indexToPixels));
                         }
                     }
+                    _enemies.Add(new Enemy(new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2)), roamPoints2, 800, _enemyTexture, 150, 150, 100, Player, _walls));
                 }
+                
             }
 
 
