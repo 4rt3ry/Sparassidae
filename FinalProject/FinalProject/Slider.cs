@@ -17,6 +17,7 @@ namespace FinalProject
         //Texture
         private Texture2D indicator;
         private Texture2D widget;
+        private Texture2D icon;
 
         private MouseState currentMouse;
         private MouseState previousMouse;
@@ -93,6 +94,21 @@ namespace FinalProject
             : this(indicator, widget, x_value, y_value, initialValue, totalValue, graphics)
         {
             this.camera = camera;
+        }
+
+        public Slider(Texture2D indicator, Texture2D widget, int x_value, int y_value,
+            double initialValue, double totalValue, GraphicsDeviceManager graphics, Texture2D icon)
+            : this(indicator, widget, x_value, y_value, initialValue, totalValue, graphics)
+        {
+            this.icon = icon;
+        }
+
+        public Slider(Texture2D indicator, Texture2D widget, int x_value, int y_value,
+           double initialValue, double totalValue, GraphicsDeviceManager graphics, Camera2D camera, Texture2D icon)
+           : this(indicator, widget, x_value, y_value, initialValue, totalValue, graphics)
+        {
+            this.camera = camera;
+            this.icon = icon;
         }
 
         /// <summary>

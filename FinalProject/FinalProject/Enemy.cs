@@ -190,6 +190,7 @@ namespace FinalProject
             switch (currentState)
             {
                 case EnemyState.RoamingState:
+                    System.Diagnostics.Debug.WriteLine("Roaming State");
                     //Check if the player is enter the detection range
                     //Still needs to add stone detection
                     if (RoamDetectionTrigger.CheckCollision(target))
@@ -307,6 +308,7 @@ namespace FinalProject
                     
                     break;
                 case EnemyState.InvestigateState:
+                    System.Diagnostics.Debug.WriteLine("Investigate State");
 
                     //Movement code
                     moveDir = movingTowards - this._position;
@@ -353,7 +355,7 @@ namespace FinalProject
                         currentState = EnemyState.ChaseWindupState;
                         chaseWindupTimer = 3f;
                         target.SetShockState();
-                        System.Diagnostics.Debug.WriteLine("Chase Wind Up");
+                        System.Diagnostics.Debug.WriteLine("Chase Start to Wind Up");
                         speed = speed * 2;
                         movingTowards = new Vector2(target.Position.X - this.displayRectangle.Width / 2,
                                 target.Position.Y - this.displayRectangle.Height / 2);
@@ -361,6 +363,7 @@ namespace FinalProject
                     break;
 
                 case EnemyState.ChaseWindupState:
+                    System.Diagnostics.Debug.WriteLine("Chase Wind up State");
                     chaseWindupTimer -= dTime;
                     if (chaseWindupTimer <= 0)
                     {
