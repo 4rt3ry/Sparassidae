@@ -27,6 +27,7 @@ namespace FinalProject
         //Fields
         private EnemyState currentState;
         private float chaseWindupTimer;
+        private Vector2 centerPositionOfEnemy;
 
         //Roam Variables
         private List<Vector2> roamLocations; // This should include spawn position
@@ -50,7 +51,8 @@ namespace FinalProject
 
         //Reference holder for target player
         private Player target;
-        private Vector2 moveingTowards;
+        private Vector2 movingTowards;
+        private Vector2 moveDir;
 
         //Visual Variables
         private Texture2D enemyTexture;
@@ -61,6 +63,7 @@ namespace FinalProject
         public Rectangle DisplayRectangle { get => displayRectangle; }
         public float DetectionRadius { get => detectionRadius; set => detectionRadius = value; }
         internal CircleCollider RoamDetectionTrigger { get => roamDetectionTrigger; set => roamDetectionTrigger = value; }
+        public float ChaseStartDistance { get => chaseStartDistance; set => chaseStartDistance = value; }
 
         //Constructors
         /// <summary>
@@ -141,7 +144,7 @@ namespace FinalProject
             this.walls = walls;
             RoamDetectionTrigger = new CircleCollider(this, new Vector2(width / 2, height / 2), detectionRadius, true);
             playerDetectionLink = new LineCollider(this, new Vector2(width /2, height/2), target.Position);
-            chaseStartDistance = 500;
+            ChaseStartDistance = detectionRadius - 300;
          
         }
 
@@ -203,8 +206,9 @@ namespace FinalProject
                         if(isDetected)
                         {
                             //System.Diagnostics.Debug.WriteLine("Dececting");
-                            moveingTowards = new Vector2(target.Position.X - this.displayRectangle.Width /2,
+                            movingTowards = new Vector2(target.Position.X - this.displayRectangle.Width /2,
                                 target.Position.Y - this.displayRectangle.Height /2);
+                            System.Diagnostics.Debug.WriteLine($"Start to investigate {movingTowards}");
                             currentState = EnemyState.InvestigateState;
                         }
                     }
@@ -275,7 +279,7 @@ namespace FinalProject
                             if (moving)
                             {
                                 //Move enemy
-                                Vector2 moveDir = roamLocations[roamTarget] - this._position;
+                                moveDir = roamLocations[roamTarget] - this._position;
                                 moveDir.Normalize();
                                 this._position += moveDir * speed * dTime;
                                
@@ -305,21 +309,54 @@ namespace FinalProject
                 case EnemyState.InvestigateState:
 
                     //Movement code
-                    Vector2 moveDir2 = moveingTowards - this._position;
-                    moveDir2.Normalize();
-                    this._position += moveDir2 * speed * dTime;
+                    moveDir = movingTowards - this._position;
+                    moveDir.Normalize();
+                    this._position += moveDir * speed * dTime;
 
                     //Detection code
                     ///Run something here that updates the Enemy/Player link (needs additional help)
+                    if (Math.Abs((this.Position - movingTowards).Length()) <= 10) //
+                    {
+                        System.Diagnostics.Debug.WriteLine("Get the position spot the player");
+                        if (RoamDetectionTrigger.CheckCollision(target))
+                        {
+                            isDetected = true;
+                            foreach (Wall wall in walls)
+                            {
+                                if (playerDetectionLink.CheckCollision(wall))
+                                {
+                                    isDetected = false;
+                                    currentState = EnemyState.RoamingState;
+                                    System.Diagnostics.Debug.WriteLine($"{wall.Position}");
+                                    System.Diagnostics.Debug.WriteLine($"{"Back to roam state"}");
+                                }
+                            }
+                            if (isDetected)
+                            {
+                                //System.Diagnostics.Debug.WriteLine("Dececting");
+                                movingTowards = new Vector2(target.Position.X - this.displayRectangle.Width / 2,
+                                    target.Position.Y - this.displayRectangle.Height / 2);
+                            }
+                        }
+                        else
+                        {
+                            isDetected = false;
+                            currentState = EnemyState.RoamingState;
+                            System.Diagnostics.Debug.WriteLine($"{"Back to roam state"}");
+                        }
+                    }
 
                     // If player is within chase start distance
                     // THIS IS TEMP CODE, WE CAN REPLACE WITH RAYTRACING/SENSOR COLLISIONS
-                    if (Math.Abs((_position - target.Position).Length()) <= chaseStartDistance)
+                    if (Math.Abs((centerPositionOfEnemy - target.Position).Length()) <= ChaseStartDistance)
                     {
                         currentState = EnemyState.ChaseWindupState;
-                        chaseWindupTimer = 4f;
+                        chaseWindupTimer = 3f;
                         target.SetShockState();
                         System.Diagnostics.Debug.WriteLine("Chase Wind Up");
+                        speed = speed * 2;
+                        movingTowards = new Vector2(target.Position.X - this.displayRectangle.Width / 2,
+                                target.Position.Y - this.displayRectangle.Height / 2);
                     }
                     break;
 
@@ -339,18 +376,64 @@ namespace FinalProject
                     // IFF the line does not collide with a wall
                     // If the enemy reaches its target position && player line is colliding with a wall
                     // Then the chase is broken
+                    System.Diagnostics.Debug.WriteLine("Chasing");
 
+                    movingTowards = new Vector2(target.Position.X - this.displayRectangle.Width / 2,
+                                target.Position.Y - this.displayRectangle.Height / 2);
+                    //Movement code
+                    moveDir = movingTowards - this._position;
+                    moveDir.Normalize();
+                    this._position += moveDir * speed * dTime;
+
+                    //Detection code
+                    ///Run something here that updates the Enemy/Player link (needs additional help)
+                    if (Math.Abs((this.Position - movingTowards).Length()) < chaseStartDistance) //
+                    {
+                        System.Diagnostics.Debug.WriteLine("Get the position spot the player");
+                        if (RoamDetectionTrigger.CheckCollision(target))
+                        {
+                            isDetected = true;
+                            foreach (Wall wall in walls)
+                            {
+                                if (playerDetectionLink.CheckCollision(wall))
+                                {
+                                    isDetected = false;
+                                    currentState = EnemyState.InvestigateState;
+                                    speed = speed / 2;
+                                    movingTowards = movingTowards = new Vector2(target.Position.X - this.displayRectangle.Width / 2,
+                                            target.Position.Y - this.displayRectangle.Height / 2);
+                                    System.Diagnostics.Debug.WriteLine($"{wall.Position}");
+                                    System.Diagnostics.Debug.WriteLine($"{"Back to roam state"}");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            isDetected = false;
+                            currentState = EnemyState.InvestigateState;
+                            speed = speed / 2;
+                            movingTowards = movingTowards = new Vector2(target.Position.X - this.displayRectangle.Width / 2,
+                                    target.Position.Y - this.displayRectangle.Height / 2);
+                            System.Diagnostics.Debug.WriteLine($"{"Back to roam state"}");
+                        }
+                    }
+                    else
+                    {
+                        currentState = EnemyState.InvestigateState;
+                        speed = speed / 2;
+                        movingTowards = movingTowards = new Vector2(target.Position.X - this.displayRectangle.Width / 2,
+                                target.Position.Y - this.displayRectangle.Height / 2);
+                    }
 
 
                     if (this.PhysicsCollider.CheckCollision(target))
                     {
                         System.Diagnostics.Debug.WriteLine("Player died");
-                        currentState = EnemyState.PlayerDeadState;
+                        CatchPlayer();
                     }
                     break;
                 case EnemyState.PlayerDeadState:
                     // Check collision of bodies for detection
-                    target.SetDeadState();
                     break;
                 case EnemyState.ReturnState:
                     // Path back to start
@@ -363,9 +446,11 @@ namespace FinalProject
             displayRectangle.X = (int)_position.X;
             displayRectangle.Y = (int)_position.Y;
 
+            centerPositionOfEnemy = new Vector2(_position.X + displayRectangle.Width / 2, _position.Y + displayRectangle.Height / 2);
+
             //If the enemy is in a state where there is a target, the detection code will run
             //This updates the enemy/player link as well as the last seen position if the player is in vision
-            if(target != null)
+            if (target != null)
             {
                 playerDetectionLink.EndPosition = target.Position;
                 //playerDetectionLink.Position = _position;

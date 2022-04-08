@@ -72,7 +72,12 @@ namespace FinalProject
         /// <param name="batch"></param>
         public void DrawTest(SpriteBatch batch)
         {
-            foreach(Enemy enemy in _enemies)
+            //foreach (Wall wall in _walls)
+            //{
+            //    batch.Draw(whiteTexture, wall.WallRec, Color.Yellow); ;
+            //}
+
+            foreach (Enemy enemy in _enemies)
             {
                 batch.Draw(whiteTexture, enemy.DisplayRectangle, Color.White);
                 enemy.RoamDetectionTrigger.DrawDebugTexture(batch, Color.Red);
@@ -80,8 +85,14 @@ namespace FinalProject
                     new Rectangle((int)enemy.Position.X - (int)enemy.DetectionRadius + enemy.DisplayRectangle.Width / 2,
                     (int)enemy.Position.Y - (int)enemy.DetectionRadius + enemy.DisplayRectangle.Height / 2,
                     (int)enemy.DetectionRadius *2 , (int)enemy.DetectionRadius *2), Color.White);
+                batch.Draw(circleTexture,
+                    new Rectangle((int)enemy.Position.X - (int)enemy.ChaseStartDistance + enemy.DisplayRectangle.Width / 2,
+                    (int)enemy.Position.Y - (int)enemy.ChaseStartDistance + enemy.DisplayRectangle.Height / 2,
+                    (int)enemy.ChaseStartDistance * 2, (int)enemy.ChaseStartDistance * 2), Color.Yellow);
 
             }
+
+           
         }
 
 
