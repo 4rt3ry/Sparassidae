@@ -353,7 +353,7 @@ namespace FinalProject
                     if (Math.Abs((centerPositionOfEnemy - target.Position).Length()) <= ChaseStartDistance)
                     {
                         currentState = EnemyState.ChaseWindupState;
-                        chaseWindupTimer = 3f;
+                        chaseWindupTimer = 6f;
                         target.SetShockState();
                         System.Diagnostics.Debug.WriteLine("Chase Start to Wind Up");
                         speed = speed * 2;

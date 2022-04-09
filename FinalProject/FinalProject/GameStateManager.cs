@@ -250,10 +250,14 @@ namespace FinalProject
                         if (isMenuLighted)
                         {
                             isMenuLighted = false;
+                            SFXManager.PlaySound(Sounds.FLOff);
+                            SFXManager.StopInstancedSound(Sounds.FLAmbience);
                         }
                         else
                         {
                             isMenuLighted = true;
+                            SFXManager.PlaySound(Sounds.FLOn);
+                            SFXManager.LoopInstancedSound(Sounds.FLAmbience, false);
                         }
                     }
 
@@ -380,6 +384,7 @@ namespace FinalProject
         public void Click_ToInstruction(object sender, System.EventArgs e)
         {
             currentState = GameState.InstructionState;
+            SFXManager.StopInstancedSound(Sounds.FLAmbience);
         }
 
         /// <summary>
@@ -395,6 +400,7 @@ namespace FinalProject
                 _camera.Position.X + _graphics.PreferredBackBufferWidth/2,
                 _camera.Position.Y + _graphics.PreferredBackBufferHeight/2));
             currentState = GameState.OptionState;
+            SFXManager.StopInstancedSound(Sounds.FLAmbience);
         }
 
         /// <summary>
@@ -406,6 +412,7 @@ namespace FinalProject
         {
             SFXManager.LoopInstancedSound(Sounds.HBNormal, true);
             currentState = GameState.PlayState;
+            SFXManager.StopInstancedSound(Sounds.FLAmbience);
         }
 
         /// <summary>
@@ -417,6 +424,8 @@ namespace FinalProject
         {
             SFXManager.StopAllInstances();
             currentState = GameState.MenuState;
+            if(isMenuLighted)
+                SFXManager.LoopInstancedSound(Sounds.FLAmbience, false);
         }
 
         /// <summary>

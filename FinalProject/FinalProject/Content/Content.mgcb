@@ -277,11 +277,41 @@
 /processorParam:Quality=Best
 /build:SoundFX/Alert.wav
 
+#begin SoundFX/BHEnd.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundFX/BHEnd.wav
+
+#begin SoundFX/BHover.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundFX/BHover.wav
+
 #begin SoundFX/CatchAmbience.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:SoundFX/CatchAmbience.wav
+
+#begin SoundFX/FLAmbience.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundFX/FLAmbience.wav
+
+#begin SoundFX/FLOff.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundFX/FLOff.wav
+
+#begin SoundFX/FLOn.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundFX/FLOn.wav
 
 #begin SoundFX/HeartbeatFrantic.wav
 /importer:WavImporter

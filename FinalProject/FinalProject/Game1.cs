@@ -88,6 +88,11 @@ namespace FinalProject
             soundEffects.Add(Content.Load<SoundEffect>("SoundFX/Sigh"));
             soundEffects.Add(Content.Load<SoundEffect>("SoundFX/Alert"));
             soundEffects.Add(Content.Load<SoundEffect>("SoundFX/SpiderAmbienceChase"));
+            soundEffects.Add(Content.Load<SoundEffect>("SoundFX/FLOn"));
+            soundEffects.Add(Content.Load<SoundEffect>("SoundFX/FLOff"));
+            soundEffects.Add(Content.Load<SoundEffect>("SoundFX/FLAmbience"));
+            soundEffects.Add(Content.Load<SoundEffect>("SoundFX/BHover"));
+            soundEffects.Add(Content.Load<SoundEffect>("SoundFX/BHEnd"));
 
 
 

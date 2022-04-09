@@ -29,7 +29,12 @@ namespace FinalProject
         BrHeavy,
         BrSigh,
         Alert,
-        SAmbChase
+        SAmbChase,
+        FLOn,
+        FLOff,
+        FLAmbience,
+        BHover,
+        BHEnd
     }
     public static class SFXManager
     {
@@ -166,6 +171,11 @@ namespace FinalProject
             sounds[Sounds.BrSigh] = snds[12];
             sounds[Sounds.Alert] = snds[13];
             sounds[Sounds.SAmbChase] = snds[14];
+            sounds[Sounds.FLOn] = snds[15];
+            sounds[Sounds.FLOff] = snds[16];
+            sounds[Sounds.FLAmbience] = snds[17];
+            sounds[Sounds.BHover] = snds[18];
+            sounds[Sounds.BHEnd] = snds[19];
 
             instances = new Dictionary<Sounds, SoundEffectInstance>(sounds.Count);
             for(int i = 0; i < sounds.Count; i++)

@@ -20,6 +20,7 @@ namespace FinalProject
         private Vector2 mousePosition;
 
         private bool isHovering;
+        private bool wasHovering;
         private Rectangle buttonRectangle;
         private int x_value;
         private int y_value;
@@ -106,25 +107,38 @@ namespace FinalProject
 
             isHovering = false;
 
-            if(camera != null)
+            if (camera != null)
             {
                 mousePosition = camera.ScreenToWorldSpace(mousePosition);
             }
 
             // Check if the mouse is in/ovre the button
-            if(buttonRectangle.Contains(mousePosition.X, mousePosition.Y))
+            if (buttonRectangle.Contains(mousePosition.X, mousePosition.Y))
             {
+                if (!wasHovering)
+                {
+                    SFXManager.PlaySound(Sounds.BHover);
+                }
                 isHovering = true;
+                wasHovering = true;
 
                 // If mouse is over the button, check if the player click the button
-                if(currentMouse.LeftButton == ButtonState.Released &&
+                if (currentMouse.LeftButton == ButtonState.Released &&
                     previousMouse.LeftButton == ButtonState.Pressed)
                 {
                     // If the click event is not null, call the method
-                    if(Click != null)
+                    if (Click != null)
                     {
                         Click(this, new EventArgs());
                     }
+                }
+            }
+            else
+            {
+                if (wasHovering)
+                {
+                    SFXManager.PlaySound(Sounds.BHEnd);
+                    wasHovering = false;
                 }
             }
 
