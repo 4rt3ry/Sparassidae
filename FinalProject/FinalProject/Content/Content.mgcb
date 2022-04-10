@@ -410,6 +410,13 @@
 /processorParam:TextureFormat=Compressed
 /build:SyneTactile24.spritefont
 
+#begin SyneTactile36.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:SyneTactile36.spritefont
+
 #begin TestCircleRange.png
 /importer:TextureImporter
 /processor:TextureProcessor
