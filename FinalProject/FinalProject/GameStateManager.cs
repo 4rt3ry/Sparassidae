@@ -191,7 +191,7 @@ namespace FinalProject
                     backMainButton.Draw(batch);
                     volumeSlider.Draw(batch);
                     // Test volume number 
-                    batch.DrawString(syneTactileFont48, "Volume", new Vector2 (800, 280), Color.White);
+                    batch.DrawString(syneTactileFont48, "Volume", new Vector2 (850, 280), Color.White);
 
                     break;
 
@@ -206,6 +206,7 @@ namespace FinalProject
 
                 case GameState.PauseState:
                     batch.Draw(pauseMask, Vector2.Zero, Color.White);
+                    //batch.DrawString(syneTactileFont48, "Volume", new Vector2(850, 280), Color.White);
                     mainMenuButton.Draw(batch);
                     volumeSlider.Draw(batch);
                     break;
