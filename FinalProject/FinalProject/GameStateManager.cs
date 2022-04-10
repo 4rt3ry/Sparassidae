@@ -206,8 +206,13 @@ namespace FinalProject
 
                 case GameState.PauseState:
                     batch.Draw(pauseMask, Vector2.Zero, Color.White);
-                    //batch.DrawString(syneTactileFont48, "Volume", new Vector2(850, 280), Color.White);
+                    
+                    // Local position based on the camera
+                    batch.DrawString(syneTactileFont48, "Volume", 
+                        new Vector2(map.Player.Position.X + 850 - _graphics.PreferredBackBufferWidth/2,
+                        map.Player.Position.Y + 280 - _graphics.PreferredBackBufferHeight/2), Color.White);
                     mainMenuButton.Draw(batch);
+                    backGameButton.Draw(batch);
                     volumeSlider.Draw(batch);
                     break;
 
@@ -297,20 +302,20 @@ namespace FinalProject
                     // Press start(gamepad) or P(keyboard) to pause
                     if (ks.IsKeyDown(Keys.P) && previousKs.IsKeyUp(Keys.P))
                     {
+                        // Update all the local position of the UI in the pause state once
                         volumeSlider.UpdatePosition(map.Player.Position);
                         System.Diagnostics.Debug.WriteLine(map.Player.Position);
                         mainMenuButton.UpdatePosition(map.Player.Position);
+                        backGameButton.UpdatePosition(map.Player.Position);
 
                         currentState = GameState.PauseState;
-
                     }
 
+                    // Check if the player is dead
                     if(map.Player.CurrentState == PlayerState.DeadState)
                     {
                         currentState = GameState.GameOverState;
                     }
-
-
 
                     // Update lighting effects after buttons have been updated
                     UpdatePenumbraState(penumbra);
@@ -324,10 +329,9 @@ namespace FinalProject
                         currentState = GameState.PlayState;
                     }
 
-                    
-
                     volumeSlider.Update();
                     mainMenuButton.Update();
+                    backGameButton.Update();
 
                     // Update lighting effects after buttons have been updated
                     UpdatePenumbraState(penumbra);
@@ -365,7 +369,7 @@ namespace FinalProject
             Texture2D back = content.Load<Texture2D>("Controls/Back");
             Texture2D back_Hover = content.Load<Texture2D>("Controls/Back_Hover");
             backMainButton = new Button(back, back_Hover, _graphics.PreferredBackBufferWidth / 2 - back.Width / 2, 700, _graphics);
-            backGameButton = new Button(back, back_Hover, _graphics.PreferredBackBufferWidth / 2 - back.Width / 2, 700, _graphics);
+            backGameButton = new Button(back, back_Hover, _graphics.PreferredBackBufferWidth / 2 - back.Width / 2, 650, _graphics, camera);
             Texture2D mainMain = content.Load<Texture2D>("Controls/MainMenu");
             Texture2D mainMain_Hover = content.Load<Texture2D>("Controls/MainMenu_hover");
             mainMenuButton = new Button(mainMain, mainMain_Hover, _graphics.PreferredBackBufferWidth / 2 - mainMain.Width / 2, 800, _graphics, camera);
