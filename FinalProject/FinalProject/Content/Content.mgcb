@@ -181,7 +181,7 @@
 /processorParam:TextureFormat=Color
 /build:Enemy.png
 
-#begin EnemySprite.png
+#begin EnemySpriteSheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -191,7 +191,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:EnemySprite.png
+/build:EnemySpriteSheet.png
 
 #begin GameEnd.png
 /importer:TextureImporter

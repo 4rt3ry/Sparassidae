@@ -5,10 +5,10 @@
  */
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
 
 namespace FinalProject
@@ -57,6 +57,14 @@ namespace FinalProject
         //Visual Variables
         private Texture2D enemyTexture;
         private Rectangle displayRectangle;
+
+        private Texture2D enemyAnimatedTexturesheet;
+        private int numSpritesInSheet;
+        private int widthOfSingleSprite;
+        private int currentFrame;
+        private double fps;
+        private double secondsPerFrame;
+        private double timeCounter;
 
         //Properties
         public EnemyState CurrentState { get => currentState;  }
@@ -128,7 +136,7 @@ namespace FinalProject
         /// <param name="detectionRadius">Radius for detecting player</param>
         /// <param name="enemyTexture">Visual texture</param>
         public Enemy(Vector2 position, List<Vector2> roamLocations, float detectionRadius, Texture2D enemyTexture, int width, int height, float movingSpeed,
-            Player target, List<Wall> walls) 
+            Player target, List<Wall> walls, Texture2D enemyAnimatedTexturesheet = null) 
             : this(position, roamLocations, detectionRadius)
         {
             this.enemyTexture = enemyTexture;
@@ -145,7 +153,12 @@ namespace FinalProject
             RoamDetectionTrigger = new CircleCollider(this, new Vector2(width / 2, height / 2), detectionRadius, true);
             playerDetectionLink = new LineCollider(this, new Vector2(width /2, height/2), target.Position);
             ChaseStartDistance = detectionRadius - 300;
-         
+
+            if(enemyAnimatedTexturesheet != null)
+            {
+                this.enemyAnimatedTexturesheet = enemyAnimatedTexturesheet;
+                EnemyAnimationSetUp();
+            }
         }
 
         //Methods
@@ -503,6 +516,61 @@ namespace FinalProject
         {
             currentState = EnemyState.PlayerDeadState;
             target.SetDeadState();
+        }
+
+        /// <summary>
+        /// Set up the enemy animation
+        /// </summary>
+        /// <param name="content"></param>
+        public void EnemyAnimationSetUp()
+        {
+            numSpritesInSheet = 7;
+            widthOfSingleSprite = enemyAnimatedTexturesheet.Width / numSpritesInSheet;
+
+            // Set up animation stuff
+            currentFrame = 1;
+            fps = 7.0;
+            secondsPerFrame = 1.0f / fps;
+            timeCounter = 0;
+        }
+
+        /// <summary>
+        /// Updates the animation time
+        /// </summary>
+        /// <param name="gameTime">Game time information</param>
+        private void UpdateAnimation(GameTime gameTime)
+        {
+            // Add to the time counter (need TOTALSECONDS here)
+            timeCounter += gameTime.ElapsedGameTime.TotalSeconds;
+
+            // Has enough time gone by to actually flip frames?
+            if (timeCounter >= secondsPerFrame)
+            {
+                // Update the frame and wrap
+                currentFrame++;
+                if (currentFrame >= 4) currentFrame = 1;
+
+                // Remove one "frame" worth of time
+                timeCounter -= secondsPerFrame;
+            }
+        }
+
+        /// <summary>
+        /// Draws Enemy with a walking animation
+        /// </summary>
+        /// <param name="flip"></param>
+        private void DrawEnemyAnimation(SpriteBatch batch, SpriteEffects flip = SpriteEffects.None)
+        {
+            batch.Draw(
+                enemyAnimatedTexturesheet,
+                this.Position,
+                new Rectangle(widthOfSingleSprite * currentFrame, 0, widthOfSingleSprite, enemyAnimatedTexturesheet.Height),
+                Color.White,
+                0.0f,
+                Vector2.Zero,
+                1.0f,
+                flip,
+                0.0f);
         }
 
         public void StoneDetection(Stone stone)
