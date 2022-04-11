@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Penumbra;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace FinalProject
 {
@@ -23,11 +24,13 @@ namespace FinalProject
 
         // Lighting
         private PointLight _pointLight;
+        private TexturedLight _texturedLight;
 
         // Stone throw info
         private Vector2 _direction;
         private float _currentSpeed = _maxThrowSpeed; // Pixels per second
         private int _hitCount = 1;
+        private float targetScale = 50;
 
 
         // Properties
@@ -42,6 +45,11 @@ namespace FinalProject
         public PointLight Light { get => _pointLight; set => _pointLight = value; }
 
         /// <summary>
+        /// A textured penumbra light that reveals the current stone
+        /// </summary>
+        public TexturedLight TLight { get => _texturedLight; set => _texturedLight = value; }
+
+        /// <summary>
         /// The stone's position
         /// </summary>
         public new Vector2 Position
@@ -51,6 +59,7 @@ namespace FinalProject
             {
                 _position = value;
                 _pointLight.Position = value;
+                _texturedLight.Position = value;
             }
         }
 
@@ -71,7 +80,27 @@ namespace FinalProject
                 Position = _position,
                 Scale = new Vector2(50),
                 ShadowType = ShadowType.Solid,
-                Color = Color.CornflowerBlue,
+                Color = new Color(0.065f, 0.065f, 0.085f),
+                Intensity = 1f,
+                
+            };
+
+        }
+
+        /// <summary>
+        /// Creates a new stone with a given texture
+        /// </summary>
+        /// <param name="position">Location of the stone</param>
+        /// <param name="texture">Texture the stones light will have</param>
+        public Stone(Vector2 position, Texture2D texture) : this(position)
+        {
+            _texturedLight = new TexturedLight
+            {
+                Position = _position,
+                Scale = new Vector2(50),
+                ShadowType = ShadowType.Solid,
+                Color = Color.AntiqueWhite,
+                Texture = texture,
             };
         }
 
@@ -82,7 +111,30 @@ namespace FinalProject
         public void Update(float dTime)
         {
             _currentSpeed -= _drag * dTime;
-            if (_currentSpeed <= 0) _currentSpeed = 0;
+            if (_currentSpeed <= 0)
+            {
+                _currentSpeed = 0;
+                targetScale = 350f;
+            }
+
+            if (_texturedLight.Scale.X < targetScale)
+            {
+                _texturedLight.Scale = new Vector2(_texturedLight.Scale.X + dTime * 250);
+            }
+            else if(_texturedLight.Scale.X > targetScale)
+            {
+                _texturedLight.Scale = new Vector2(_texturedLight.Scale.X - dTime * 250);
+            }
+
+            if (_pointLight.Scale.X < targetScale)
+            {
+                _pointLight.Scale = new Vector2(_pointLight.Scale.X + dTime * 250);
+            }
+            else if (_pointLight.Scale.X > targetScale)
+            {
+                _pointLight.Scale = new Vector2(_pointLight.Scale.X - dTime * 250);
+            }
+
 
             _velocity = _direction * _currentSpeed;
             Position += _velocity * dTime;

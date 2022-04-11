@@ -38,6 +38,7 @@ namespace FinalProject
         private Effect _maskEffect;
         private Texture2D _stoneRevealMask;
         private Texture2D _enemyTexture;
+        private Texture2D _stoneMaskTexture;
 
         // Imported using LoadMap()
         private Texture2D _mapTexture;
@@ -125,7 +126,7 @@ namespace FinalProject
             // Player 
             _player.Move(dTime);
             _player.Update(dTime);
-            _player.ThrowStone(_stones, _penumbra);
+            _player.ThrowStone(_stones, _penumbra, _stoneMaskTexture);
 
             foreach (Stone stone in _stones) stone.Update(dTime);
 
@@ -317,6 +318,7 @@ namespace FinalProject
         private void LoadContent()
         {
             _enemyTexture = _content.Load<Texture2D>("Enemy");
+            _stoneMaskTexture = _content.Load<Texture2D>("Stone_Reveal_Mask");
 
             //Test purpose
             whiteTexture = _content.Load<Texture2D>("blackbox2");

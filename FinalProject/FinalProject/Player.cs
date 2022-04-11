@@ -73,7 +73,7 @@ namespace FinalProject
                 Position = this.Position,
                 Scale = new Vector2(800), //Range of the light source
                 ShadowType = ShadowType.Solid,
-                Color = Color.CornflowerBlue,
+                Color = new Color(0.45f, 0.45f, 0.44f),
                 ConeDecay = 2.0f
             };
             targetScale = 650;
@@ -232,7 +232,7 @@ namespace FinalProject
             currentMouse = Mouse.GetState();
 
             // Throw a stone when left mouse button is pressed
-            if (currentMouse.LeftButton == ButtonState.Pressed && 
+            if (currentMouse.LeftButton == ButtonState.Pressed &&
                 previousMouse.LeftButton == ButtonState.Released)
             {
                 Stone stone = new Stone(_position);
@@ -241,6 +241,8 @@ namespace FinalProject
                 stone.Throw(throwDirection);
                 stones.Add(stone);
                 penumbra.Lights.Add(stone.Light);
+                //Debug testing code, changes state when throwing a stone
+                /*
                 switch (currentState)
                 {
                     case PlayerState.WalkingState:
@@ -257,9 +259,33 @@ namespace FinalProject
                     case PlayerState.DeadState:
                         break;
                 }
+                */
             }
+        }
 
-            previousMouse = currentMouse;
+        /// <summary>
+        /// Throw stone method that takes a texture and throws a light of that texture
+        /// </summary>
+        /// <param name="stones"></param>
+        /// <param name="penumbra"></param>
+        /// <param name="texture"></param>
+        public void ThrowStone(List<Stone> stones, PenumbraComponent penumbra, Texture2D texture)
+        {
+                currentMouse = Mouse.GetState();
+
+                // Throw a stone when left mouse button is pressed
+                if (currentMouse.LeftButton == ButtonState.Pressed &&
+                    previousMouse.LeftButton == ButtonState.Released)
+                {
+                    Stone stone = new Stone(_position, texture);
+                    Vector2 throwDirection = new Vector2(MathF.Cos(flashlight.Rotation), MathF.Sin(flashlight.Rotation));
+                    Debug.WriteLine("Throw: " + throwDirection);
+                    stone.Throw(throwDirection);
+                    stones.Add(stone);
+                    penumbra.Lights.Add(stone.Light);
+                }
+
+                previousMouse = currentMouse;
         }
 
         /// <summary>
