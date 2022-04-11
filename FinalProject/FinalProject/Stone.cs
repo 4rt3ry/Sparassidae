@@ -30,7 +30,7 @@ namespace FinalProject
         private Vector2 _direction;
         private float _currentSpeed = _maxThrowSpeed; // Pixels per second
         private int _hitCount = 1;
-        private float targetScale = 50;
+        private float targetScale = 100;
 
 
         // Properties
@@ -78,7 +78,7 @@ namespace FinalProject
             _pointLight = new PointLight
             {
                 Position = _position,
-                Scale = new Vector2(50),
+                Scale = new Vector2(10),
                 ShadowType = ShadowType.Solid,
                 Color = new Color(0.065f, 0.065f, 0.085f),
                 Intensity = 1f,

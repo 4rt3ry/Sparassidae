@@ -196,6 +196,7 @@ namespace FinalProject
                     if (RoamDetectionTrigger.CheckCollision(target))
                     {
                         isDetected = true;
+                        target.SetAfraidState();
                         foreach (Wall wall in walls)
                         {
                             if (playerDetectionLink.CheckCollision(wall))
@@ -343,6 +344,7 @@ namespace FinalProject
                         else
                         {
                             isDetected = false;
+                            target.SetWalkingState();
                             currentState = EnemyState.RoamingState;
                             System.Diagnostics.Debug.WriteLine($"{"Back to roam state"}");
                         }

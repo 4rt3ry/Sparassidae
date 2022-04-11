@@ -337,7 +337,7 @@ namespace FinalProject
             currentState = PlayerState.WalkingState;
             SFXManager.StopAllHB();
             SFXManager.StopAllBr(); 
-            SFXManager.LoopInstancedSound(Sounds.HBNormal, true);
+            SFXManager.LoopInstancedSound(Sounds.HBNormal, false);
             SFXManager.PlaySound(Sounds.BrSigh);
             sighTimer = 3.1f;
             targetScale = 650;
