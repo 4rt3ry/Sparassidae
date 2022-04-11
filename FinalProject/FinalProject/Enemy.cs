@@ -487,11 +487,7 @@ namespace FinalProject
                     }
 
 
-                    if (this.PhysicsCollider.CheckCollision(target))
-                    {
-                        System.Diagnostics.Debug.WriteLine("Player died");
-                        CatchPlayer();
-                    }
+                   
                     break;
                 case EnemyState.PlayerDeadState:
                     // Check collision of bodies for detection
@@ -502,7 +498,11 @@ namespace FinalProject
             }
 
             //This code always runs regardless of state
-
+            if (this.PhysicsCollider.CheckCollision(target))
+            {
+                System.Diagnostics.Debug.WriteLine("Player died");
+                CatchPlayer();
+            }
             //Update display rectangle based on position
             displayRectangle.X = (int)_position.X;
             displayRectangle.Y = (int)_position.Y;

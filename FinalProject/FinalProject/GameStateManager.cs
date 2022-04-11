@@ -97,7 +97,7 @@ namespace FinalProject
 
             instructionButton.Click += Click_ToInstruction;
             optionButton.Click += Click_ToOption;
-            playButton.Click += Click_ToPlay;
+            playButton.Click += Click_ToRestartPlay;
             backMainButton.Click += Click_ToMenu;
             mainMenuButton.Click += Click_ToMenu;
             backGameButton.Click += Click_ToPlay;
@@ -389,7 +389,7 @@ namespace FinalProject
                     UpdatePenumbraState(penumbra);
                     break;
                 case GameState.GameOverState:
-
+                    System.Diagnostics.Debug.WriteLine("GameOVer");
                     mainMenuButton.Update();
 
                     // Update lighting effects after buttons have been updated
@@ -472,6 +472,20 @@ namespace FinalProject
         public void Click_ToPlay(object sender, System.EventArgs e)
         {
             SFXManager.LoopInstancedSound(Sounds.HBNormal, true);
+            currentState = GameState.PlayState;
+            SFXManager.StopInstancedSound(Sounds.FLAmbience);
+        }
+
+        /// <summary>
+        /// Change the state to Play
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void Click_ToRestartPlay(object sender, System.EventArgs e)
+        {
+            SFXManager.LoopInstancedSound(Sounds.HBNormal, true);
+            //String fileName = "testLevel.lvl";
+            //map.LoadFromFile(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "..\\..\\..\\..\\Content\\" + fileName);
             currentState = GameState.PlayState;
             SFXManager.StopInstancedSound(Sounds.FLAmbience);
         }
