@@ -154,7 +154,7 @@ namespace FinalProject
             this.walls = walls;
             RoamDetectionTrigger = new CircleCollider(this, new Vector2(width / 2, height / 2), detectionRadius, true);
             playerDetectionLink = new LineCollider(this, new Vector2(width /2, height/2), target.Position);
-            ChaseStartDistance = detectionRadius - 300;
+            ChaseStartDistance = detectionRadius - 250;
         }
 
         /// <summary>
