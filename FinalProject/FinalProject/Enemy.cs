@@ -185,7 +185,7 @@ namespace FinalProject
             this.walls = walls;
             RoamDetectionTrigger = new CircleCollider(this, new Vector2(widthOfSingleSprite / 2, enemyAnimatedTexturesheet.Height / 2), detectionRadius, true);
             playerDetectionLink = new LineCollider(this, new Vector2(widthOfSingleSprite / 2, enemyAnimatedTexturesheet.Height / 2), target.Position);
-            ChaseStartDistance = detectionRadius - 300;
+            ChaseStartDistance = detectionRadius - 250;
         }
 
         //Methods
@@ -448,7 +448,7 @@ namespace FinalProject
 
                     //Detection code
                     ///Run something here that updates the Enemy/Player link (needs additional help)
-                    if (Math.Abs((this.Position - movingTowards).Length()) < chaseStartDistance) //
+                    if (Math.Abs((this.Position - movingTowards).Length()) < (detectionRadius+100)) //
                     {
                         System.Diagnostics.Debug.WriteLine("Get the position spot the player");
                         if (RoamDetectionTrigger.CheckCollision(target))
@@ -472,6 +472,7 @@ namespace FinalProject
                         {
                             isDetected = false;
                             currentState = EnemyState.InvestigateState;
+                            target.SetAfraidState();
                             speed = speed / 2;
                             movingTowards = movingTowards = new Vector2(target.Position.X - this.displayRectangle.Width / 2,
                                     target.Position.Y - this.displayRectangle.Height / 2);
@@ -480,7 +481,8 @@ namespace FinalProject
                     }
                     else
                     {
-                        currentState = EnemyState.InvestigateState;
+                        currentState = EnemyState.RoamingState;
+                        target.SetWalkingState();
                         speed = speed / 2;
                         movingTowards = movingTowards = new Vector2(target.Position.X - this.displayRectangle.Width / 2,
                                 target.Position.Y - this.displayRectangle.Height / 2);

@@ -276,7 +276,7 @@ namespace FinalProject
                         }
                     }
                     //_enemies.Add(new Enemy(new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2)), roamPoints2, 800, _enemyTexture, 150, 150, 100, Player, _walls));
-                    _enemies.Add(new Enemy(new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2)), roamPoints2, 625, 100, Player, _walls, _content.Load<Texture2D>("EnemySpriteSheet")));
+                    _enemies.Add(new Enemy(new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2)), roamPoints2, 650, 100, Player, _walls, _content.Load<Texture2D>("EnemySpriteSheet")));
                 }
                 
             }
