@@ -58,6 +58,7 @@ namespace FinalProject
         private Texture2D enemyTexture;
         private Rectangle displayRectangle;
 
+        // Animated Visual variables
         private Texture2D enemyAnimatedTexturesheet;
         private int numSpritesInSheet;
         private int widthOfSingleSprite;
@@ -65,6 +66,7 @@ namespace FinalProject
         private double fps;
         private double secondsPerFrame;
         private double timeCounter;
+        private bool isAnimated;
 
         //Properties
         public EnemyState CurrentState { get => currentState;  }
@@ -136,7 +138,7 @@ namespace FinalProject
         /// <param name="detectionRadius">Radius for detecting player</param>
         /// <param name="enemyTexture">Visual texture</param>
         public Enemy(Vector2 position, List<Vector2> roamLocations, float detectionRadius, Texture2D enemyTexture, int width, int height, float movingSpeed,
-            Player target, List<Wall> walls, Texture2D enemyAnimatedTexturesheet = null) 
+            Player target, List<Wall> walls) 
             : this(position, roamLocations, detectionRadius)
         {
             this.enemyTexture = enemyTexture;
@@ -153,12 +155,37 @@ namespace FinalProject
             RoamDetectionTrigger = new CircleCollider(this, new Vector2(width / 2, height / 2), detectionRadius, true);
             playerDetectionLink = new LineCollider(this, new Vector2(width /2, height/2), target.Position);
             ChaseStartDistance = detectionRadius - 300;
+        }
 
-            if(enemyAnimatedTexturesheet != null)
-            {
-                this.enemyAnimatedTexturesheet = enemyAnimatedTexturesheet;
-                EnemyAnimationSetUp();
-            }
+        /// <summary>
+        /// Animated Enemy constructor with unique detection radius and texture sheet
+        /// </summary>
+        /// <param name="position">Enemy starting position</param>
+        /// <param name="roamLocations">Array of positions to roam to</param>
+        /// <param name="detectionRadius">Radius for detecting player</param>
+        /// <param name="enemyTexture">Visual texture</param>
+        public Enemy(Vector2 position, List<Vector2> roamLocations, float detectionRadius, float movingSpeed,
+            Player target, List<Wall> walls, Texture2D enemyAnimatedTexturesheet)
+            : this(position, roamLocations, detectionRadius)
+        {
+            this.enemyAnimatedTexturesheet = enemyAnimatedTexturesheet;
+            EnemyAnimationSetUp();
+
+            this._physicsCollider = new RectangleCollider(this, new Vector2(widthOfSingleSprite / 2, enemyAnimatedTexturesheet.Height / 2), 
+                new Vector2(widthOfSingleSprite, enemyAnimatedTexturesheet.Height), true);
+            displayRectangle = new Rectangle(new Point((int)position.X, (int)position.Y), 
+                new Point(widthOfSingleSprite, enemyAnimatedTexturesheet.Height));
+            moving = true;
+            moveTime = 5;
+            roamTarget = 1;
+            roamCheckDistance = 10;
+            this.speed = movingSpeed;
+            isForward = 0; // Move forward
+            this.target = target;
+            this.walls = walls;
+            RoamDetectionTrigger = new CircleCollider(this, new Vector2(widthOfSingleSprite / 2, enemyAnimatedTexturesheet.Height / 2), detectionRadius, true);
+            playerDetectionLink = new LineCollider(this, new Vector2(widthOfSingleSprite / 2, enemyAnimatedTexturesheet.Height / 2), target.Position);
+            ChaseStartDistance = detectionRadius - 300;
         }
 
         //Methods
@@ -171,27 +198,43 @@ namespace FinalProject
             switch (currentState)
             {
                 case EnemyState.RoamingState:
-                    
+                    if (isAnimated)
+                    {
+                        DrawEnemyWalkingAnimation(batch);
+                    }
                     break;
                 case EnemyState.InvestigateState:
-
+                    if (isAnimated)
+                    {
+                        DrawEnemyWalkingAnimation(batch);
+                    }
                     break;
                 case EnemyState.ChaseWindupState:
-
+                    if (isAnimated) DrawEnemyStandingAnimation(batch);
                     break;
                 case EnemyState.ChaseState:
-
+                    if (isAnimated)
+                    {
+                        DrawEnemyWalkingAnimation(batch);
+                    }
                     break;
                 case EnemyState.PlayerDeadState:
 
                     break;
                 case EnemyState.ReturnState:
-
+                    if (isAnimated)
+                    {
+                        DrawEnemyWalkingAnimation(batch);
+                    }
                     break;
             }
-            //Constant display of enemy texture (For current version, not including animations)
-            batch.Draw(enemyTexture, displayRectangle, Color.White);
 
+          
+            if(!isAnimated)
+            {
+                //Constant display of enemy texture (For current version, not including animations)
+                batch.Draw(enemyTexture, displayRectangle, Color.White);
+            }
         }
 
         /// <summary>
@@ -482,6 +525,8 @@ namespace FinalProject
                 }
             }
 
+            // Update the animation
+            if (isAnimated) UpdateAnimation(dTime);
         }
 
         /// <summary>
@@ -532,16 +577,17 @@ namespace FinalProject
             fps = 7.0;
             secondsPerFrame = 1.0f / fps;
             timeCounter = 0;
+            isAnimated = true;
         }
 
         /// <summary>
         /// Updates the animation time
         /// </summary>
         /// <param name="gameTime">Game time information</param>
-        private void UpdateAnimation(GameTime gameTime)
+        private void UpdateAnimation(float dTime)
         {
             // Add to the time counter (need TOTALSECONDS here)
-            timeCounter += gameTime.ElapsedGameTime.TotalSeconds;
+            timeCounter += dTime;
 
             // Has enough time gone by to actually flip frames?
             if (timeCounter >= secondsPerFrame)
@@ -559,12 +605,30 @@ namespace FinalProject
         /// Draws Enemy with a walking animation
         /// </summary>
         /// <param name="flip"></param>
-        private void DrawEnemyAnimation(SpriteBatch batch, SpriteEffects flip = SpriteEffects.None)
+        private void DrawEnemyWalkingAnimation(SpriteBatch batch, SpriteEffects flip = SpriteEffects.None)
         {
             batch.Draw(
                 enemyAnimatedTexturesheet,
                 this.Position,
                 new Rectangle(widthOfSingleSprite * currentFrame, 0, widthOfSingleSprite, enemyAnimatedTexturesheet.Height),
+                Color.White,
+                0.0f,
+                Vector2.Zero,
+                1.0f,
+                flip,
+                0.0f);
+        }
+
+        /// <summary>
+        /// Draws mario standing still
+        /// </summary>
+        /// <param name="flip">Should he be flipped horizontally?</param>
+        private void DrawEnemyStandingAnimation(SpriteBatch batch, SpriteEffects flip = SpriteEffects.None)
+        {
+            batch.Draw(
+                enemyAnimatedTexturesheet,
+                this.Position,
+                new Rectangle(0, 0, widthOfSingleSprite, enemyAnimatedTexturesheet.Height),
                 Color.White,
                 0.0f,
                 Vector2.Zero,
