@@ -34,6 +34,7 @@ namespace FinalProject
         private float introTimer;
         private float menuLightTimer;
         private bool isMenuLighted;
+        private bool isGodMode;
 
         private KeyboardState ks;
         private KeyboardState previousKs;
@@ -41,6 +42,7 @@ namespace FinalProject
         Map map;
         GraphicsDeviceManager _graphics;
         private Camera2D _camera;
+
 
         //Texture2D for menu and buttons
         private Texture2D menuNoLight_Texture;
@@ -59,6 +61,7 @@ namespace FinalProject
         private Button backGameButton;
         private Slider volumeSlider;
 
+        private Texture2D _stoneUITexture;
         private Fade _fadeTransition;
 
         //Font
@@ -69,6 +72,7 @@ namespace FinalProject
         private List<Button> buttons = new List<Button>();
 
         private Random rng = new Random();
+
         //Properties
         public GameState CurrentState { get => currentState; }
         public Map Map => map;
@@ -78,6 +82,7 @@ namespace FinalProject
         {
             _graphics = graphics;
             _camera = camera;
+            isGodMode = false;
 
             //Set intro timer
             introTimer = 2f;
@@ -201,10 +206,50 @@ namespace FinalProject
                     break;
 
                 case GameState.PlayState:
-                    map.DrawTest(batch);
+                    if(isGodMode)
+                    {
+                        map.DrawTest(batch);
+                        if(map.TotalStoneNumber == 0)
+                        {
+                            map.TotalStoneNumber = 10;
+                        }
+                    }
+
+                    if(map.Stones != null)
+                    {
+                        System.Diagnostics.Debug.WriteLine(map.Stones.Count);
+                    }
+                    
+                    // Task Hub
+                    batch.DrawString(syneTactileFont24, "Mission Hud",
+                       new Vector2(map.Player.Position.X + 1730 - _graphics.PreferredBackBufferWidth / 2,
+                       map.Player.Position.Y + 50 - _graphics.PreferredBackBufferHeight / 2), Color.White);
+                   
+                    batch.DrawString(syneTactileFont24, "Objective: Walk Around",
+                        new Vector2(map.Player.Position.X + 1580 - _graphics.PreferredBackBufferWidth / 2,
+                        map.Player.Position.Y + 100 - _graphics.PreferredBackBufferHeight / 2), Color.White);
+
+                    // Stone
+                    batch.Draw(_stoneUITexture, new Rectangle((int)map.Player.Position.X + 40 - _graphics.PreferredBackBufferWidth / 2,
+                        (int)map.Player.Position.Y + 990 - _graphics.PreferredBackBufferHeight / 2, 50, 50), Color.White);
+                    
+                    batch.DrawString(syneTactileFont48, $" x {map.TotalStoneNumber}",
+                      new Vector2(map.Player.Position.X + 100 - _graphics.PreferredBackBufferWidth / 2,
+                      map.Player.Position.Y + 975 - _graphics.PreferredBackBufferHeight / 2), Color.White);
+
+                    // Timer 
+
                     break;
 
                 case GameState.PauseState:
+                    // The game UI but masked
+                    batch.DrawString(syneTactileFont24, "Mission Hud", 
+                        new Vector2(map.Player.Position.X + 1730 - _graphics.PreferredBackBufferWidth / 2,
+                        map.Player.Position.Y + 50 - _graphics.PreferredBackBufferHeight / 2), Color.White);
+                    batch.DrawString(syneTactileFont24, "Objective: Walk Around", 
+                        new Vector2(map.Player.Position.X + 1580 - _graphics.PreferredBackBufferWidth / 2,
+                        map.Player.Position.Y + 100 - _graphics.PreferredBackBufferHeight / 2), Color.White);
+
                     batch.Draw(pauseMask, Vector2.Zero, Color.White);
                     
                     // Local position based on the camera
@@ -311,6 +356,13 @@ namespace FinalProject
                         currentState = GameState.PauseState;
                     }
 
+                    // Update the god mode
+                    if (ks.IsKeyDown(Keys.G) && previousKs.IsKeyUp(Keys.G))
+                    {
+                        if (isGodMode) isGodMode = false;
+                        else isGodMode = true;
+                    }
+
                     // Check if the player is dead
                     if(map.Player.CurrentState == PlayerState.DeadState)
                     {
@@ -380,6 +432,8 @@ namespace FinalProject
             
             syneTactileFont24 = content.Load<SpriteFont>("SyneTactile24");
             syneTactileFont48 = content.Load<SpriteFont>("SyneTactile48");
+
+            _stoneUITexture = content.Load<Texture2D>("Stone");
 
         }
 

@@ -25,6 +25,7 @@ namespace FinalProject
         private readonly List<Wall> _walls;
         private readonly List<Stone> _stones;
         private readonly List<Vector2> _stoneRevealAreas;
+        private int totalStoneNumber;
 
         private readonly PenumbraComponent _penumbra;
         private readonly ContentManager _content;
@@ -51,6 +52,10 @@ namespace FinalProject
         public ContentManager Content => _content;
         public Player Player => _player;
 
+        internal List<Stone> Stones => _stones;
+
+        public int TotalStoneNumber { get => totalStoneNumber; set => totalStoneNumber = value; }
+
         //Constructors
 
 
@@ -64,6 +69,9 @@ namespace FinalProject
             _stones = new List<Stone>();
             _stoneRevealAreas = new List<Vector2>();
             _penumbra = penumbra;
+
+            // This will be external number.
+            TotalStoneNumber = 10;
         }
 
         //Methods
@@ -126,9 +134,9 @@ namespace FinalProject
             // Player 
             _player.Move(dTime);
             _player.Update(dTime);
-            _player.ThrowStone(_stones, _penumbra, _stoneMaskTexture);
+            _player.ThrowStone(Stones, _penumbra, _stoneMaskTexture, this);
 
-            foreach (Stone stone in _stones) stone.Update(dTime);
+            foreach (Stone stone in Stones) stone.Update(dTime);
 
             // Wall collisions
             foreach (Wall wall in _walls)
@@ -141,7 +149,7 @@ namespace FinalProject
                 }
 
                 // Stone collisions
-                foreach (Stone stone in _stones)
+                foreach (Stone stone in Stones)
                 {
                     if (wall.PhysicsCollider.CheckCollision(stone, out hit))
                     {
@@ -294,6 +302,7 @@ namespace FinalProject
             _stoneRevealAreas.Clear();
             _width = _defaultWidth;
             _height = _defaultHeight;
+            totalStoneNumber = 10;
         }
 
         private void SetupPenumbraLighting()

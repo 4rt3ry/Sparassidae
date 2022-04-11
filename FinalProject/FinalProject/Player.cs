@@ -269,10 +269,12 @@ namespace FinalProject
         /// <param name="stones"></param>
         /// <param name="penumbra"></param>
         /// <param name="texture"></param>
-        public void ThrowStone(List<Stone> stones, PenumbraComponent penumbra, Texture2D texture)
+        public void ThrowStone(List<Stone> stones, PenumbraComponent penumbra, Texture2D texture, Map map)
         {
-                currentMouse = Mouse.GetState();
+             currentMouse = Mouse.GetState();
 
+             if(map.TotalStoneNumber >= 1)
+             {
                 // Throw a stone when left mouse button is pressed
                 if (currentMouse.LeftButton == ButtonState.Pressed &&
                     previousMouse.LeftButton == ButtonState.Released)
@@ -283,9 +285,10 @@ namespace FinalProject
                     stone.Throw(throwDirection);
                     stones.Add(stone);
                     penumbra.Lights.Add(stone.Light);
+                    map.TotalStoneNumber--;
                 }
-
-                previousMouse = currentMouse;
+             }
+             previousMouse = currentMouse;
         }
 
         /// <summary>
