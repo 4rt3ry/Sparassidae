@@ -237,8 +237,9 @@ namespace FinalProject
             {
                 Stone stone = new Stone(_position);
                 Vector2 throwDirection = new Vector2(MathF.Cos(flashlight.Rotation), MathF.Sin(flashlight.Rotation));
+                Vector2 mousePosition = camera.ScreenToWorldSpace(new Vector2(currentMouse.X, currentMouse.Y));
                 Debug.WriteLine("Throw: " + throwDirection);
-                stone.Throw(throwDirection);
+                stone.Throw(mousePosition);
                 stones.Add(stone);
                 penumbra.Lights.Add(stone.Light);
                 //Debug testing code, changes state when throwing a stone
@@ -281,8 +282,9 @@ namespace FinalProject
                 {
                     Stone stone = new Stone(_position, texture);
                     Vector2 throwDirection = new Vector2(MathF.Cos(flashlight.Rotation), MathF.Sin(flashlight.Rotation));
+                    Vector2 mousePosition = camera.ScreenToWorldSpace(new Vector2(currentMouse.X, currentMouse.Y));
                     Debug.WriteLine("Throw: " + throwDirection);
-                    stone.Throw(throwDirection);
+                    stone.Throw(mousePosition);
                     stones.Add(stone);
                     penumbra.Lights.Add(stone.Light);
                     map.TotalStoneNumber--;

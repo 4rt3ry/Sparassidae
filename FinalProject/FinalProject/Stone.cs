@@ -110,6 +110,8 @@ namespace FinalProject
         /// <param name="dTime"></param>
         public void Update(float dTime)
         {
+
+            // Drag
             _currentSpeed -= _drag * dTime;
             if (_currentSpeed <= 0)
             {
@@ -117,6 +119,7 @@ namespace FinalProject
                 targetScale = 350f;
             }
 
+            // Scales up light after thrown
             if (_texturedLight.Scale.X < targetScale)
             {
                 _texturedLight.Scale = new Vector2(_texturedLight.Scale.X + dTime * 250);
@@ -175,12 +178,18 @@ namespace FinalProject
         /// 
         /// </summary>
         /// <param name="direction"></param>
-        public void Throw(Vector2 direction)
+        public void Throw(Vector2 target)
         {
+            Vector2 trajectory = target - _position;
+            Vector2 direction = trajectory;
+            float throwDistance = MathF.Sqrt(trajectory.X * trajectory.X + trajectory.Y * trajectory.Y);
+            float initialSpeed = MathF.Sqrt(2 * throwDistance * _drag);
+
             if (direction.LengthSquared() != 0) direction.Normalize();
 
             _direction = direction;
-            _velocity = direction * _maxThrowSpeed;
+            _currentSpeed = initialSpeed;
+            _velocity = direction * _currentSpeed;
         }
     }
 }
