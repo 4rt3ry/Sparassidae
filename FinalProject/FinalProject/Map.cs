@@ -291,6 +291,14 @@ namespace FinalProject
             //_penumbra = (PenumbraComponent)serviceProvider.GetService(typeof(PenumbraComponent));
 
             SetupPenumbraLighting();
+
+            //Debug code that puts all enemies into end game chase sequence at the start of the game
+            /*
+            foreach(Enemy e in _enemies)
+            {
+                e.StartEndGameChaseSequence();
+            }
+            */
         }
 
         /// <summary>

@@ -20,7 +20,8 @@ namespace FinalProject
         ChaseWindupState,
         ChaseState,
         PlayerDeadState,
-        ReturnState
+        ReturnState,
+        EndGameChaseState
     }
     class Enemy : GameObject
     {
@@ -37,6 +38,7 @@ namespace FinalProject
         private float moveTime; //Time enemy will be moving towards roam point
         private float downTime; //Time enemy will wait before moving again
         private float speed;
+        private float baseSpeed; //Base speed on the enemy
         private Random rng = new Random();
         private int isForward; // Let a bool, 0 = move forward, 1 = move backward
 
@@ -149,6 +151,7 @@ namespace FinalProject
             roamTarget = 1;
             roamCheckDistance = 10;
             this.speed = movingSpeed;
+            this.baseSpeed = movingSpeed;
             isForward = 0; // Move forward
             this.target = target;
             this.walls = walls;
@@ -180,6 +183,7 @@ namespace FinalProject
             roamTarget = 1;
             roamCheckDistance = 10;
             this.speed = movingSpeed;
+            this.baseSpeed = movingSpeed;
             isForward = 0; // Move forward
             this.target = target;
             this.walls = walls;
@@ -222,6 +226,13 @@ namespace FinalProject
 
                     break;
                 case EnemyState.ReturnState:
+                    if (isAnimated)
+                    {
+                        DrawEnemyWalkingAnimation(batch);
+                    }
+                    break;
+
+                case EnemyState.EndGameChaseState:
                     if (isAnimated)
                     {
                         DrawEnemyWalkingAnimation(batch);
@@ -497,6 +508,33 @@ namespace FinalProject
                 case EnemyState.ReturnState:
                     // Path back to start
                     break;
+
+                    //End game chase that continues regardless of distance/breakage
+                case EnemyState.EndGameChaseState:
+                    //Movement code
+                    moveDir = movingTowards - this._position;
+                    moveDir.Normalize();
+                    this._position += moveDir * speed * dTime;
+
+                    //Keep player as target
+                    movingTowards = new Vector2(target.Position.X - this.displayRectangle.Width / 2,
+                                            target.Position.Y - this.displayRectangle.Height / 2);
+
+                    //Change speed if wall between enemy and player
+                    bool hitWall = false;
+                    foreach(Wall wall in walls)
+                    {
+                        if (playerDetectionLink.CheckCollision(wall))
+                        {
+                            speed = baseSpeed / 2f;
+                            hitWall = true;
+                        }
+                    }
+                    if (!hitWall)
+                    {
+                        speed = baseSpeed;
+                    }
+                    break;
             }
 
             //This code always runs regardless of state
@@ -637,6 +675,14 @@ namespace FinalProject
                 1.0f,
                 flip,
                 0.0f);
+        }
+
+        /// <summary>
+        /// Starts the end game chase, causing enemy to charge at player through walls
+        /// </summary>
+        public void StartEndGameChaseSequence()
+        {
+            currentState = EnemyState.EndGameChaseState;
         }
 
         public void StoneDetection(Stone stone)
