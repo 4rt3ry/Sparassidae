@@ -187,7 +187,7 @@ namespace FinalProject
             speed = currentState switch
             {
                 PlayerState.WalkingState => speed,
-                PlayerState.AfraidState => speed / 2f,
+                PlayerState.AfraidState => speed / 1.3f,
                 PlayerState.ShockState => 0.3f,
                 PlayerState.ChaseState => speed * 1.5f,
                 PlayerState.DeadState => 0,

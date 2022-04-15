@@ -31,6 +31,7 @@ namespace FinalProject
         private readonly List<Enemy> _enemies;
         private readonly List<Wall> _walls;
         private readonly List<Stone> _stones;
+        private readonly List<Stone> _landedStones;
         private readonly List<Vector2> _stoneRevealAreas;
         private int totalStoneNumber;
 
@@ -86,6 +87,7 @@ namespace FinalProject
             _enemies = new List<Enemy>();
             _walls = new List<Wall>();
             _stones = new List<Stone>();
+            _landedStones = new List<Stone>();
             _stoneRevealAreas = new List<Vector2>();
             _penumbra = penumbra;
 
@@ -181,12 +183,16 @@ namespace FinalProject
             _player.ThrowStone(Stones, _penumbra, _stoneMaskTexture, this);
 
             foreach (Stone stone in Stones) stone.Update(dTime);
+            foreach (Stone stone in _landedStones) stone.Update(dTime);
 
             Stone selected = null;
             if (Stones.Count > 0)
             {
                 selected = _stones[0];
             }
+
+            //Turns true if a stone has moved from the active list to the dead list
+            List<Stone> removed = new List<Stone>();
 
             // Wall collisions
             foreach (Wall wall in Walls)
@@ -206,7 +212,15 @@ namespace FinalProject
                         stone.Position = hit.HitPoint + hit.Normal * ((CircleCollider)stone.PhysicsCollider).Radius;
                         stone.Bounce(hit.Normal);
                     }
-                    if (isEGCActive && decayTimer <= 0)
+                    if (stone.Landed)
+                    {
+                        _landedStones.Add(stone);
+                        removed.Add(stone);
+                    }
+                }
+                if (isEGCActive && decayTimer <= 0)
+                {
+                    foreach(Stone stone in _landedStones)
                     {
                         if (stone.TargetScale > 0)
                         {
@@ -215,6 +229,13 @@ namespace FinalProject
                                 selected = stone;
                             }
                         }
+                    }
+                }
+                if (removed.Count > 0)
+                {
+                    foreach(Stone s in removed)
+                    {
+                        _stones.Remove(s);
                     }
                 }
             }
@@ -370,7 +391,7 @@ namespace FinalProject
                         }
                     }
                     //_enemies.Add(new Enemy(new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2)), roamPoints2, 800, _enemyTexture, 150, 150, 100, Player, _walls));
-                    _enemies.Add(new Enemy(new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2)), roamPoints2, 650, 100, _content.Load<Texture2D>("EnemySpriteSheet"), this));
+                    _enemies.Add(new Enemy(new Vector2(x, y), roamPoints2, 650, 100, _content.Load<Texture2D>("EnemySpriteSheet"), this));
                 }
 
             }
