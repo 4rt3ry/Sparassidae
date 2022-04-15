@@ -14,6 +14,7 @@ using Penumbra;
 using Microsoft.Xna.Framework.Content;
 using System.IO;
 
+
 namespace FinalProject
 {
     class Map
@@ -45,6 +46,8 @@ namespace FinalProject
 
         // Textures and Effects
         private Effect _maskEffect;
+        private Effect _tileEffect;
+        private Texture2D _tileTexture;
         private Texture2D _stoneRevealMask;
         private Texture2D _enemyTexture;
         private Texture2D _stoneMaskTexture;
@@ -73,7 +76,7 @@ namespace FinalProject
         {
             _content = content;
             LoadContent();
-            _player = new Player(new Vector2(500, 500),camera);
+            _player = new Player(new Vector2(500, 500), camera);
             _enemies = new List<Enemy>();
             _walls = new List<Wall>();
             _stones = new List<Stone>();
@@ -137,7 +140,25 @@ namespace FinalProject
             {
                 enemy.Display(batch);
             }
-            
+
+        }
+
+        public void DrawBackground(SpriteBatch batch, Matrix transformMatrix)
+        {
+            Matrix view = Matrix.Identity;
+
+            int width = batch.GraphicsDevice.Viewport.Width;
+            int height = batch.GraphicsDevice.Viewport.Height;
+            Matrix projection = Matrix.CreateOrthographicOffCenter(0, width, height, 0, 0, 1);
+            Vector2 translation2D = new Vector2(transformMatrix.Translation.X / _tileTexture.Width, transformMatrix.Translation.Y / _tileTexture.Height);
+
+
+            _tileEffect.Parameters["ViewProjection"].SetValue(view * projection);
+            _tileEffect.Parameters["UVScale"].SetValue(new Vector2(width / (float)_tileTexture.Width, height / (float)_tileTexture.Height));
+            _tileEffect.Parameters["CameraOffset"].SetValue(translation2D);
+            batch.Begin(effect: _tileEffect, samplerState: SamplerState.LinearWrap);
+            batch.Draw(_tileTexture, batch.GraphicsDevice.Viewport.Bounds, Color.White);
+            batch.End();
         }
 
         /// <summary>
@@ -389,6 +410,9 @@ namespace FinalProject
             //Test purpose
             whiteTexture = _content.Load<Texture2D>("blackbox2");
             circleTexture = _content.Load<Texture2D>("TestCircleRange");
+            _tileTexture = _content.Load<Texture2D>("MossBackground");
+            _tileEffect = _content.Load<Effect>("TileBackgroundEffect");
+            _maskEffect = _content.Load<Effect>("ImageMask");
         }
 
         /// <summary>
