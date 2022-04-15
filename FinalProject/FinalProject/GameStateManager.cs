@@ -104,7 +104,7 @@ namespace FinalProject
             // Load map
             map = new Map(penumbra, content, camera);
             //map.LoadTutorial();
-            map.LoadBackgroundTestLevel();
+            map.LoadTutorial();
         }
 
         //Methods

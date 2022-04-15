@@ -235,7 +235,7 @@
 /processorParam:TextureFormat=Color
 /build:Menu_noLight.png
 
-#begin moss_greyscale_seamless1.png
+#begin moss_greyscale_seamless.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -245,7 +245,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:moss_greyscale_seamless1.png;Background_Texture_Moss.png
+/build:moss_greyscale_seamless.png;MossBackground.png
 
 #begin PauseMask.png
 /importer:TextureImporter

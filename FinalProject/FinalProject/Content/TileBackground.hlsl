@@ -8,8 +8,9 @@
 #define PS_SHADERMODEL ps_4_0
 #endif
 
-float4x4 view_projection;
+float4x4 ViewProjection;
 float2 UVScale;
+float2 CameraOffset;
 sampler TextureSampler : register(s0);
 
 struct VertexInput {
@@ -26,10 +27,11 @@ struct PixelInput {
 PixelInput SpriteVertexShader(VertexInput v) {
     PixelInput output;
 
-    output.Position = mul(v.Position, view_projection);
+    output.Position = mul(v.Position, ViewProjection);
     output.Color = v.Color;
     output.TexCoord = v.TexCoord;
     output.TexCoord.xy *= UVScale;
+    output.TexCoord.xy -= CameraOffset;
     return output;
 }
 float4 SpritePixelShader(PixelInput p) : COLOR0 {

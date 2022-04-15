@@ -109,19 +109,17 @@ namespace FinalProject
 
         public void DrawBackground(SpriteBatch batch, Matrix transformMatrix)
         {
-
-            //_tileEffect.Parameters["ViewportSize"].SetValue(new Vector2(batch.GraphicsDevice.Viewport.Width, batch.GraphicsDevice.Viewport.Width));
-            //_tileEffect.Parameters["Scale"].SetValue(1f);
-            //_tileEffect.Parameters[""];
             Matrix view = Matrix.Identity;
 
             int width = batch.GraphicsDevice.Viewport.Width;
             int height = batch.GraphicsDevice.Viewport.Height;
             Matrix projection = Matrix.CreateOrthographicOffCenter(0, width, height, 0, 0, 1);
+            Vector2 translation2D = new Vector2(transformMatrix.Translation.X / _tileTexture.Width, transformMatrix.Translation.Y / _tileTexture.Height);
 
 
-            _tileEffect.Parameters["view_projection"].SetValue(view * projection);
+            _tileEffect.Parameters["ViewProjection"].SetValue(view * projection);
             _tileEffect.Parameters["UVScale"].SetValue(new Vector2(width / (float)_tileTexture.Width, height / (float)_tileTexture.Height));
+            _tileEffect.Parameters["CameraOffset"].SetValue(translation2D);
             batch.Begin(effect: _tileEffect, samplerState: SamplerState.LinearWrap);
             batch.Draw(_tileTexture, batch.GraphicsDevice.Viewport.Bounds, Color.White);
             batch.End();
@@ -333,7 +331,7 @@ namespace FinalProject
             //Test purpose
             whiteTexture = _content.Load<Texture2D>("blackbox2");
             circleTexture = _content.Load<Texture2D>("TestCircleRange");
-            _tileTexture = _content.Load<Texture2D>("Background_Texture_Moss");
+            _tileTexture = _content.Load<Texture2D>("MossBackground");
             _tileEffect = _content.Load<Effect>("TileBackgroundEffect");
             _maskEffect = _content.Load<Effect>("ImageMask");
         }
