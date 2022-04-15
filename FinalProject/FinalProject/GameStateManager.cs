@@ -112,7 +112,7 @@ namespace FinalProject
             // Load map
             map = new Map(penumbra, content, camera);
             //map.LoadTutorial();
-            String fileName = "testLevel.lvl";
+            String fileName = "MainLevel1.lvl";
             map.LoadFromFile(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "..\\..\\..\\..\\Content\\" + fileName);
         }
 
