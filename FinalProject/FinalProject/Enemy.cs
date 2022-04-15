@@ -158,6 +158,7 @@ namespace FinalProject
             RoamDetectionTrigger = new CircleCollider(this, new Vector2(width / 2, height / 2), detectionRadius, true);
             DetectionLink = new LineCollider(this, new Vector2(width /2, height/2), target.Position);
             ChaseStartDistance = detectionRadius - 250;
+            this.map = map;
         }
 
         /// <summary>
