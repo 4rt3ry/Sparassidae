@@ -50,7 +50,7 @@ namespace FinalProject
         private Texture2D fade_Texture;
         private Texture2D black_Texture;
         private Texture2D gameOver_Texture;
-        
+
         private Button playButton;
         private Button optionButton;
         private Button instructionButton;
@@ -73,7 +73,7 @@ namespace FinalProject
         public Map Map => map;
 
         //Constructors
-        public GameStateManager(ContentManager content, PenumbraComponent penumbra, GraphicsDeviceManager graphics,Camera2D camera)
+        public GameStateManager(ContentManager content, PenumbraComponent penumbra, GraphicsDeviceManager graphics, Camera2D camera)
         {
             _graphics = graphics;
             _camera = camera;
@@ -145,6 +145,16 @@ namespace FinalProject
             }
         }
 
+        public void DrawBackground(SpriteBatch batch, Matrix tranformMatrix)
+        {
+            switch (currentState)
+            {
+                case GameState.PlayState:
+                    map.DrawBackground(batch, tranformMatrix);
+                    break;
+            }
+        }
+
         /// <summary>
         /// Draw UI and things that are not effected by Light system
         /// </summary>
@@ -189,7 +199,7 @@ namespace FinalProject
                     backMainButton.Draw(batch);
                     volumeSlider.Draw(batch);
                     // Test volume number 
-                    batch.DrawString(syneTactileFont, volumeSlider.CurValue.ToString(), new Vector2 (800, 300), Color.White);
+                    batch.DrawString(syneTactileFont, volumeSlider.CurValue.ToString(), new Vector2(800, 300), Color.White);
 
                     break;
 
@@ -298,7 +308,7 @@ namespace FinalProject
 
                     }
 
-                    if(map.Player.CurrentState == PlayerState.DeadState)
+                    if (map.Player.CurrentState == PlayerState.DeadState)
                     {
                         currentState = GameState.GameOverState;
                     }
@@ -317,7 +327,7 @@ namespace FinalProject
                         currentState = GameState.PlayState;
                     }
 
-                    
+
 
                     volumeSlider.Update();
                     mainMenuButton.Update();
@@ -366,7 +376,7 @@ namespace FinalProject
             Texture2D sliderWidget = content.Load<Texture2D>("SliderBackground");
             Texture2D sliderIndicator = content.Load<Texture2D>("SliderIndicator");
             volumeSlider = new Slider(sliderIndicator, sliderWidget, _graphics.PreferredBackBufferWidth / 2 - sliderWidget.Width / 2, 400, 60, 100, _graphics, camera);
-            
+
             syneTactileFont = content.Load<SpriteFont>("SyneTactile24");
 
         }
@@ -391,8 +401,8 @@ namespace FinalProject
             SFXManager.LoopInstancedSound(Sounds.HBNormal, false);
             SFXManager.LoopInstancedSound(Sounds.SAmbience, false);
             volumeSlider.UpdatePosition(new Vector2(
-                _camera.Position.X + _graphics.PreferredBackBufferWidth/2,
-                _camera.Position.Y + _graphics.PreferredBackBufferHeight/2));
+                _camera.Position.X + _graphics.PreferredBackBufferWidth / 2,
+                _camera.Position.Y + _graphics.PreferredBackBufferHeight / 2));
             currentState = GameState.OptionState;
         }
 

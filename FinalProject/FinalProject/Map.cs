@@ -26,7 +26,7 @@ namespace FinalProject
         private readonly List<Wall> _walls;
         private readonly List<Stone> _stones;
         private readonly List<Vector2> _stoneRevealAreas;
-        
+
         private readonly PenumbraComponent _penumbra;
         private readonly ContentManager _content;
 
@@ -37,6 +37,8 @@ namespace FinalProject
 
         // Textures and Effects
         private Effect _maskEffect;
+        private Effect _tileEffect;
+        private Texture2D _tileTexture;
         private Texture2D _stoneRevealMask;
         private Texture2D _enemyTexture;
 
@@ -58,7 +60,7 @@ namespace FinalProject
         {
             _content = content;
             LoadContent();
-            _player = new Player(new Vector2(500, 500),camera);
+            _player = new Player(new Vector2(500, 500), camera);
             _enemies = new List<Enemy>();
             _walls = new List<Wall>();
             _stones = new List<Stone>();
@@ -73,14 +75,14 @@ namespace FinalProject
         /// <param name="batch"></param>
         public void DrawTest(SpriteBatch batch)
         {
-            foreach(Enemy enemy in _enemies)
+            foreach (Enemy enemy in _enemies)
             {
                 batch.Draw(whiteTexture, enemy.DisplayRectangle, Color.White);
                 enemy.RoamDetectionTrigger.DrawDebugTexture(batch, Color.Red);
                 batch.Draw(circleTexture,
                     new Rectangle((int)enemy.Position.X - (int)enemy.DetectionRadius + enemy.DisplayRectangle.Width / 2,
                     (int)enemy.Position.Y - (int)enemy.DetectionRadius + enemy.DisplayRectangle.Height / 2,
-                    (int)enemy.DetectionRadius *2 , (int)enemy.DetectionRadius *2), Color.White);
+                    (int)enemy.DetectionRadius * 2, (int)enemy.DetectionRadius * 2), Color.White);
 
             }
         }
@@ -102,7 +104,27 @@ namespace FinalProject
             {
                 enemy.Display(batch);
             }
-            
+
+        }
+
+        public void DrawBackground(SpriteBatch batch, Matrix transformMatrix)
+        {
+
+            //_tileEffect.Parameters["ViewportSize"].SetValue(new Vector2(batch.GraphicsDevice.Viewport.Width, batch.GraphicsDevice.Viewport.Width));
+            //_tileEffect.Parameters["Scale"].SetValue(1f);
+            //_tileEffect.Parameters[""];
+            Matrix view = Matrix.Identity;
+
+            int width = batch.GraphicsDevice.Viewport.Width;
+            int height = batch.GraphicsDevice.Viewport.Height;
+            Matrix projection = Matrix.CreateOrthographicOffCenter(0, width, height, 0, 0, 1);
+
+
+            _tileEffect.Parameters["view_projection"].SetValue(view * projection);
+            _tileEffect.Parameters["UVScale"].SetValue(new Vector2(width / (float)_tileTexture.Width, height / (float)_tileTexture.Height));
+            batch.Begin(effect: _tileEffect, samplerState: SamplerState.LinearWrap);
+            batch.Draw(_tileTexture, batch.GraphicsDevice.Viewport.Bounds, Color.White);
+            batch.End();
         }
 
         /// <summary>
@@ -187,6 +209,7 @@ namespace FinalProject
             ResetMap();
             SetupPenumbraLighting();
             _player.Flashlight.Scale = new Vector2(2000);
+            //Matrix.CreateOrthographicOffCenter()
         }
 
         /// <summary>
@@ -310,6 +333,9 @@ namespace FinalProject
             //Test purpose
             whiteTexture = _content.Load<Texture2D>("blackbox2");
             circleTexture = _content.Load<Texture2D>("TestCircleRange");
+            _tileTexture = _content.Load<Texture2D>("Background_Texture_Moss");
+            _tileEffect = _content.Load<Effect>("TileBackgroundEffect");
+            _maskEffect = _content.Load<Effect>("ImageMask");
         }
     }
 }

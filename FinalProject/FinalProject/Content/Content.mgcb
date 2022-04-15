@@ -193,11 +193,11 @@
 /processorParam:TextureFormat=Color
 /build:GameEnd.png
 
-#begin Image_Mask.hlsl
+#begin ImageMask.hlsl
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
-/build:Image_Mask.hlsl
+/build:ImageMask.hlsl
 
 #begin Instruction.png
 /importer:TextureImporter
@@ -234,6 +234,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Menu_noLight.png
+
+#begin moss_greyscale_seamless1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:moss_greyscale_seamless1.png;Background_Texture_Moss.png
 
 #begin PauseMask.png
 /importer:TextureImporter
@@ -391,4 +403,10 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:TestCircleRange.png
+
+#begin TileBackground.hlsl
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:TileBackground.hlsl;TileBackgroundEffect.hlsl
 

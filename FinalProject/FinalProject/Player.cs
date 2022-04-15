@@ -134,14 +134,14 @@ namespace FinalProject
             //Rotate the flashlight direction based on the mouse position
             flashlight.Rotation = MathF.Atan2(mousePos.Y -  this.Position.Y, mousePos.X - this.Position.X);
 
-            if(flashlight.Scale.X > targetScale)
-            {
-                flashlight.Scale = new Vector2(flashlight.Scale.X - (10 + Math.Abs((targetScale-flashlight.Scale.X)/2)) * dTime);
-            }
-            if(flashlight.Scale.X < targetScale)
-            {
-                flashlight.Scale = new Vector2(flashlight.Scale.X + (10 + Math.Abs((targetScale - flashlight.Scale.X) / 2)) * dTime);
-            }
+            //if(flashlight.Scale.X > targetScale)
+            //{
+            //    flashlight.Scale = new Vector2(flashlight.Scale.X - (10 + Math.Abs((targetScale-flashlight.Scale.X)/2)) * dTime);
+            //}
+            //if(flashlight.Scale.X < targetScale)
+            //{
+            //    flashlight.Scale = new Vector2(flashlight.Scale.X + (10 + Math.Abs((targetScale - flashlight.Scale.X) / 2)) * dTime);
+            //}
 
             switch (CurrentState)
             {
