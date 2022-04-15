@@ -57,6 +57,17 @@ namespace FinalProject
         public TexturedLight TLight { get => _texturedLight; set => _texturedLight = value; }
 
         /// <summary>
+        /// Has this stone been investigated by an enemy
+        /// </summary>
+        public bool IsInvestigated { get => isInvestigated; set => isInvestigated = value; }
+
+        /// <summary>
+        /// Has this stone landed, or is it still in motion
+        /// </summary>
+        public bool Landed { get => landed; set => landed = value; }
+
+
+        /// <summary>
         /// The stone's position
         /// </summary>
         public new Vector2 Position
@@ -69,9 +80,6 @@ namespace FinalProject
                 _texturedLight.Position = value;
             }
         }
-
-        public bool IsInvestigated { get => isInvestigated; set => isInvestigated = value; }
-
 
         /// <summary>
         /// Creates a new stone, adding a point light to <paramref name="penumbra"/>.
@@ -91,7 +99,7 @@ namespace FinalProject
                 Scale = new Vector2(10),
                 ShadowType = ShadowType.Solid,
                 Color = new Color(0.065f, 0.065f, 0.085f),
-                Intensity = 1f,
+                Intensity = 2f,
                 
             };
 
