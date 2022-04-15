@@ -63,12 +63,12 @@ namespace FinalProject
         /// <summary>
         /// Constructor for the button that needs to be centered
         /// </summary>
-        /// <param name="buttonNorm"></param>
-        /// <param name="buttonHover"></param>
-        /// <param name="x_value"></param>
-        /// <param name="y_value"></param>
-        /// <param name="graphics"></param>
-        /// <param name="camera"></param>
+        /// <param name="buttonNorm">normal texture</param>
+        /// <param name="buttonHover">texture when mouse is hovering over button</param>
+        /// <param name="x_value">the x value of the position</param>
+        /// <param name="y_value">the y value of the position</param>
+        /// <param name="graphics">Graphics Device Manager</param>
+        /// <param name="camera">Camera</param>
         public Button(Texture2D buttonNorm, Texture2D buttonHover,
           int x_value, int y_value, GraphicsDeviceManager graphics, Camera2D camera)
             : this(buttonNorm, buttonHover, x_value, y_value, graphics)

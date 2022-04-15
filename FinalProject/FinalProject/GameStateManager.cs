@@ -457,6 +457,8 @@ namespace FinalProject
         {
             currentState = GameState.InstructionState;
             SFXManager.StopInstancedSound(Sounds.FLAmbience);
+            backMainButton.ButtonRectangle = new Rectangle(_graphics.PreferredBackBufferWidth / 2 - backMainButton.ButtonRectangle.Width / 2, 900,
+                backMainButton.ButtonRectangle.Width, backMainButton.ButtonRectangle.Height);
         }
 
         /// <summary>
@@ -474,6 +476,9 @@ namespace FinalProject
                 _camera.Position.Y + _graphics.PreferredBackBufferHeight/2));
             currentState = GameState.OptionState;
             SFXManager.StopInstancedSound(Sounds.FLAmbience);
+
+            backMainButton.ButtonRectangle= new Rectangle(_graphics.PreferredBackBufferWidth / 2 - backMainButton.ButtonRectangle.Width / 2, 700, 
+                backMainButton.ButtonRectangle.Width, backMainButton.ButtonRectangle.Height);
         }
 
         /// <summary>
