@@ -48,11 +48,12 @@ namespace FinalProject
         //Texture2D for menu and buttons
         private Texture2D menuNoLight_Texture;
         private Texture2D menuLight_Texture;
-        private Texture2D instruction_Texture;
+        private Texture2D instruction_Texture; // Wear headphone suggestion
         private Texture2D pauseMask;
         private Texture2D fade_Texture;
         private Texture2D black_Texture;
         private Texture2D gameOver_Texture;
+        private Texture2D gameInstruction_Texture; // How to play the game
         
         private Button playButton;
         private Button optionButton;
@@ -202,7 +203,7 @@ namespace FinalProject
                     break;
 
                 case GameState.InstructionState:
-                    batch.Draw(black_Texture, new Rectangle(0, 0, black_Texture.Width, black_Texture.Height), Color.White);
+                    batch.Draw(gameInstruction_Texture, new Rectangle(0, 0, black_Texture.Width, black_Texture.Height), Color.White);
                     backMainButton.Draw(batch);
                     break;
 
@@ -222,6 +223,7 @@ namespace FinalProject
                     }
                     
                     // Task Hub
+                    // Update the UI based on the center of the screen (local position)
                     batch.DrawString(syneTactileFont24, "Mission Hud",
                        new Vector2(map.Player.Position.X + 1730 - _graphics.PreferredBackBufferWidth / 2,
                        map.Player.Position.Y + 50 - _graphics.PreferredBackBufferHeight / 2), Color.White);
@@ -421,6 +423,7 @@ namespace FinalProject
             fade_Texture = content.Load<Texture2D>("blackbox2");
             black_Texture = content.Load<Texture2D>("Blackbackground");
             gameOver_Texture = content.Load<Texture2D>("GameEnd");
+            gameInstruction_Texture = content.Load<Texture2D>("InstructionPage");
 
             playButton = new Button(content.Load<Texture2D>("Controls/Play"), content.Load<Texture2D>("Controls/Play_hover"), 1500, 700, _graphics);
             optionButton = new Button(content.Load<Texture2D>("Controls/Options"), content.Load<Texture2D>("Controls/Options_hover"), 1500, 800, _graphics);
