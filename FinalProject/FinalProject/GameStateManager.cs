@@ -24,7 +24,8 @@ namespace FinalProject
         InstructionState,
         PlayState,
         PauseState,
-        GameOverState
+        GameOverState,
+        WinState
     }
 
     class GameStateManager
@@ -369,6 +370,12 @@ namespace FinalProject
                         currentState = GameState.GameOverState;
                     }
 
+                    //DEBUG activates EGC
+                    if (ks.IsKeyDown(Keys.I))
+                    {
+                        map.TriggerEndGameChase();
+                    }
+
                     // Update lighting effects after buttons have been updated
                     UpdatePenumbraState(penumbra);
                     break;
@@ -514,6 +521,14 @@ namespace FinalProject
             SFXManager.SetGlobalVolume((float)cur.Percentage);
             // Can use slider.Percentage / slider.CurValue to access the number
             // And then change the volume
+        }
+
+        /// <summary>
+        /// Sets the current game to the win state
+        /// </summary>
+        public void Set_WinState()
+        {
+            currentState = GameState.WinState;
         }
 
         /// <summary>

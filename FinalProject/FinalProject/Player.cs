@@ -188,7 +188,7 @@ namespace FinalProject
             {
                 PlayerState.WalkingState => speed,
                 PlayerState.AfraidState => speed / 2f,
-                PlayerState.ShockState => 1,
+                PlayerState.ShockState => 0.3f,
                 PlayerState.ChaseState => speed * 1.5f,
                 PlayerState.DeadState => 0,
                 _ => 0

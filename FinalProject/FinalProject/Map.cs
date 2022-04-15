@@ -35,6 +35,14 @@ namespace FinalProject
         private float _width = _defaultWidth;
         private float _height = _defaultHeight;
 
+        private Random rng;
+
+        //End Game Chase variables
+        private bool isEGCActive;
+        private float stoneDecayTime;
+        private float decayTimer;
+        private float egcTimer;
+
         // Textures and Effects
         private Effect _maskEffect;
         private Texture2D _stoneRevealMask;
@@ -72,6 +80,12 @@ namespace FinalProject
 
             // This will be external number.
             TotalStoneNumber = 10;
+
+            //EGC Variables
+            isEGCActive = false;
+            stoneDecayTime = 5f;
+            decayTimer = stoneDecayTime;
+            egcTimer = 30;
         }
 
         //Methods
@@ -138,6 +152,12 @@ namespace FinalProject
 
             foreach (Stone stone in Stones) stone.Update(dTime);
 
+            Stone selected = null;
+            if (Stones.Count > 0)
+            {
+                selected = _stones[0];
+            }
+
             // Wall collisions
             foreach (Wall wall in _walls)
             {
@@ -156,6 +176,16 @@ namespace FinalProject
                         stone.Position = hit.HitPoint + hit.Normal * ((CircleCollider)stone.PhysicsCollider).Radius;
                         stone.Bounce(hit.Normal);
                     }
+                    if(isEGCActive && decayTimer <= 0)
+                    {
+                        if (stone.TargetScale > 0)
+                        {
+                            if (Vector2.Distance(stone.Position, _player.Position) < Vector2.Distance(selected.Position, _player.Position))
+                            {
+                                selected = stone;
+                            }
+                        }
+                    }
                 }
             }
 
@@ -163,6 +193,22 @@ namespace FinalProject
             foreach (Enemy enemy in _enemies)
             {
                 enemy.Update(dTime);
+            }
+
+            //EGC Stuff
+            if (isEGCActive)
+            {
+                if(decayTimer < 0)
+                {
+                    selected.TargetScale = 0;
+                    decayTimer = stoneDecayTime;
+                }
+                decayTimer -= dTime;
+                egcTimer -= dTime;
+                if(egcTimer < 0)
+                {
+                    //Trigger win state
+                }
             }
         }
 
@@ -341,6 +387,19 @@ namespace FinalProject
             //Test purpose
             whiteTexture = _content.Load<Texture2D>("blackbox2");
             circleTexture = _content.Load<Texture2D>("TestCircleRange");
+        }
+
+        /// <summary>
+        /// Begins the end game chase
+        /// </summary>
+        public void TriggerEndGameChase()
+        {
+            foreach (Enemy e in _enemies)
+            {
+                e.StartEndGameChaseSequence();
+            }
+            _player.SetChaseState();
+            isEGCActive = true;
         }
     }
 }

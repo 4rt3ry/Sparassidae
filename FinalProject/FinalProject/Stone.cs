@@ -31,6 +31,7 @@ namespace FinalProject
         private float _currentSpeed = _maxThrowSpeed; // Pixels per second
         private int _hitCount = 1;
         private float targetScale = 100;
+        private bool landed;
 
 
         // Properties
@@ -38,6 +39,11 @@ namespace FinalProject
         /// How many times the stone can bounce
         /// </summary>
         public int HitCount { get => _hitCount; set => _hitCount = value; }
+        
+        /// <summary>
+        /// The target scale of the light of the stone
+        /// </summary>
+        public float TargetScale { get => targetScale; set => targetScale = value; }
 
         /// <summary>
         /// A small sphere of light that reveals the current stone.
@@ -62,6 +68,7 @@ namespace FinalProject
                 _texturedLight.Position = value;
             }
         }
+
 
         /// <summary>
         /// Creates a new stone, adding a point light to <paramref name="penumbra"/>.
@@ -116,7 +123,9 @@ namespace FinalProject
             if (_currentSpeed <= 0)
             {
                 _currentSpeed = 0;
-                targetScale = 350f;
+                if(!landed)
+                    targetScale = 350f;
+                landed = true;
             }
 
             // Scales up light after thrown
