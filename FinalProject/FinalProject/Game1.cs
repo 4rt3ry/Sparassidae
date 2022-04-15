@@ -93,6 +93,7 @@ namespace FinalProject
             soundEffects.Add(Content.Load<SoundEffect>("SoundFX/FLAmbience"));
             soundEffects.Add(Content.Load<SoundEffect>("SoundFX/BHover"));
             soundEffects.Add(Content.Load<SoundEffect>("SoundFX/BHEnd"));
+            soundEffects.Add(Content.Load<SoundEffect>("SoundFX/AmbientWhiteNoise"));
 
 
 

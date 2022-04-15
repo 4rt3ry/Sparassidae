@@ -34,7 +34,8 @@ namespace FinalProject
         FLOff,
         FLAmbience,
         BHover,
-        BHEnd
+        BHEnd,
+        WNAmb
     }
     public static class SFXManager
     {
@@ -176,6 +177,7 @@ namespace FinalProject
             sounds[Sounds.FLAmbience] = snds[17];
             sounds[Sounds.BHover] = snds[18];
             sounds[Sounds.BHEnd] = snds[19];
+            sounds[Sounds.WNAmb] = snds[20];
 
             instances = new Dictionary<Sounds, SoundEffectInstance>(sounds.Count);
             for(int i = 0; i < sounds.Count; i++)

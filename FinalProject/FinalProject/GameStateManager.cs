@@ -368,6 +368,7 @@ namespace FinalProject
                     if(map.Player.CurrentState == PlayerState.DeadState)
                     {
                         currentState = GameState.GameOverState;
+                        SFXManager.StopAllInstances();
                     }
 
                     //DEBUG activates EGC
@@ -464,6 +465,7 @@ namespace FinalProject
         {
             SFXManager.LoopInstancedSound(Sounds.HBNormal, false);
             SFXManager.LoopInstancedSound(Sounds.SAmbience, false);
+            SFXManager.LoopInstancedSound(Sounds.WNAmb, false);
             volumeSlider.UpdatePosition(new Vector2(
                 _camera.Position.X + _graphics.PreferredBackBufferWidth/2,
                 _camera.Position.Y + _graphics.PreferredBackBufferHeight/2));
@@ -479,6 +481,7 @@ namespace FinalProject
         public void Click_ToPlay(object sender, System.EventArgs e)
         {
             SFXManager.LoopInstancedSound(Sounds.HBNormal, true);
+            SFXManager.LoopInstancedSound(Sounds.WNAmb, false);
             currentState = GameState.PlayState;
             SFXManager.StopInstancedSound(Sounds.FLAmbience);
         }
@@ -495,6 +498,7 @@ namespace FinalProject
             //map.LoadFromFile(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "..\\..\\..\\..\\Content\\" + fileName);
             currentState = GameState.PlayState;
             SFXManager.StopInstancedSound(Sounds.FLAmbience);
+            SFXManager.LoopInstancedSound(Sounds.WNAmb, false);
         }
 
         /// <summary>

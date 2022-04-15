@@ -304,6 +304,7 @@ namespace FinalProject
             SFXManager.LoopInstancedSound(Sounds.HBRushed, false);
             SFXManager.LoopInstancedSound(Sounds.SAmbience, false);
             SFXManager.LoopInstancedSound(Sounds.BrMedium, false);
+            SFXManager.StopInstancedSound(Sounds.WNAmb);
             numTargets += 1;
             targetScale = 400;
         }
@@ -317,6 +318,7 @@ namespace FinalProject
             SFXManager.PlaySound(Sounds.Catch);
             SFXManager.StopAllHB();
             SFXManager.StopAllBr();
+            SFXManager.StopInstancedSound(Sounds.WNAmb);
             shockTimer = 4.5f;
             targetScale = 300;
         }
@@ -343,6 +345,7 @@ namespace FinalProject
             SFXManager.StopAllHB();
             SFXManager.StopAllBr(); 
             SFXManager.LoopInstancedSound(Sounds.HBNormal, false);
+            SFXManager.LoopInstancedSound(Sounds.WNAmb, false);
             SFXManager.PlaySound(Sounds.BrSigh);
             sighTimer = 3.1f;
             targetScale = 650;
@@ -358,6 +361,7 @@ namespace FinalProject
             SFXManager.StopAllBr();
             SFXManager.LoopInstancedSound(Sounds.HBFrantic, false);
             SFXManager.LoopInstancedSound(Sounds.BrHeavy, false);
+            SFXManager.StopInstancedSound(Sounds.WNAmb);
             alertTimer = 2f;
             targetScale = 150;
             flashlight.Scale = new Vector2(150);

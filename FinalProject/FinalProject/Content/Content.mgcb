@@ -289,6 +289,12 @@
 /processorParam:Quality=Best
 /build:SoundFX/Alert.wav
 
+#begin SoundFX/AmbientWhiteNoise.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundFX/AmbientWhiteNoise.wav
+
 #begin SoundFX/BHEnd.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
