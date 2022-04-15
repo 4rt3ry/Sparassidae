@@ -16,6 +16,7 @@ namespace FinalProject
     {
 
         // Fields
+        private bool isInvestigated; // This is bool value used by enemy to record if this stone is investigated or not
 
         // Constants
         private const float _maxThrowSpeed = 800; // Pixels per second
@@ -69,6 +70,8 @@ namespace FinalProject
             }
         }
 
+        public bool IsInvestigated { get => isInvestigated; set => isInvestigated = value; }
+
 
         /// <summary>
         /// Creates a new stone, adding a point light to <paramref name="penumbra"/>.
@@ -92,6 +95,7 @@ namespace FinalProject
                 
             };
 
+            IsInvestigated = false;
         }
 
         /// <summary>

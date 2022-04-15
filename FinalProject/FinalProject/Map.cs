@@ -64,6 +64,8 @@ namespace FinalProject
 
         public int TotalStoneNumber { get => totalStoneNumber; set => totalStoneNumber = value; }
 
+        internal List<Wall> Walls => _walls;
+
         //Constructors
 
 
@@ -126,7 +128,7 @@ namespace FinalProject
         public void Draw(SpriteBatch batch)
         {
             // Probably where enemies, stones, and stone reveal areas would be drawn
-            foreach (Wall wall in _walls)
+            foreach (Wall wall in Walls)
             {
                 wall.PhysicsCollider.DrawDebugTexture(batch, Color.White);
             }
@@ -159,7 +161,7 @@ namespace FinalProject
             }
 
             // Wall collisions
-            foreach (Wall wall in _walls)
+            foreach (Wall wall in Walls)
             {
                 // Player collision
                 ColliderHitInfo hit;
@@ -222,13 +224,13 @@ namespace FinalProject
             // Create walls
 
             // Boundaries
-            _walls.Add(new Wall(new Vector2(_width / 2, 50), _width, 100));
-            _walls.Add(new Wall(new Vector2(_width / 2, 1080 - 50), _width, 100));
-            _walls.Add(new Wall(new Vector2(50, _height / 2), 100, _height));
-            _walls.Add(new Wall(new Vector2(_width - 50, _height / 2), 100, _height));
+            Walls.Add(new Wall(new Vector2(_width / 2, 50), _width, 100));
+            Walls.Add(new Wall(new Vector2(_width / 2, 1080 - 50), _width, 100));
+            Walls.Add(new Wall(new Vector2(50, _height / 2), 100, _height));
+            Walls.Add(new Wall(new Vector2(_width - 50, _height / 2), 100, _height));
 
             // Center wall
-            _walls.Add(new Wall(new Vector2(_width / 2, _height / 2), 500, 500));
+            Walls.Add(new Wall(new Vector2(_width / 2, _height / 2), 500, 500));
 
             //// Setting up wall graphics
             //foreach (Wall wall in _walls)
@@ -238,7 +240,7 @@ namespace FinalProject
 
             //Create Roam Points
             List<Vector2> roamPoints = new List<Vector2> { new Vector2(1500, 700), new Vector2(1500, 100), new Vector2(100, 100) };
-            _enemies.Add(new Enemy(roamPoints[0], roamPoints, 800, _enemyTexture, 150, 150, 100, Player, _walls));
+            _enemies.Add(new Enemy(roamPoints[0], roamPoints, 800, _enemyTexture, 150, 150, 100, this));
             //List<Vector2> roamPoints2 = null;
             //_enemies.Add(new Enemy(new Vector2(1550, 100), roamPoints2, 800, _enemyTexture, 150, 150, 100, Player, _walls));
             //_enemies.Add(new Enemy(new Vector2(1500, 100), _enemyTexture, 200, 200));
@@ -289,7 +291,7 @@ namespace FinalProject
                 switch (tileData[0])
                 {
                     case "wall":
-                        _walls.Add(new Wall(new Vector2(x + (w/2), y + (h/2)), w, h));
+                        Walls.Add(new Wall(new Vector2(x + (w/2), y + (h/2)), w, h));
                         break;
                     case "enemy":
                         break;
@@ -322,7 +324,7 @@ namespace FinalProject
                         }
                     }
                     //_enemies.Add(new Enemy(new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2)), roamPoints2, 800, _enemyTexture, 150, 150, 100, Player, _walls));
-                    _enemies.Add(new Enemy(new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2)), roamPoints2, 650, 100, Player, _walls, _content.Load<Texture2D>("EnemySpriteSheet")));
+                    _enemies.Add(new Enemy(new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2)), roamPoints2, 650, 100, _content.Load<Texture2D>("EnemySpriteSheet"), this));
                 }
                 
             }
@@ -352,7 +354,7 @@ namespace FinalProject
         /// </summary>
         private void ResetMap()
         {
-            _walls.Clear();
+            Walls.Clear();
             _enemies.Clear();
             _stoneRevealAreas.Clear();
             _width = _defaultWidth;
@@ -368,7 +370,7 @@ namespace FinalProject
             //Add the hulls into the penumbra system
             // Note: create walls before this and add walls into the walls list
             //       it should work, if not dm Runi :)
-            foreach (Wall wall in _walls)
+            foreach (Wall wall in Walls)
             {
                 _penumbra.Hulls.Add(wall.Hull);
             }

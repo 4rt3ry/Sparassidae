@@ -29,6 +29,7 @@ namespace FinalProject
         private EnemyState currentState;
         private float chaseWindupTimer;
         private Vector2 centerPositionOfEnemy;
+        private Map map; // This is the map that current enemy is in; it is used to get access to stone
 
         //Roam Variables
         private List<Vector2> roamLocations; // This should include spawn position
@@ -45,10 +46,10 @@ namespace FinalProject
         //Detection variables
         private float detectionRadius;
         private float chaseStartDistance;
-        private LineCollider playerDetectionLink;
+        private LineCollider DetectionLink; // This link is to check if there is wall between enemy to player/stones
         private CircleCollider roamDetectionTrigger;
         private Vector2 lastSeenPosition;
-        private List<Wall> walls;
+       // private List<Wall> walls;
         private bool isDetected;
 
         //Reference holder for target player
@@ -140,7 +141,7 @@ namespace FinalProject
         /// <param name="detectionRadius">Radius for detecting player</param>
         /// <param name="enemyTexture">Visual texture</param>
         public Enemy(Vector2 position, List<Vector2> roamLocations, float detectionRadius, Texture2D enemyTexture, int width, int height, float movingSpeed,
-            Player target, List<Wall> walls) 
+            Map map) 
             : this(position, roamLocations, detectionRadius)
         {
             this.enemyTexture = enemyTexture;
@@ -153,10 +154,9 @@ namespace FinalProject
             this.speed = movingSpeed;
             this.baseSpeed = movingSpeed;
             isForward = 0; // Move forward
-            this.target = target;
-            this.walls = walls;
+            this.target = map.Player;
             RoamDetectionTrigger = new CircleCollider(this, new Vector2(width / 2, height / 2), detectionRadius, true);
-            playerDetectionLink = new LineCollider(this, new Vector2(width /2, height/2), target.Position);
+            DetectionLink = new LineCollider(this, new Vector2(width /2, height/2), target.Position);
             ChaseStartDistance = detectionRadius - 250;
         }
 
@@ -167,8 +167,7 @@ namespace FinalProject
         /// <param name="roamLocations">Array of positions to roam to</param>
         /// <param name="detectionRadius">Radius for detecting player</param>
         /// <param name="enemyTexture">Visual texture</param>
-        public Enemy(Vector2 position, List<Vector2> roamLocations, float detectionRadius, float movingSpeed,
-            Player target, List<Wall> walls, Texture2D enemyAnimatedTexturesheet)
+        public Enemy(Vector2 position, List<Vector2> roamLocations, float detectionRadius, float movingSpeed, Texture2D enemyAnimatedTexturesheet, Map map)
             : this(position, roamLocations, detectionRadius)
         {
             this.enemyAnimatedTexturesheet = enemyAnimatedTexturesheet;
@@ -185,11 +184,11 @@ namespace FinalProject
             this.speed = movingSpeed;
             this.baseSpeed = movingSpeed;
             isForward = 0; // Move forward
-            this.target = target;
-            this.walls = walls;
+            this.target = map.Player;
             RoamDetectionTrigger = new CircleCollider(this, new Vector2(widthOfSingleSprite / 2, enemyAnimatedTexturesheet.Height / 2), detectionRadius, true);
-            playerDetectionLink = new LineCollider(this, new Vector2(widthOfSingleSprite / 2, enemyAnimatedTexturesheet.Height / 2), target.Position);
+            DetectionLink = new LineCollider(this, new Vector2(widthOfSingleSprite / 2, enemyAnimatedTexturesheet.Height / 2), target.Position);
             ChaseStartDistance = detectionRadius - 250;
+            this.map = map;
         }
 
         //Methods
@@ -258,33 +257,51 @@ namespace FinalProject
             {
                 case EnemyState.RoamingState:
                     System.Diagnostics.Debug.WriteLine("Roaming State");
+
                     //Check if the player is enter the detection range
-                    //Still needs to add stone detection
                     if (RoamDetectionTrigger.CheckCollision(target))
                     {
-                        isDetected = true;
-                        target.SetAfraidState();
-                        foreach (Wall wall in walls)
-                        {
-                            if (playerDetectionLink.CheckCollision(wall))
-                            {
-                                isDetected = false;
-                                System.Diagnostics.Debug.WriteLine($"{wall.Position}");
-                            }
-                        }
-                        if(isDetected)
+                        DetectionLink.EndPosition = target.Position;
+                        if (WallDetection()) // IF there is no wall between enemy and player
                         {
                             //System.Diagnostics.Debug.WriteLine("Dececting");
+                            target.SetAfraidState();
                             movingTowards = new Vector2(target.Position.X - this.displayRectangle.Width /2,
                                 target.Position.Y - this.displayRectangle.Height /2);
                             System.Diagnostics.Debug.WriteLine($"Start to investigate {movingTowards}");
                             currentState = EnemyState.InvestigateState;
                         }
                     }
-                   
 
+                    // Stone detection function
+                    foreach (Stone stone in map.Stones)
+                    {
+                        // Check if the stone has been investigated
+                        if (!stone.IsInvestigated)
+                        {
+                            // Check uninvestigated stone is in the roam detection range
+                            if (RoamDetectionTrigger.CheckCollision(stone))
+                            {
+                                // Set the Detection link
+                                DetectionLink.EndPosition = stone.Position;
+                                // Check the wall between stone and enemy
+                                if (WallDetection())
+                                {
+                                    // Set up moving position
+                                    movingTowards = new Vector2(stone.Position.X - this.displayRectangle.Width / 2,
+                                stone.Position.Y - this.displayRectangle.Height / 2);
+                                    // set the stone as investigated
+                                    stone.IsInvestigated = true;
+                                    // Change state
+                                    currentState = EnemyState.InvestigateState;
+                                }
+                            }
+                        }
+                    }
+
+                    // !TODO: Roaming: Now only has the multiple locations roaming function
                     //No locations (Stand still)
-                    if(roamLocations == null)
+                    if (roamLocations == null)
                     {
                         
                     }
@@ -391,9 +408,9 @@ namespace FinalProject
                         if (RoamDetectionTrigger.CheckCollision(target))
                         {
                             isDetected = true;
-                            foreach (Wall wall in walls)
+                            foreach (Wall wall in map.Walls)
                             {
-                                if (playerDetectionLink.CheckCollision(wall))
+                                if (DetectionLink.CheckCollision(wall))
                                 {
                                     isDetected = false;
                                     currentState = EnemyState.RoamingState;
@@ -465,9 +482,9 @@ namespace FinalProject
                         if (RoamDetectionTrigger.CheckCollision(target))
                         {
                             isDetected = true;
-                            foreach (Wall wall in walls)
+                            foreach (Wall wall in map.Walls)
                             {
-                                if (playerDetectionLink.CheckCollision(wall))
+                                if (DetectionLink.CheckCollision(wall))
                                 {
                                     isDetected = false;
                                     currentState = EnemyState.InvestigateState;
@@ -522,9 +539,9 @@ namespace FinalProject
 
                     //Change speed if wall between enemy and player
                     bool hitWall = false;
-                    foreach(Wall wall in walls)
+                    foreach(Wall wall in map.Walls)
                     {
-                        if (playerDetectionLink.CheckCollision(wall))
+                        if (DetectionLink.CheckCollision(wall))
                         {
                             speed = baseSpeed / 2f;
                             hitWall = true;
@@ -553,7 +570,7 @@ namespace FinalProject
             //This updates the enemy/player link as well as the last seen position if the player is in vision
             if (target != null)
             {
-                playerDetectionLink.EndPosition = target.Position;
+                DetectionLink.EndPosition = target.Position;
                 //playerDetectionLink.Position = _position;
                 //SOME SORT OF DETECTION OF LINES COLLISION WITH MAP OBJECTS
                 //playerDetectionLink.CheckCollision();
@@ -561,7 +578,7 @@ namespace FinalProject
                 //if no collision with map objects
                 if (true)
                 {
-                    lastSeenPosition = playerDetectionLink.EndPosition;
+                    lastSeenPosition = DetectionLink.EndPosition;
                 }
             }
 
@@ -579,7 +596,7 @@ namespace FinalProject
             this.target = p;
             currentState = EnemyState.InvestigateState;
             p.SetAfraidState();
-            this.playerDetectionLink = new LineCollider(_position, p.Position);
+            this.DetectionLink = new LineCollider(_position, p.Position);
         }
 
         /// <summary>
@@ -685,14 +702,30 @@ namespace FinalProject
             currentState = EnemyState.EndGameChaseState;
         }
 
+        // Helper Methods
+
         public void StoneDetection(Stone stone)
         {
 
         }
 
-        public void WallDetection(Stone stone)
-        {
 
+        /// <summary>
+        /// Detect if wall is between the detection line
+        /// </summary>
+        /// <returns>Return true if there is no wall between the detection link</returns>
+        public bool WallDetection()
+        {
+            foreach (Wall wall in map.Walls)
+            {
+                if (DetectionLink.CheckCollision(wall))
+                {
+
+                    System.Diagnostics.Debug.WriteLine($"{wall.Position}");
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }
