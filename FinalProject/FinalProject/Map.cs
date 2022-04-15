@@ -17,6 +17,12 @@ using System.IO;
 
 namespace FinalProject
 {
+    enum Level
+    {
+        Tutorial,
+        Test1
+    }
+
     class Map
     {
         //Fields
@@ -93,6 +99,7 @@ namespace FinalProject
             egcTimer = 30;
         }
 
+        #region Draw Loop
         //Methods
         /// <summary>
         /// This method is used to show the enemy.
@@ -112,7 +119,7 @@ namespace FinalProject
                 batch.Draw(circleTexture,
                     new Rectangle((int)enemy.Position.X - (int)enemy.DetectionRadius + enemy.DisplayRectangle.Width / 2,
                     (int)enemy.Position.Y - (int)enemy.DetectionRadius + enemy.DisplayRectangle.Height / 2,
-                    (int)enemy.DetectionRadius *2 , (int)enemy.DetectionRadius *2), Color.White);
+                    (int)enemy.DetectionRadius * 2, (int)enemy.DetectionRadius * 2), Color.White);
                 batch.Draw(circleTexture,
                     new Rectangle((int)enemy.Position.X - (int)enemy.ChaseStartDistance + enemy.DisplayRectangle.Width / 2,
                     (int)enemy.Position.Y - (int)enemy.ChaseStartDistance + enemy.DisplayRectangle.Height / 2,
@@ -120,9 +127,8 @@ namespace FinalProject
 
             }
 
-           
-        }
 
+        }
 
         /// <summary>
         /// Draws all elements of the map, including the player and any walls
@@ -160,6 +166,7 @@ namespace FinalProject
             batch.Draw(_tileTexture, batch.GraphicsDevice.Viewport.Bounds, Color.White);
             batch.End();
         }
+        #endregion
 
         /// <summary>
         /// Updates enemy positions and stone throws.
@@ -199,7 +206,7 @@ namespace FinalProject
                         stone.Position = hit.HitPoint + hit.Normal * ((CircleCollider)stone.PhysicsCollider).Radius;
                         stone.Bounce(hit.Normal);
                     }
-                    if(isEGCActive && decayTimer <= 0)
+                    if (isEGCActive && decayTimer <= 0)
                     {
                         if (stone.TargetScale > 0)
                         {
@@ -221,24 +228,42 @@ namespace FinalProject
             //EGC Stuff
             if (isEGCActive)
             {
-                if(decayTimer < 0)
+                if (decayTimer < 0)
                 {
                     selected.TargetScale = 0;
                     decayTimer = stoneDecayTime;
                 }
                 decayTimer -= dTime;
                 egcTimer -= dTime;
-                if(egcTimer < 0)
+                if (egcTimer < 0)
                 {
                     //Trigger win state
                 }
             }
         }
 
+
+        public void LoadLevel(Level level)
+        {
+            switch (level)
+            {
+                case Level.Tutorial:
+                    LoadTutorial();
+                    break;
+
+                case Level.Test1:
+                    LoadFromFile("testLevel.lvl");
+                    break;
+
+                default:
+                    LoadTutorial();
+                    break;
+            }
+        }
+
         public void LoadTutorial()
         {
             ResetMap();
-
             _width = 1920;
             _height = 1080;
 
@@ -270,7 +295,6 @@ namespace FinalProject
             SetupPenumbraLighting();
         }
 
-
         /// <summary>
         /// 
         /// </summary>
@@ -287,7 +311,8 @@ namespace FinalProject
             ResetMap();
 
             //Create reader and grab the data
-            StreamReader reader = new StreamReader(filepath);
+            string fullPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "..\\..\\..\\..\\Content\\" + filepath;
+            StreamReader reader = new StreamReader(fullPath);
             String data = reader.ReadToEnd();
             reader.Close();
             //Close the reader
@@ -312,12 +337,12 @@ namespace FinalProject
                 switch (tileData[0])
                 {
                     case "wall":
-                        Walls.Add(new Wall(new Vector2(x + (w/2), y + (h/2)), w, h));
+                        Walls.Add(new Wall(new Vector2(x + (w / 2), y + (h / 2)), w, h));
                         break;
                     case "enemy":
                         break;
                     case "spawn":
-                        Player.Position = new Vector2(x + (indexToPixels / 2), y + (indexToPixels/2));
+                        Player.Position = new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2));
                         break;
                     case "objective":
                         break;
@@ -325,7 +350,7 @@ namespace FinalProject
                         break;
                 }
 
-                
+
 
                 //Set up for the roam points, do nothing if empty
                 if (!tileData[5].Equals("empty"))
@@ -347,7 +372,7 @@ namespace FinalProject
                     //_enemies.Add(new Enemy(new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2)), roamPoints2, 800, _enemyTexture, 150, 150, 100, Player, _walls));
                     _enemies.Add(new Enemy(new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2)), roamPoints2, 650, 100, _content.Load<Texture2D>("EnemySpriteSheet"), this));
                 }
-                
+
             }
 
 
@@ -368,19 +393,6 @@ namespace FinalProject
                 e.StartEndGameChaseSequence();
             }
             */
-        }
-
-        /// <summary>
-        /// Clears all map data
-        /// </summary>
-        private void ResetMap()
-        {
-            Walls.Clear();
-            _enemies.Clear();
-            _stoneRevealAreas.Clear();
-            _width = _defaultWidth;
-            _height = _defaultHeight;
-            totalStoneNumber = 10;
         }
 
         private void SetupPenumbraLighting()
@@ -426,6 +438,20 @@ namespace FinalProject
             }
             _player.SetChaseState();
             isEGCActive = true;
+        }
+
+        /// <summary>
+        /// Clears all map data
+        /// </summary>
+        private void ResetMap()
+        {
+            _player.Position = new Vector2(500, 500);
+            _walls.Clear();
+            _enemies.Clear();
+            _stoneRevealAreas.Clear();
+            _width = _defaultWidth;
+            _height = _defaultHeight;
+            totalStoneNumber = 10;
         }
     }
 }

@@ -40,10 +40,13 @@ namespace FinalProject
         private KeyboardState ks;
         private KeyboardState previousKs;
 
-        Map map;
-        GraphicsDeviceManager _graphics;
+        // Map
+        private Map map;
+        private Level currentLevel;
         private Camera2D _camera;
 
+        // Graphics
+        private GraphicsDeviceManager graphics;
 
         //Texture2D for menu and buttons
         private Texture2D menuNoLight_Texture;
@@ -82,7 +85,7 @@ namespace FinalProject
         //Constructors
         public GameStateManager(ContentManager content, PenumbraComponent penumbra, GraphicsDeviceManager graphics, Camera2D camera)
         {
-            _graphics = graphics;
+            this.graphics = graphics;
             _camera = camera;
             isGodMode = false;
 
@@ -99,10 +102,10 @@ namespace FinalProject
 
             instructionButton.Click += Click_ToInstruction;
             optionButton.Click += Click_ToOption;
-            playButton.Click += Click_ToRestartPlay;
+            playButton.Click += Click_ToPlay;
             backMainButton.Click += Click_ToMenu;
             mainMenuButton.Click += Click_ToMenu;
-            backGameButton.Click += Click_ToPlay;
+            backGameButton.Click += Click_ToRestartPlay;
             volumeSlider.Click += Click_UpdateVolume;
 
             buttons.Add(playButton);
@@ -112,8 +115,7 @@ namespace FinalProject
             // Load map
             map = new Map(penumbra, content, camera);
             //map.LoadTutorial();
-            String fileName = "testLevel.lvl";
-            map.LoadFromFile(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "..\\..\\..\\..\\Content\\" + fileName);
+            map.LoadLevel(Level.Test1);
         }
 
         //Methods
@@ -159,6 +161,7 @@ namespace FinalProject
             switch (currentState)
             {
                 case GameState.PlayState:
+                case GameState.PauseState:
                     map.DrawBackground(batch, tranformMatrix);
                     break;
             }
@@ -235,20 +238,20 @@ namespace FinalProject
                     // Task Hub
                     // Update the UI based on the center of the screen (local position)
                     batch.DrawString(syneTactileFont24, "Mission Hud",
-                       new Vector2(map.Player.Position.X + 1730 - _graphics.PreferredBackBufferWidth / 2,
-                       map.Player.Position.Y + 50 - _graphics.PreferredBackBufferHeight / 2), Color.White);
+                       new Vector2(map.Player.Position.X + 1730 - graphics.PreferredBackBufferWidth / 2,
+                       map.Player.Position.Y + 50 - graphics.PreferredBackBufferHeight / 2), Color.White);
                    
                     batch.DrawString(syneTactileFont24, "Objective: Walk Around",
-                        new Vector2(map.Player.Position.X + 1580 - _graphics.PreferredBackBufferWidth / 2,
-                        map.Player.Position.Y + 100 - _graphics.PreferredBackBufferHeight / 2), Color.White);
+                        new Vector2(map.Player.Position.X + 1580 - graphics.PreferredBackBufferWidth / 2,
+                        map.Player.Position.Y + 100 - graphics.PreferredBackBufferHeight / 2), Color.White);
 
                     // Stone
-                    batch.Draw(_stoneUITexture, new Rectangle((int)map.Player.Position.X + 40 - _graphics.PreferredBackBufferWidth / 2,
-                        (int)map.Player.Position.Y + 990 - _graphics.PreferredBackBufferHeight / 2, 50, 50), Color.White);
+                    batch.Draw(_stoneUITexture, new Rectangle((int)map.Player.Position.X + 40 - graphics.PreferredBackBufferWidth / 2,
+                        (int)map.Player.Position.Y + 990 - graphics.PreferredBackBufferHeight / 2, 50, 50), Color.White);
                     
                     batch.DrawString(syneTactileFont48, $" x {map.TotalStoneNumber}",
-                      new Vector2(map.Player.Position.X + 100 - _graphics.PreferredBackBufferWidth / 2,
-                      map.Player.Position.Y + 975 - _graphics.PreferredBackBufferHeight / 2), Color.White);
+                      new Vector2(map.Player.Position.X + 100 - graphics.PreferredBackBufferWidth / 2,
+                      map.Player.Position.Y + 975 - graphics.PreferredBackBufferHeight / 2), Color.White);
 
                     // Timer 
 
@@ -257,18 +260,18 @@ namespace FinalProject
                 case GameState.PauseState:
                     // The game UI but masked
                     batch.DrawString(syneTactileFont24, "Mission Hud", 
-                        new Vector2(map.Player.Position.X + 1730 - _graphics.PreferredBackBufferWidth / 2,
-                        map.Player.Position.Y + 50 - _graphics.PreferredBackBufferHeight / 2), Color.White);
+                        new Vector2(map.Player.Position.X + 1730 - graphics.PreferredBackBufferWidth / 2,
+                        map.Player.Position.Y + 50 - graphics.PreferredBackBufferHeight / 2), Color.White);
                     batch.DrawString(syneTactileFont24, "Objective: Walk Around", 
-                        new Vector2(map.Player.Position.X + 1580 - _graphics.PreferredBackBufferWidth / 2,
-                        map.Player.Position.Y + 100 - _graphics.PreferredBackBufferHeight / 2), Color.White);
+                        new Vector2(map.Player.Position.X + 1580 - graphics.PreferredBackBufferWidth / 2,
+                        map.Player.Position.Y + 100 - graphics.PreferredBackBufferHeight / 2), Color.White);
 
                     batch.Draw(pauseMask, Vector2.Zero, Color.White);
                     
                     // Local position based on the camera
                     batch.DrawString(syneTactileFont48, "Volume", 
-                        new Vector2(map.Player.Position.X + 850 - _graphics.PreferredBackBufferWidth/2,
-                        map.Player.Position.Y + 280 - _graphics.PreferredBackBufferHeight/2), Color.White);
+                        new Vector2(map.Player.Position.X + 850 - graphics.PreferredBackBufferWidth/2,
+                        map.Player.Position.Y + 280 - graphics.PreferredBackBufferHeight/2), Color.White);
                     mainMenuButton.Draw(batch);
                     backGameButton.Draw(batch);
                     volumeSlider.Draw(batch);
@@ -380,6 +383,7 @@ namespace FinalProject
                     if(map.Player.CurrentState == PlayerState.DeadState)
                     {
                         currentState = GameState.GameOverState;
+                        map.Player.CurrentState = default;
                         SFXManager.StopAllInstances();
                     }
 
@@ -435,21 +439,21 @@ namespace FinalProject
             gameOver_Texture = content.Load<Texture2D>("GameEnd");
             gameInstruction_Texture = content.Load<Texture2D>("InstructionPage");
 
-            playButton = new Button(content.Load<Texture2D>("Controls/Play"), content.Load<Texture2D>("Controls/Play_hover"), 1500, 700, _graphics);
-            optionButton = new Button(content.Load<Texture2D>("Controls/Options"), content.Load<Texture2D>("Controls/Options_hover"), 1500, 800, _graphics);
-            instructionButton = new Button(content.Load<Texture2D>("Controls/Instruction"), content.Load<Texture2D>("Controls/Instruction_hover"), 1500, 900, _graphics);
+            playButton = new Button(content.Load<Texture2D>("Controls/Play"), content.Load<Texture2D>("Controls/Play_hover"), 1500, 700, graphics);
+            optionButton = new Button(content.Load<Texture2D>("Controls/Options"), content.Load<Texture2D>("Controls/Options_hover"), 1500, 800, graphics);
+            instructionButton = new Button(content.Load<Texture2D>("Controls/Instruction"), content.Load<Texture2D>("Controls/Instruction_hover"), 1500, 900, graphics);
 
             Texture2D back = content.Load<Texture2D>("Controls/Back");
             Texture2D back_Hover = content.Load<Texture2D>("Controls/Back_Hover");
-            backMainButton = new Button(back, back_Hover, _graphics.PreferredBackBufferWidth / 2 - back.Width / 2, 700, _graphics);
-            backGameButton = new Button(back, back_Hover, _graphics.PreferredBackBufferWidth / 2 - back.Width / 2, 650, _graphics, camera);
+            backMainButton = new Button(back, back_Hover, graphics.PreferredBackBufferWidth / 2 - back.Width / 2, 700, graphics);
+            backGameButton = new Button(back, back_Hover, graphics.PreferredBackBufferWidth / 2 - back.Width / 2, 650, graphics, camera);
             Texture2D mainMain = content.Load<Texture2D>("Controls/MainMenu");
             Texture2D mainMain_Hover = content.Load<Texture2D>("Controls/MainMenu_hover");
-            mainMenuButton = new Button(mainMain, mainMain_Hover, _graphics.PreferredBackBufferWidth / 2 - mainMain.Width / 2, 800, _graphics, camera);
+            mainMenuButton = new Button(mainMain, mainMain_Hover, graphics.PreferredBackBufferWidth / 2 - mainMain.Width / 2, 800, graphics, camera);
 
             Texture2D sliderWidget = content.Load<Texture2D>("SliderBackground");
             Texture2D sliderIndicator = content.Load<Texture2D>("SliderIndicator");
-            volumeSlider = new Slider(sliderIndicator, sliderWidget, _graphics.PreferredBackBufferWidth / 2 - sliderWidget.Width / 2, 400, 60, 100, _graphics, camera);
+            volumeSlider = new Slider(sliderIndicator, sliderWidget, graphics.PreferredBackBufferWidth / 2 - sliderWidget.Width / 2, 400, 60, 100, graphics, camera);
             
             syneTactileFont24 = content.Load<SpriteFont>("SyneTactile24");
             syneTactileFont48 = content.Load<SpriteFont>("SyneTactile48");
@@ -467,7 +471,7 @@ namespace FinalProject
         {
             currentState = GameState.InstructionState;
             SFXManager.StopInstancedSound(Sounds.FLAmbience);
-            backMainButton.ButtonRectangle = new Rectangle(_graphics.PreferredBackBufferWidth / 2 - backMainButton.ButtonRectangle.Width / 2, 900,
+            backMainButton.ButtonRectangle = new Rectangle(graphics.PreferredBackBufferWidth / 2 - backMainButton.ButtonRectangle.Width / 2, 900,
                 backMainButton.ButtonRectangle.Width, backMainButton.ButtonRectangle.Height);
         }
 
@@ -482,12 +486,12 @@ namespace FinalProject
             SFXManager.LoopInstancedSound(Sounds.SAmbience, false);
             SFXManager.LoopInstancedSound(Sounds.WNAmb, false);
             volumeSlider.UpdatePosition(new Vector2(
-                _camera.Position.X + _graphics.PreferredBackBufferWidth/2,
-                _camera.Position.Y + _graphics.PreferredBackBufferHeight/2));
+                _camera.Position.X + graphics.PreferredBackBufferWidth/2,
+                _camera.Position.Y + graphics.PreferredBackBufferHeight/2));
             currentState = GameState.OptionState;
             SFXManager.StopInstancedSound(Sounds.FLAmbience);
 
-            backMainButton.ButtonRectangle= new Rectangle(_graphics.PreferredBackBufferWidth / 2 - backMainButton.ButtonRectangle.Width / 2, 700, 
+            backMainButton.ButtonRectangle= new Rectangle(graphics.PreferredBackBufferWidth / 2 - backMainButton.ButtonRectangle.Width / 2, 700, 
                 backMainButton.ButtonRectangle.Width, backMainButton.ButtonRectangle.Height);
         }
 
@@ -500,8 +504,10 @@ namespace FinalProject
         {
             SFXManager.LoopInstancedSound(Sounds.HBNormal, true);
             SFXManager.LoopInstancedSound(Sounds.WNAmb, false);
-            currentState = GameState.PlayState;
             SFXManager.StopInstancedSound(Sounds.FLAmbience);
+            currentState = GameState.PlayState;
+            currentLevel = Level.Test1;
+            map.LoadLevel(currentLevel);
         }
 
         /// <summary>
@@ -512,11 +518,9 @@ namespace FinalProject
         public void Click_ToRestartPlay(object sender, System.EventArgs e)
         {
             SFXManager.LoopInstancedSound(Sounds.HBNormal, true);
-            //String fileName = "testLevel.lvl";
-            //map.LoadFromFile(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "..\\..\\..\\..\\Content\\" + fileName);
-            currentState = GameState.PlayState;
             SFXManager.StopInstancedSound(Sounds.FLAmbience);
             SFXManager.LoopInstancedSound(Sounds.WNAmb, false);
+            currentState = GameState.PlayState;
         }
 
         /// <summary>

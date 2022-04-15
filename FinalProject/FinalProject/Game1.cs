@@ -137,8 +137,10 @@ namespace FinalProject
             _penumbra.Transform = transMatrix;
             GraphicsDevice.Clear(Color.White);
 
+            // Draws background depending on game state
             _gameStateManager.DrawBackground(_batch, transMatrix);
 
+            // Draws level
             _batch.Begin(transformMatrix: transMatrix);
             _gameStateManager.Display(_batch);
             _batch.End();
