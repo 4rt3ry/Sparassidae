@@ -80,7 +80,7 @@ namespace FinalProject
         public Map Map => map;
 
         //Constructors
-        public GameStateManager(ContentManager content, PenumbraComponent penumbra, GraphicsDeviceManager graphics,Camera2D camera)
+        public GameStateManager(ContentManager content, PenumbraComponent penumbra, GraphicsDeviceManager graphics, Camera2D camera)
         {
             _graphics = graphics;
             _camera = camera;
@@ -150,6 +150,16 @@ namespace FinalProject
                     break;
                 case GameState.GameOverState:
 
+                    break;
+            }
+        }
+
+        public void DrawBackground(SpriteBatch batch, Matrix tranformMatrix)
+        {
+            switch (currentState)
+            {
+                case GameState.PlayState:
+                    map.DrawBackground(batch, tranformMatrix);
                     break;
             }
         }
