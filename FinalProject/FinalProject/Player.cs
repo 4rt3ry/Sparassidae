@@ -374,5 +374,27 @@ namespace FinalProject
         {
             currentState = PlayerState.DeadState;
         }
+
+        public void Reset()
+        {
+            currentState = PlayerState.WalkingState;
+
+            _position = new Vector2(500, 500);
+
+            //Creaet the spotlight
+            //Now we only use default spotlight, we might add customed one in the future
+            Flashlight = new Spotlight
+            {
+                Position = this.Position,
+                Scale = new Vector2(800), //Range of the light source
+                ShadowType = ShadowType.Solid,
+                Color = new Color(0.45f, 0.45f, 0.44f),
+                ConeDecay = 2.0f
+            };
+            targetScale = 650;
+
+            sighTimer = 3.1f;
+            alertTimer = 2f;
+        }
     }
 }

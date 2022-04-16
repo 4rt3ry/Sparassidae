@@ -466,7 +466,7 @@ namespace FinalProject
         /// </summary>
         private void ResetMap()
         {
-            _player.Position = new Vector2(500, 500);
+            _player.Reset();
             _walls.Clear();
             _enemies.Clear();
             _stoneRevealAreas.Clear();

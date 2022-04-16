@@ -43,6 +43,7 @@ namespace FinalProject
         // Map
         private Map map;
         private Level currentLevel;
+        private bool levelLoaded;
         private Camera2D _camera;
 
         // Graphics
@@ -114,8 +115,7 @@ namespace FinalProject
 
             // Load map
             map = new Map(penumbra, content, camera);
-            //map.LoadTutorial();
-            map.LoadLevel(Level.Test1);
+            currentLevel = Level.Test1;
         }
 
         //Methods
@@ -383,7 +383,7 @@ namespace FinalProject
                     if(map.Player.CurrentState == PlayerState.DeadState)
                     {
                         currentState = GameState.GameOverState;
-                        map.Player.CurrentState = default;
+                        levelLoaded = false;
                         SFXManager.StopAllInstances();
                     }
 
@@ -506,8 +506,12 @@ namespace FinalProject
             SFXManager.LoopInstancedSound(Sounds.WNAmb, false);
             SFXManager.StopInstancedSound(Sounds.FLAmbience);
             currentState = GameState.PlayState;
-            currentLevel = Level.Test1;
-            map.LoadLevel(currentLevel);
+
+            if (!levelLoaded)
+            {
+                map.LoadLevel(currentLevel);
+                levelLoaded = true;
+            }
         }
 
         /// <summary>
