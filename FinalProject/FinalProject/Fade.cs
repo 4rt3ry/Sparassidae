@@ -18,8 +18,10 @@ namespace FinalProject
         private float transparency = 1f;
         bool faded = false;
         bool finishedIn = false;
+        bool faded2 = false;
         float fadeInTime = 1;
         float fadeOutTime = 1;
+        GameState prevState;
         SpriteBatch batch;
 
         public Fade()
@@ -33,6 +35,11 @@ namespace FinalProject
 
         public void Update(float dTime)
         {
+            if (faded == true)
+            {
+                transparency = 0;
+                return;
+            }
             float scale = (1/fadeInTime);
             if (finishedIn == true)
             {
@@ -40,38 +47,58 @@ namespace FinalProject
             }
             dTime = dTime * scale;
             gameTime += dTime;
-            if (transparency <= 1 && finishedIn == false )
+            if (transparency <= 1f && finishedIn == false )
             {
                 transparency -= dTime;
                 if (transparency <= 0)
                 {
-
+                    transparency = 0;
                     finishedIn = true;
+                    //faded = true;
                 }
             }
-            else if (finishedIn == true)
+            else if (finishedIn == true && faded2 == false)
             {
+                System.Diagnostics.Debug.WriteLine("adding");
+
                 transparency += dTime;
-                if (transparency >= 1)
+                if (transparency >= 1f)
+                {
+                    faded2 = true;
+                }
+            }
+            if (transparency >= 0 && faded2 == true)
+            {
+                transparency -= dTime;
+                if (transparency <= 0 )
                 {
                     faded = true;
                 }
             }
-            System.Diagnostics.Debug.WriteLine(transparency);
+            System.Diagnostics.Debug.WriteLine("trans is " + transparency);
 
         }
 
-        public void StartFade(SpriteBatch batch, float fadeInTime, float fadeOutTime)
+        public void StartFade(SpriteBatch batch, float fadeInTime, float fadeOutTime,GameState currentState)
         {
+            //System.Diagnostics.Debug.WriteLine(currentState.ToString() + faded);
+            if (currentState != prevState && faded == true) {
+                System.Diagnostics.Debug.WriteLine("new" + currentState.ToString() + prevState.ToString());
+
+                faded = false;
+                finishedIn = false;
+                prevState = currentState;
+                transparency = 1f;
+            }
             if (faded == true)
             {
                 return;
             }
-
+            prevState = currentState;
             this.fadeInTime = fadeInTime;
             this.fadeOutTime = fadeOutTime;
 
-            batch.Draw(fade_Texture, new Rectangle(0, 0, 5000, 5000), Color.Black* transparency );
+            batch.Draw(texture: fade_Texture, destinationRectangle: new Rectangle(0, 0, 5000, 5000), color: Color.Black* transparency,layerDepth:1f,origin: new Vector2(0,0),sourceRectangle: new Rectangle(0, 0, 5000, 5000),rotation:0f,effects:SpriteEffects.None);
 
         }
 

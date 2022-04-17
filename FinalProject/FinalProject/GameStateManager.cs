@@ -70,6 +70,8 @@ namespace FinalProject
         private Texture2D _stoneUITexture;
         private Fade _fadeTransition;
 
+        private SpriteBatch _batch;
+
         //Font
         private SpriteFont syneTactileFont24;
         private SpriteFont syneTactileFont48;
@@ -112,6 +114,8 @@ namespace FinalProject
             buttons.Add(playButton);
             buttons.Add(optionButton);
             buttons.Add(instructionButton);
+            _fadeTransition = new Fade();
+            _fadeTransition.LoadContent(content);
 
             // Load map
             map = new Map(penumbra, content, camera);
@@ -127,6 +131,7 @@ namespace FinalProject
         public void Display(SpriteBatch batch)
         {
             //Current state actions
+            _batch = batch;
             switch (currentState)
             {
                 case GameState.IntroState:
@@ -174,6 +179,8 @@ namespace FinalProject
         public void DrawUI(SpriteBatch batch)
         {
             //Current state actions
+            _fadeTransition.StartFade(_batch, 2f, 2f, currentState);
+
             switch (currentState)
             {
                 case GameState.IntroState:
@@ -221,7 +228,8 @@ namespace FinalProject
                     break;
 
                 case GameState.PlayState:
-                    if(isGodMode)
+
+                    if (isGodMode)
                     {
                         map.DrawTest(batch);
                         if(map.TotalStoneNumber == 0)
@@ -275,6 +283,7 @@ namespace FinalProject
                     mainMenuButton.Draw(batch);
                     backGameButton.Draw(batch);
                     volumeSlider.Draw(batch);
+
                     break;
 
                 case GameState.GameOverState:
@@ -292,6 +301,7 @@ namespace FinalProject
         public void Update(float dTime, PenumbraComponent penumbra)
         {
             ks = Keyboard.GetState();
+            _fadeTransition.Update(dTime);
 
             //Current state actions
             switch (currentState)
@@ -301,7 +311,9 @@ namespace FinalProject
                     introTimer -= dTime;
                     if (introTimer <= 0)
                     {
+
                         currentState = GameState.MenuState;
+
                     }
 
                     // Update lighting effects after buttons have been updated
@@ -370,6 +382,7 @@ namespace FinalProject
                         backGameButton.UpdatePosition(map.Player.Position);
 
                         currentState = GameState.PauseState;
+
                     }
 
                     // Update the god mode

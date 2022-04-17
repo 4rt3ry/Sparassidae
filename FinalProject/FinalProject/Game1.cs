@@ -40,7 +40,7 @@ namespace FinalProject
         {
             _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1080;
-            _graphics.IsFullScreen = true;
+            //_graphics.IsFullScreen = true;
             _graphics.HardwareModeSwitch = true;
             _graphics.ApplyChanges();
 
@@ -149,13 +149,12 @@ namespace FinalProject
             _penumbra.Draw(gameTime);
 
             // Draw stuff that is not affected by lighting (UI, etc).
-            _batch.Begin(transformMatrix: transMatrix);
+            _batch.Begin(transformMatrix: transMatrix,sortMode: SpriteSortMode.FrontToBack);
 
             ShapeBatch.Begin(GraphicsDevice);
             _gameStateManager.DrawUI(_batch);
-            _fadeTransition.StartFade(_batch, 1f, 1f);
+            _fadeTransition.StartFade(_batch, 1f, 1f,GameState.InstructionState);
             ShapeBatch.End();
-
             _batch.End();
 
             base.Draw(gameTime);
