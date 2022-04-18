@@ -26,7 +26,7 @@ namespace FinalProject
         private int y_value;
 
         private GraphicsDeviceManager graphics;
-        private Camera2D camera;
+        //private Camera2D camera;
 
         private Texture2D buttonNorm;
         private Texture2D buttonHover;
@@ -73,7 +73,7 @@ namespace FinalProject
           int x_value, int y_value, GraphicsDeviceManager graphics, Camera2D camera)
             : this(buttonNorm, buttonHover, x_value, y_value, graphics)
         {
-            this.camera = camera;
+            //this.camera = camera;
         }
 
         //Methods
@@ -107,10 +107,10 @@ namespace FinalProject
 
             isHovering = false;
 
-            if (camera != null)
-            {
-                mousePosition = camera.ScreenToWorldSpace(mousePosition);
-            }
+            //if (camera != null)
+            //{
+            //    mousePosition = camera.ScreenToWorldSpace(mousePosition);
+            //}
 
             // Check if the mouse is in/ovre the button
             if (buttonRectangle.Contains(mousePosition.X, mousePosition.Y))
@@ -150,11 +150,11 @@ namespace FinalProject
         /// Update the position based on the center of the camera
         /// </summary>
         /// <param name="center"></param>
-        public void UpdatePosition(Vector2 center)
-        {
-            buttonRectangle = new Rectangle(
-                (int)center.X + x_value, (int)center.Y + y_value,
-                buttonRectangle.Width, buttonRectangle.Height);
-        }
+        //public void UpdatePosition(Vector2 center)
+        //{
+        //    buttonRectangle = new Rectangle(
+        //        (int)center.X + x_value, (int)center.Y + y_value,
+        //        buttonRectangle.Width, buttonRectangle.Height);
+        //}
     }
 }

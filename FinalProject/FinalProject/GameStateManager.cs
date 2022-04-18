@@ -58,7 +58,7 @@ namespace FinalProject
         private Texture2D black_Texture;
         private Texture2D gameOver_Texture;
         private Texture2D gameInstruction_Texture; // How to play the game
-        
+
         private Button playButton;
         private Button optionButton;
         private Button instructionButton;
@@ -221,7 +221,7 @@ namespace FinalProject
                     backMainButton.Draw(batch);
                     volumeSlider.Draw(batch);
                     // Test volume number 
-                    batch.DrawString(syneTactileFont48, "Volume", new Vector2 (850, 280), Color.White);
+                    batch.DrawString(syneTactileFont48, "Volume", new Vector2(850, 280), Color.White);
 
                     break;
 
@@ -235,39 +235,34 @@ namespace FinalProject
                     if (isGodMode)
                     {
                         map.DrawTest(batch);
-                        if(map.TotalStoneNumber == 0)
+                        if (map.TotalStoneNumber == 0)
                         {
                             map.TotalStoneNumber = 10;
                         }
                     }
 
-                    if(map.Stones != null)
+                    if (map.Stones != null)
                     {
                         System.Diagnostics.Debug.WriteLine(map.Stones.Count);
                     }
-                    
+
                     // Task Hub
                     // Update the UI based on the center of the screen (local position)
                     batch.DrawString(syneTactileFont24, "Mission Hud",
-                       new Vector2(map.Player.Position.X + 1730 - graphics.PreferredBackBufferWidth / 2,
-                       map.Player.Position.Y + 50 - graphics.PreferredBackBufferHeight / 2), Color.White);
-                   
+                       new Vector2(1730, 50), Color.White);
+
                     batch.DrawString(syneTactileFont24, "Objective: Walk Around",
-                        new Vector2(map.Player.Position.X + 1580 - graphics.PreferredBackBufferWidth / 2,
-                        map.Player.Position.Y + 100 - graphics.PreferredBackBufferHeight / 2), Color.White);
+                        new Vector2(1580, 100), Color.White);
 
                     // Stone
-                    batch.Draw(_stoneUITexture, new Rectangle((int)map.Player.Position.X + 40 - graphics.PreferredBackBufferWidth / 2,
-                        (int)map.Player.Position.Y + 990 - graphics.PreferredBackBufferHeight / 2, 50, 50), Color.White);
-                    
+                    batch.Draw(_stoneUITexture, new Rectangle(40, 990, 50, 50), Color.White);
+
                     batch.DrawString(syneTactileFont48, $" x {map.TotalStoneNumber}",
-                      new Vector2(map.Player.Position.X + 100 - graphics.PreferredBackBufferWidth / 2,
-                      map.Player.Position.Y + 975 - graphics.PreferredBackBufferHeight / 2), Color.White);
+                      new Vector2(100, 975), Color.White);
 
 
                     batch.DrawString(syneTactileFont24, "Press [P] to Pause",
-                        new Vector2(map.Player.Position.X + graphics.PreferredBackBufferWidth / 2 - 260, 
-                        map.Player.Position.Y + graphics.PreferredBackBufferHeight / 2 - 50),
+                        new Vector2(graphics.PreferredBackBufferWidth - 260, graphics.PreferredBackBufferHeight - 50),
                         Color.White);
 
                     // Timer 
@@ -276,19 +271,16 @@ namespace FinalProject
 
                 case GameState.PauseState:
                     // The game UI but masked
-                    batch.DrawString(syneTactileFont24, "Mission Hud", 
-                        new Vector2(map.Player.Position.X + 1730 - graphics.PreferredBackBufferWidth / 2,
-                        map.Player.Position.Y + 50 - graphics.PreferredBackBufferHeight / 2), Color.White);
-                    batch.DrawString(syneTactileFont24, "Objective: Walk Around", 
-                        new Vector2(map.Player.Position.X + 1580 - graphics.PreferredBackBufferWidth / 2,
-                        map.Player.Position.Y + 100 - graphics.PreferredBackBufferHeight / 2), Color.White);
+                    batch.DrawString(syneTactileFont24, "Mission Hud",
+                        new Vector2(1730, 50), Color.White);
+                    batch.DrawString(syneTactileFont24, "Objective: Walk Around",
+                        new Vector2(1580, 100), Color.White);
 
                     batch.Draw(pauseMask, Vector2.Zero, Color.White);
-                    
+
                     // Local position based on the camera
-                    batch.DrawString(syneTactileFont48, "Volume", 
-                        new Vector2(map.Player.Position.X + 850 - graphics.PreferredBackBufferWidth/2,
-                        map.Player.Position.Y + 280 - graphics.PreferredBackBufferHeight/2), Color.White);
+                    batch.DrawString(syneTactileFont48, "Volume",
+                        new Vector2(850, 280), Color.White);
                     mainMenuButton.Draw(batch);
                     backGameButton.Draw(batch);
                     volumeSlider.Draw(batch);
@@ -303,8 +295,7 @@ namespace FinalProject
                 case GameState.WinState:
                     //Write 'You Win' on the screen
                     batch.DrawString(syneTactileFont48, "You Won",
-                       new Vector2(map.Player.Position.X + 1730 - graphics.PreferredBackBufferWidth / 2,
-                       map.Player.Position.Y + 50 - graphics.PreferredBackBufferHeight / 2), Color.White);
+                       new Vector2(1730, 50), Color.White);
                     break;
             }
         }
@@ -392,10 +383,10 @@ namespace FinalProject
                     if (ks.IsKeyDown(Keys.P) && previousKs.IsKeyUp(Keys.P))
                     {
                         // Update all the local position of the UI in the pause state once
-                        volumeSlider.UpdatePosition(map.Player.Position);
-                        System.Diagnostics.Debug.WriteLine(map.Player.Position);
-                        mainMenuButton.UpdatePosition(map.Player.Position);
-                        backGameButton.UpdatePosition(map.Player.Position);
+                        //volumeSlider.UpdatePosition(map.Player.Position);
+                        //System.Diagnostics.Debug.WriteLine(map.Player.Position);
+                        //mainMenuButton.UpdatePosition(map.Player.Position);
+                        //backGameButton.UpdatePosition(map.Player.Position);
 
                         currentState = GameState.PauseState;
 
@@ -409,7 +400,7 @@ namespace FinalProject
                     }
 
                     // Check if the player is dead
-                    if(map.Player.CurrentState == PlayerState.DeadState)
+                    if (map.Player.CurrentState == PlayerState.DeadState)
                     {
                         currentState = GameState.GameOverState;
                         levelLoaded = false;
@@ -450,7 +441,7 @@ namespace FinalProject
                     break;
 
                 case GameState.WinState:
-                    if((ks.IsKeyDown(Keys.Space) && previousKs.IsKeyUp(Keys.Space)) || (ks.IsKeyDown(Keys.Enter) && previousKs.IsKeyUp(Keys.Enter)))
+                    if ((ks.IsKeyDown(Keys.Space) && previousKs.IsKeyUp(Keys.Space)) || (ks.IsKeyDown(Keys.Enter) && previousKs.IsKeyUp(Keys.Enter)))
                     {
                         Click_ToMenu(null, null);
                     }
@@ -490,7 +481,7 @@ namespace FinalProject
             Texture2D sliderWidget = content.Load<Texture2D>("SliderBackground");
             Texture2D sliderIndicator = content.Load<Texture2D>("SliderIndicator");
             volumeSlider = new Slider(sliderIndicator, sliderWidget, graphics.PreferredBackBufferWidth / 2 - sliderWidget.Width / 2, 400, 60, 100, graphics, camera);
-            
+
             syneTactileFont24 = content.Load<SpriteFont>("SyneTactile24");
             syneTactileFont48 = content.Load<SpriteFont>("SyneTactile48");
 
@@ -521,13 +512,13 @@ namespace FinalProject
             SFXManager.LoopInstancedSound(Sounds.HBNormal, false);
             SFXManager.LoopInstancedSound(Sounds.SAmbience, false);
             SFXManager.LoopInstancedSound(Sounds.WNAmb, false);
-            volumeSlider.UpdatePosition(new Vector2(
-                _camera.Position.X + graphics.PreferredBackBufferWidth/2,
-                _camera.Position.Y + graphics.PreferredBackBufferHeight/2));
+            //volumeSlider.UpdatePosition(new Vector2(
+            //    _camera.Position.X + graphics.PreferredBackBufferWidth / 2,
+            //    _camera.Position.Y + graphics.PreferredBackBufferHeight / 2));
             currentState = GameState.OptionState;
             SFXManager.StopInstancedSound(Sounds.FLAmbience);
 
-            backMainButton.ButtonRectangle= new Rectangle(graphics.PreferredBackBufferWidth / 2 - backMainButton.ButtonRectangle.Width / 2, 700, 
+            backMainButton.ButtonRectangle = new Rectangle(graphics.PreferredBackBufferWidth / 2 - backMainButton.ButtonRectangle.Width / 2, 700,
                 backMainButton.ButtonRectangle.Width, backMainButton.ButtonRectangle.Height);
         }
 
@@ -572,7 +563,7 @@ namespace FinalProject
         {
             SFXManager.StopAllInstances();
             currentState = GameState.MenuState;
-            if(isMenuLighted)
+            if (isMenuLighted)
                 SFXManager.LoopInstancedSound(Sounds.FLAmbience, false);
         }
 

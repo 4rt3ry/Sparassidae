@@ -40,7 +40,7 @@ namespace FinalProject
         public event EventHandler Click;
 
         private GraphicsDeviceManager graphics;
-        private Camera2D camera;
+        //private Camera2D camera;
 
         //Properties
 
@@ -93,7 +93,7 @@ namespace FinalProject
             double initialValue, double totalValue, GraphicsDeviceManager graphics, Camera2D camera) 
             : this(indicator, widget, x_value, y_value, initialValue, totalValue, graphics)
         {
-            this.camera = camera;
+            //this.camera = camera;
         }
 
         public Slider(Texture2D indicator, Texture2D widget, int x_value, int y_value,
@@ -107,7 +107,7 @@ namespace FinalProject
            double initialValue, double totalValue, GraphicsDeviceManager graphics, Camera2D camera, Texture2D icon)
            : this(indicator, widget, x_value, y_value, initialValue, totalValue, graphics)
         {
-            this.camera = camera;
+            //this.camera = camera;
             this.icon = icon;
         }
 
@@ -131,11 +131,11 @@ namespace FinalProject
             mousePosition = new Vector2(currentMouse.X, currentMouse.Y);
 
             //Check if the slider needs to be centered
-            if(camera != null)
-            {
-                System.Diagnostics.Debug.WriteLine("Slider's camera");
-                mousePosition = camera.ScreenToWorldSpace(mousePosition);
-            }
+            //if(camera != null)
+            //{
+            //    System.Diagnostics.Debug.WriteLine("Slider's camera");
+            //    mousePosition = camera.ScreenToWorldSpace(mousePosition);
+            //}
 
             if(sliderRec.Contains(mousePosition.X, mousePosition.Y))
             {
@@ -216,20 +216,20 @@ namespace FinalProject
         /// Update the slider position based on the center of the screen
         /// </summary>
         /// <param name="center"></param>
-        public void UpdatePosition(Vector2 center)
-        {
-            this.sliderRec = new Rectangle(
-                x_value + (int)center.X,  y_value + (int)center.Y,
-                sliderRec.Width, sliderRec.Height);
+        //public void UpdatePosition(Vector2 center)
+        //{
+        //    this.sliderRec = new Rectangle(
+        //        x_value + (int)center.X,  y_value + (int)center.Y,
+        //        sliderRec.Width, sliderRec.Height);
 
-            this.indicatorRec = new Rectangle(
-                (int)(percentage * this.sliderRec.Width) + this.SliderRec.X - this.indicatorRec.Width / 2,
-                this.sliderRec.Y + this.sliderRec.Height / 2 - this.indicatorRec.Height / 2,
-                this.indicatorRec.Width, this.indicatorRec.Height);
+        //    this.indicatorRec = new Rectangle(
+        //        (int)(percentage * this.sliderRec.Width) + this.SliderRec.X - this.indicatorRec.Width / 2,
+        //        this.sliderRec.Y + this.sliderRec.Height / 2 - this.indicatorRec.Height / 2,
+        //        this.indicatorRec.Width, this.indicatorRec.Height);
 
-            System.Diagnostics.Debug.WriteLine(sliderRec);
-            System.Diagnostics.Debug.WriteLine(currentMouse.Position);
-        }
+        //    System.Diagnostics.Debug.WriteLine(sliderRec);
+        //    System.Diagnostics.Debug.WriteLine(currentMouse.Position);
+        //}
 
     }
 

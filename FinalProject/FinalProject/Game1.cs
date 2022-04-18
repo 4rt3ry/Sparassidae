@@ -149,7 +149,7 @@ namespace FinalProject
             _penumbra.Draw(gameTime);
 
             // Draw stuff that is not affected by lighting (UI, etc).
-            _batch.Begin(transformMatrix: transMatrix,sortMode: SpriteSortMode.FrontToBack);
+            _batch.Begin(sortMode: SpriteSortMode.FrontToBack);
 
             ShapeBatch.Begin(GraphicsDevice);
             _gameStateManager.DrawUI(_batch);
