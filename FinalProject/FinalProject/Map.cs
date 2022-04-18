@@ -31,9 +31,9 @@ namespace FinalProject
         private readonly Player _player;
         private readonly List<Enemy> _enemies;
         private readonly List<Wall> _walls;
-        private readonly List<Stone> _stones;
-        private readonly List<Stone> _landedStones;
-        private readonly List<Stone> _decayingStones;
+        private List<Stone> _stones;
+        private List<Stone> _landedStones;
+        private List<Stone> _decayingStones;
         private readonly List<Vector2> _stoneRevealAreas;
         private int totalStoneNumber;
 
@@ -513,6 +513,9 @@ namespace FinalProject
             isEGCActive = false;
             egcTimer = 30f;
             decayTimer = 3.8f;
+            _stones = new List<Stone>();
+            _landedStones = new List<Stone>();
+            _decayingStones = new List<Stone>();
         }
     }
 }
