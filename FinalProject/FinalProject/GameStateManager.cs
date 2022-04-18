@@ -119,7 +119,7 @@ namespace FinalProject
 
             // Load map
             map = new Map(penumbra, content, camera, this);
-            currentLevel = Level.Test1;
+            currentLevel = Level.Level1;
         }
 
         //Methods
@@ -295,6 +295,7 @@ namespace FinalProject
                     break;
 
                 case GameState.WinState:
+                    //Write 'You Win' on the screen
                     batch.DrawString(syneTactileFont48, "You Won",
                        new Vector2(map.Player.Position.X + 1730 - graphics.PreferredBackBufferWidth / 2,
                        map.Player.Position.Y + 50 - graphics.PreferredBackBufferHeight / 2), Color.White);
@@ -588,6 +589,7 @@ namespace FinalProject
         public void Set_WinState()
         {
             currentState = GameState.WinState;
+            levelLoaded = false;
             SFXManager.StopAllInstances();
         }
 

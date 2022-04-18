@@ -20,7 +20,8 @@ namespace FinalProject
     enum Level
     {
         Tutorial,
-        Test1
+        Test1,
+        Level1
     }
 
     class Map
@@ -100,7 +101,7 @@ namespace FinalProject
             //EGC Variables
             isEGCActive = false;
             stoneDecayTime = 5f;
-            decayTimer = stoneDecayTime;
+            decayTimer = 3.8f;
             egcTimer = 30;
 
             this.stateManager = stateManager;
@@ -229,9 +230,16 @@ namespace FinalProject
                     {
                         if (stone.TargetScale > 0)
                         {
-                            if (Vector2.Distance(stone.Position, _player.Position) < Vector2.Distance(selected.Position, _player.Position))
+                            if(selected == null)
                             {
                                 selected = stone;
+                            }
+                            else
+                            {
+                                if (Vector2.Distance(stone.Position, _player.Position) < Vector2.Distance(selected.Position, _player.Position))
+                                {
+                                    selected = stone;
+                                }
                             }
                         }
                     }
@@ -264,6 +272,7 @@ namespace FinalProject
                 if (egcTimer < 0)
                 {
                     stateManager.Set_WinState();
+                    ResetMap();
                 }
             }
         }
@@ -279,6 +288,10 @@ namespace FinalProject
 
                 case Level.Test1:
                     LoadFromFile("testLevel.lvl");
+                    break;
+
+                case Level.Level1:
+                    LoadFromFile("MainLevel1.lvl");
                     break;
 
                 default:
@@ -478,6 +491,9 @@ namespace FinalProject
             _width = _defaultWidth;
             _height = _defaultHeight;
             totalStoneNumber = 10;
+            isEGCActive = false;
+            egcTimer = 30f;
+            decayTimer = 3.8f;
         }
     }
 }
