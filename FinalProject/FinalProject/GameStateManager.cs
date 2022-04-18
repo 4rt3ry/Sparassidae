@@ -264,6 +264,12 @@ namespace FinalProject
                       new Vector2(map.Player.Position.X + 100 - graphics.PreferredBackBufferWidth / 2,
                       map.Player.Position.Y + 975 - graphics.PreferredBackBufferHeight / 2), Color.White);
 
+
+                    batch.DrawString(syneTactileFont24, "Press [P] to Pause",
+                        new Vector2(map.Player.Position.X + graphics.PreferredBackBufferWidth / 2 - 260, 
+                        map.Player.Position.Y + graphics.PreferredBackBufferHeight / 2 - 50),
+                        Color.White);
+
                     // Timer 
 
                     break;
