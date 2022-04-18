@@ -98,7 +98,7 @@ namespace FinalProject
                 Position = _position,
                 Scale = new Vector2(10),
                 ShadowType = ShadowType.Solid,
-                Color = new Color(0.15f, 0.22f, 0.15f),
+                Color = new Color(0.35f, 0.42f, 0.35f),
                 Intensity = 0.7f,
             };
 

@@ -428,7 +428,7 @@ namespace FinalProject
                         }
                     }
                     //_enemies.Add(new Enemy(new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2)), roamPoints2, 800, _enemyTexture, 150, 150, 100, Player, _walls));
-                    _enemies.Add(new Enemy(_enemyTexture, this, new Vector2(x, y), roamPoints2, 650, 100));
+                    _enemies.Add(new Enemy(_enemyTexture, this, new Vector2(x+130, y+130), roamPoints2, 650, 100));
                 }
 
             }
