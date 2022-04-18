@@ -148,6 +148,7 @@ namespace FinalProject
 
             // Set the roaming positions
             this._position = position;
+            
             if (roamLocations == null)
             {
                 roamLocations = new List<Vector2>();
@@ -162,6 +163,8 @@ namespace FinalProject
             {
                 this.roamLocations = roamLocations;
             }
+            
+            
             this.speed = movingSpeed;
             this.baseSpeed = movingSpeed;
             this.isForward = 0; // Move Forward;
@@ -468,7 +471,7 @@ namespace FinalProject
                                 downTime -= dTime;
                                 if (downTime <= 0)
                                 {
-                                    moveTime = rng.Next(1, 3);
+                                    moveTime = rng.Next(1, 6);
                                     moving = true;
                                 }
                             }
@@ -499,7 +502,7 @@ namespace FinalProject
                             downTime -= dTime;
                             if (downTime <= 0)
                             {
-                                moveTime = rng.Next(1, 3);
+                                moveTime = rng.Next(1, 6);
                                 moving = true;
                             }
                         }
