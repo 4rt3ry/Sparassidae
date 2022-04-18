@@ -51,6 +51,9 @@ namespace FinalProject
         private float decayTimer;
         private float egcTimer;
 
+        //State Manager reference
+        GameStateManager stateManager;
+
         // Textures and Effects
         private Effect _maskEffect;
         private Effect _tileEffect;
@@ -79,7 +82,7 @@ namespace FinalProject
         //Constructors
 
 
-        public Map(PenumbraComponent penumbra, ContentManager content, Camera2D camera)
+        public Map(PenumbraComponent penumbra, ContentManager content, Camera2D camera, GameStateManager stateManager)
         {
             _content = content;
             LoadContent();
@@ -99,6 +102,8 @@ namespace FinalProject
             stoneDecayTime = 5f;
             decayTimer = stoneDecayTime;
             egcTimer = 30;
+
+            this.stateManager = stateManager;
         }
 
         #region Draw Loop
@@ -258,7 +263,7 @@ namespace FinalProject
                 egcTimer -= dTime;
                 if (egcTimer < 0)
                 {
-                    //Trigger win state
+                    stateManager.Set_WinState();
                 }
             }
         }

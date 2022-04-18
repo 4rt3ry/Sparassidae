@@ -118,7 +118,7 @@ namespace FinalProject
             _fadeTransition.LoadContent(content);
 
             // Load map
-            map = new Map(penumbra, content, camera);
+            map = new Map(penumbra, content, camera, this);
             currentLevel = Level.Test1;
         }
 
@@ -588,6 +588,7 @@ namespace FinalProject
         public void Set_WinState()
         {
             currentState = GameState.WinState;
+            SFXManager.StopAllInstances();
         }
 
         /// <summary>
