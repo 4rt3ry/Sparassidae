@@ -150,8 +150,9 @@ namespace FinalProject
                 roamLocations = new List<Vector2>();
                 roamLocations.Add(position);
             }
-            else if(roamLocations != null)
+            else if (roamLocations != null && roamLocations.Count == 1)
             {
+                roamLocations = new List<Vector2>();
                 roamLocations.Add(position);
             }
             else
