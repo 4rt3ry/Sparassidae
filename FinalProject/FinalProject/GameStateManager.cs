@@ -158,6 +158,9 @@ namespace FinalProject
                 case GameState.GameOverState:
 
                     break;
+                case GameState.WinState:
+
+                    break;
             }
         }
 
@@ -289,6 +292,12 @@ namespace FinalProject
                 case GameState.GameOverState:
                     batch.Draw(gameOver_Texture, Vector2.Zero, Color.White);
                     mainMenuButton.Draw(batch);
+                    break;
+
+                case GameState.WinState:
+                    batch.DrawString(syneTactileFont48, "You Won",
+                       new Vector2(map.Player.Position.X + 1730 - graphics.PreferredBackBufferWidth / 2,
+                       map.Player.Position.Y + 50 - graphics.PreferredBackBufferHeight / 2), Color.White);
                     break;
             }
         }
@@ -431,6 +440,13 @@ namespace FinalProject
 
                     // Update lighting effects after buttons have been updated
                     UpdatePenumbraState(penumbra);
+                    break;
+
+                case GameState.WinState:
+                    if((ks.IsKeyDown(Keys.Space) && previousKs.IsKeyUp(Keys.Space)) || (ks.IsKeyDown(Keys.Enter) && previousKs.IsKeyUp(Keys.Enter)))
+                    {
+                        Click_ToMenu(null, null);
+                    }
                     break;
             }
 
