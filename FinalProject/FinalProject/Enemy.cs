@@ -384,30 +384,36 @@ namespace FinalProject
                         // 2.1 Now: It means enemy will not move
                         if (roamLocations.Count == 1)
                         {
+                            if (Math.Abs((_position - roamLocations.ElementAt(roamTarget)).Length()) > roamCheckDistance)
+                            {
+                                moveDir = roamLocations[roamTarget] - this._position;
+                                moveDir.Normalize();
+                                this._position += moveDir * speed * dTime;
+                            }
                             ////Movement code
                             //if (moving)
                             //{
                             //    //Move enemy
 
 
-                            //    //Time Increment
-                            //    moveTime -= dTime;
-                            //    if (moveTime <= 0)
-                            //    {
-                            //        downTime = 1f;
-                            //        moving = false;
-                            //    }
-                            //}
-                            //else
-                            //{
-                            //    //Time Increment
-                            //    downTime -= dTime;
-                            //    if (downTime <= 0)
-                            //    {
-                            //        moveTime = 1.5f;
-                            //        moving = true;
-                            //    }
-                            //}
+                                //    //Time Increment
+                                //    moveTime -= dTime;
+                                //    if (moveTime <= 0)
+                                //    {
+                                //        downTime = 1f;
+                                //        moving = false;
+                                //    }
+                                //}
+                                //else
+                                //{
+                                //    //Time Increment
+                                //    downTime -= dTime;
+                                //    if (downTime <= 0)
+                                //    {
+                                //        moveTime = 1.5f;
+                                //        moving = true;
+                                //    }
+                                //}
                         }
                         // 2.2 Multiple locations (Roam between locations)
                         else if (roamLocations.Count > 1)
