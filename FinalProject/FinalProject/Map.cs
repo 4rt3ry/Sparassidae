@@ -21,7 +21,8 @@ namespace FinalProject
     {
         Tutorial,
         Test1,
-        Level1
+        Level1,
+        Level2
     }
 
     class Map
@@ -314,6 +315,10 @@ namespace FinalProject
 
                 case Level.Level1:
                     LoadFromFile("MainLevel1.lvl");
+                    break;
+
+                case Level.Level2:
+                    LoadFromFile("MainLevel2.lvl");
                     break;
 
                 default:

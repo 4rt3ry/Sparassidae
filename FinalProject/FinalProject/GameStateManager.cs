@@ -119,7 +119,7 @@ namespace FinalProject
 
             // Load map
             map = new Map(penumbra, content, camera, this);
-            currentLevel = Level.Level1;
+            currentLevel = Level.Level2;
         }
 
         //Methods
