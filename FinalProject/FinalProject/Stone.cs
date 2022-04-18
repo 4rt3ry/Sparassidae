@@ -98,9 +98,8 @@ namespace FinalProject
                 Position = _position,
                 Scale = new Vector2(10),
                 ShadowType = ShadowType.Solid,
-                Color = new Color(0.065f, 0.065f, 0.085f),
-                Intensity = 2f,
-                
+                Color = new Color(0.15f, 0.22f, 0.15f),
+                Intensity = 0.7f,
             };
 
             IsInvestigated = false;
@@ -136,7 +135,7 @@ namespace FinalProject
             {
                 _currentSpeed = 0;
                 if(!landed)
-                    targetScale = 350f;
+                    targetScale = 600f;
                 landed = true;
             }
 

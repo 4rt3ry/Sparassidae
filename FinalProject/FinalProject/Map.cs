@@ -33,6 +33,7 @@ namespace FinalProject
         private readonly List<Wall> _walls;
         private readonly List<Stone> _stones;
         private readonly List<Stone> _landedStones;
+        private readonly List<Stone> _decayingStones;
         private readonly List<Vector2> _stoneRevealAreas;
         private int totalStoneNumber;
 
@@ -92,6 +93,7 @@ namespace FinalProject
             _walls = new List<Wall>();
             _stones = new List<Stone>();
             _landedStones = new List<Stone>();
+            _decayingStones = new List<Stone>();
             _stoneRevealAreas = new List<Vector2>();
             _penumbra = penumbra;
 
@@ -190,6 +192,7 @@ namespace FinalProject
 
             foreach (Stone stone in Stones) stone.Update(dTime);
             foreach (Stone stone in _landedStones) stone.Update(dTime);
+            foreach (Stone stone in _decayingStones) stone.Update(dTime);
 
             Stone selected = null;
             if (Stones.Count > 0)
@@ -220,7 +223,24 @@ namespace FinalProject
                     }
                     if (stone.Landed)
                     {
-                        _landedStones.Add(stone);
+                        bool availableLandingPosition = true;
+                        foreach(Stone s in _landedStones)
+                        {
+                            if(Vector2.Distance(s.Position, stone.Position) < s.TargetScale/1.8f)
+                            {
+                                availableLandingPosition = false;
+                            }
+                        }
+                        if (availableLandingPosition)
+                        {
+                            _landedStones.Add(stone);
+                        }
+                        else
+                        {
+                            totalStoneNumber += 1;
+                            _decayingStones.Add(stone);
+                            stone.TargetScale = 0;
+                        }
                         removed.Add(stone);
                     }
                 }
