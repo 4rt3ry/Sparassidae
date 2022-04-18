@@ -227,9 +227,9 @@ namespace FinalProject
                     if (stone.Landed)
                     {
                         bool availableLandingPosition = true;
-                        foreach(Stone s in LandedStones)
+                        foreach (Stone s in LandedStones)
                         {
-                            if(Vector2.Distance(s.Position, stone.Position) < s.TargetScale/1.8f)
+                            if (Vector2.Distance(s.Position, stone.Position) < s.TargetScale / 1.8f)
                             {
                                 availableLandingPosition = false;
                             }
@@ -249,11 +249,11 @@ namespace FinalProject
                 }
                 if (isEGCActive && decayTimer <= 0)
                 {
-                    foreach(Stone stone in LandedStones)
+                    foreach (Stone stone in LandedStones)
                     {
                         if (stone.TargetScale > 0)
                         {
-                            if(selected == null)
+                            if (selected == null)
                             {
                                 selected = stone;
                             }
@@ -269,7 +269,7 @@ namespace FinalProject
                 }
                 if (removed.Count > 0)
                 {
-                    foreach(Stone s in removed)
+                    foreach (Stone s in removed)
                     {
                         _stones.Remove(s);
                     }
