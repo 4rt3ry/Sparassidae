@@ -26,6 +26,7 @@ namespace FinalProject
     class Enemy : GameObject
     {
         // Fields
+        private Vector2 startingPosition;
         private EnemyState currentState;
         private float chaseWindupTimer;
         private Random rng = new Random();
@@ -116,6 +117,7 @@ namespace FinalProject
             this.origin = new Vector2(texture.Width / 2, texture.Height / 2);
             this.topLeft = this._position - origin;
             this.displayRectangle = new Rectangle((int)topLeft.X, (int)topLeft.Y, texture.Width, texture.Height);
+            this.startingPosition = position;
             this._physicsCollider = new RectangleCollider(this, Vector2.Zero, new Vector2(texture.Width, texture.Height), true);
 
             // Set the still position
@@ -134,7 +136,8 @@ namespace FinalProject
         public Enemy(Map map, Vector2 position, List<Vector2> roamLocations, Texture2D texture, float movingSpeed) : this()
         {
             this.map = map;
-            if(texture!= null)
+            this.startingPosition = position;
+            if (texture!= null)
             {
                 this.enemyTexture = texture;
                 this.origin = new Vector2(texture.Width / 2, texture.Height / 2);
@@ -465,9 +468,39 @@ namespace FinalProject
                                 downTime -= dTime;
                                 if (downTime <= 0)
                                 {
-                                    moveTime = rng.Next(1, 6);
+                                    moveTime = rng.Next(1, 3);
                                     moving = true;
                                 }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //Movement code
+                        if (moving)
+                        {
+                            System.Diagnostics.Debug.WriteLine(this.Position);
+                            //Move enemy
+                            moveDir = startingPosition - this._position;
+                            moveDir.Normalize();
+                            this._position += moveDir * speed * dTime;
+
+                            //Time Increment
+                            moveTime -= dTime;
+                            if (moveTime <= 0)
+                            {
+                                downTime = 1f;
+                                moving = false;
+                            }
+                        }
+                        else
+                        {
+                            //Time Increment
+                            downTime -= dTime;
+                            if (downTime <= 0)
+                            {
+                                moveTime = rng.Next(1, 3);
+                                moving = true;
                             }
                         }
                     }
