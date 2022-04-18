@@ -81,6 +81,8 @@ namespace FinalProject
 
         internal List<Wall> Walls => _walls;
 
+        internal List<Stone> LandedStones => _landedStones;
+
         //Constructors
 
 
@@ -127,12 +129,12 @@ namespace FinalProject
                 batch.Draw(whiteTexture, enemy.DisplayRectangle, Color.White);
                 enemy.RoamDetectionTrigger.DrawDebugTexture(batch, Color.Red);
                 batch.Draw(circleTexture,
-                    new Rectangle((int)enemy.Position.X - (int)enemy.DetectionRadius + enemy.DisplayRectangle.Width / 2,
-                    (int)enemy.Position.Y - (int)enemy.DetectionRadius + enemy.DisplayRectangle.Height / 2,
+                    new Rectangle((int)enemy.Position.X - (int)enemy.DetectionRadius,
+                    (int)enemy.Position.Y - (int)enemy.DetectionRadius,
                     (int)enemy.DetectionRadius * 2, (int)enemy.DetectionRadius * 2), Color.White);
                 batch.Draw(circleTexture,
-                    new Rectangle((int)enemy.Position.X - (int)enemy.ChaseStartDistance + enemy.DisplayRectangle.Width / 2,
-                    (int)enemy.Position.Y - (int)enemy.ChaseStartDistance + enemy.DisplayRectangle.Height / 2,
+                    new Rectangle((int)enemy.Position.X - (int)enemy.ChaseStartDistance,
+                    (int)enemy.Position.Y - (int)enemy.ChaseStartDistance,
                     (int)enemy.ChaseStartDistance * 2, (int)enemy.ChaseStartDistance * 2), Color.Yellow);
 
             }
@@ -191,7 +193,7 @@ namespace FinalProject
             _player.ThrowStone(Stones, _penumbra, _stoneMaskTexture, this);
 
             foreach (Stone stone in Stones) stone.Update(dTime);
-            foreach (Stone stone in _landedStones) stone.Update(dTime);
+            foreach (Stone stone in LandedStones) stone.Update(dTime);
             foreach (Stone stone in _decayingStones) stone.Update(dTime);
 
             Stone selected = null;
@@ -224,7 +226,7 @@ namespace FinalProject
                     if (stone.Landed)
                     {
                         bool availableLandingPosition = true;
-                        foreach(Stone s in _landedStones)
+                        foreach(Stone s in LandedStones)
                         {
                             if(Vector2.Distance(s.Position, stone.Position) < s.TargetScale/1.8f)
                             {
@@ -233,7 +235,7 @@ namespace FinalProject
                         }
                         if (availableLandingPosition)
                         {
-                            _landedStones.Add(stone);
+                            LandedStones.Add(stone);
                         }
                         else
                         {
@@ -246,7 +248,7 @@ namespace FinalProject
                 }
                 if (isEGCActive && decayTimer <= 0)
                 {
-                    foreach(Stone stone in _landedStones)
+                    foreach(Stone stone in LandedStones)
                     {
                         if (stone.TargetScale > 0)
                         {
@@ -345,10 +347,7 @@ namespace FinalProject
 
             //Create Roam Points
             List<Vector2> roamPoints = new List<Vector2> { new Vector2(1500, 700), new Vector2(1500, 100), new Vector2(100, 100) };
-            _enemies.Add(new Enemy(roamPoints[0], roamPoints, 800, _enemyTexture, 150, 150, 100, this));
-            //List<Vector2> roamPoints2 = null;
-            //_enemies.Add(new Enemy(new Vector2(1550, 100), roamPoints2, 800, _enemyTexture, 150, 150, 100, Player, _walls));
-            //_enemies.Add(new Enemy(new Vector2(1500, 100), _enemyTexture, 200, 200));
+            _enemies.Add(new Enemy(_enemyTexture, this, roamPoints[0], roamPoints, 800, 100));
 
             // Set up lighting after walls are created
             SetupPenumbraLighting();
@@ -429,7 +428,7 @@ namespace FinalProject
                         }
                     }
                     //_enemies.Add(new Enemy(new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2)), roamPoints2, 800, _enemyTexture, 150, 150, 100, Player, _walls));
-                    _enemies.Add(new Enemy(new Vector2(x, y), roamPoints2, 650, 100, _content.Load<Texture2D>("EnemySpriteSheet"), this));
+                    _enemies.Add(new Enemy(_enemyTexture, this, new Vector2(x, y), roamPoints2, 650, 100));
                 }
 
             }
@@ -475,7 +474,7 @@ namespace FinalProject
         /// <param name="content">ContentManager</param>
         private void LoadContent()
         {
-            _enemyTexture = _content.Load<Texture2D>("Enemy");
+            _enemyTexture = _content.Load<Texture2D>("EnemySpriteSheet");
             _stoneMaskTexture = _content.Load<Texture2D>("Stone_Reveal_Mask");
 
             //Test purpose
