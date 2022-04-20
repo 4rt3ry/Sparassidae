@@ -32,12 +32,16 @@ namespace FinalProject_LevelEditor
         private Point adjustment;
         int index;
 
+        private PictureBox directionIndicator;
+        private BoxMovement direction;
+
         private Component parentEnemy;
         private List<Component> roamPoints;
 
         //Properties
         public TileType TileType { get => tileType; set => tileType = value; }
         internal List<Component> RoamPoints { get => roamPoints; set => roamPoints = value; }
+        public BoxMovement Direction { get => direction; set => direction = value; }
 
         //Constructors
         public Component(Point location, TileType tileType, int width, int height, int bWidth, int bHeight, Color c, Point adjustment)
@@ -48,6 +52,9 @@ namespace FinalProject_LevelEditor
             this.width = width;
             this.height = height;
             this.adjustment = adjustment;
+
+            this.direction = BoxMovement.Up;
+            this.directionIndicator = null;
 
             index = 1;
 
@@ -65,11 +72,40 @@ namespace FinalProject_LevelEditor
             pBox.Height = height*bHeight;
 
             pBox.BackColor = Color.FromArgb(100, c.R, c.G, c.B);
+            
+            if(tileType == TileType.Arrow)
+            {
+                this.direction = BoxMovement.Up;
+                this.directionIndicator = new PictureBox();
+                directionIndicator.Location = new Point(pBox.Location.X, pBox.Location.Y - bHeight);
+                directionIndicator.Width = width * bWidth;
+                directionIndicator.Height = height * bHeight;
+                directionIndicator.BackColor = Color.LightGray;
+            }
         }
 
         public Component(Point location, TileType tileType, int width, int height, int bWidth, int bHeight, Color c, Point adjustment, Component parent) : this(location, tileType, width, height, bWidth, bHeight, c, adjustment)
         {
             parentEnemy = parent;
+        }
+        public Component(Point location, TileType tileType, int width, int height, int bWidth, int bHeight, Color c, Point adjustment, BoxMovement direction) : this(location, tileType, width, height, bWidth, bHeight, c, adjustment)
+        {
+            this.direction = direction;
+            switch (direction)
+            {
+                case BoxMovement.Up:
+                    directionIndicator.Location = new Point(pBox.Location.X, pBox.Location.Y - bHeight);
+                    break;
+                case BoxMovement.Down:
+                    directionIndicator.Location = new Point(pBox.Location.X, pBox.Location.Y + bHeight);
+                    break;
+                case BoxMovement.Left:
+                    directionIndicator.Location = new Point(pBox.Location.X, pBox.Location.Y - bWidth);
+                    break;
+                case BoxMovement.Right:
+                    directionIndicator.Location = new Point(pBox.Location.X, pBox.Location.Y + bWidth);
+                    break;
+            }
         }
 
         //Methods
@@ -121,15 +157,31 @@ namespace FinalProject_LevelEditor
             {
                 case BoxMovement.Up:
                     pBox.Location = new Point(pBox.Location.X, pBox.Location.Y - bHeight*mult);
+                    if(directionIndicator != null)
+                    {
+                        directionIndicator.Location = new Point(directionIndicator.Location.X, directionIndicator.Location.Y - bHeight * mult);
+                    }
                     break;
                 case BoxMovement.Down:
                     pBox.Location = new Point(pBox.Location.X, pBox.Location.Y + bHeight*mult);
+                    if (directionIndicator != null)
+                    {
+                        directionIndicator.Location = new Point(directionIndicator.Location.X, directionIndicator.Location.Y + bHeight * mult);
+                    }
                     break;
                 case BoxMovement.Left:
                     pBox.Location = new Point(pBox.Location.X - bWidth*mult, pBox.Location.Y);
+                    if (directionIndicator != null)
+                    {
+                        directionIndicator.Location = new Point(directionIndicator.Location.X - bWidth * mult, directionIndicator.Location.Y);
+                    }
                     break;
                 case BoxMovement.Right:
                     pBox.Location = new Point(pBox.Location.X + bWidth*mult, pBox.Location.Y);
+                    if (directionIndicator != null)
+                    {
+                        directionIndicator.Location = new Point(directionIndicator.Location.X + bWidth * mult, directionIndicator.Location.Y);
+                    }
                     break;
             }
         }
@@ -141,6 +193,11 @@ namespace FinalProject_LevelEditor
         /// <param name="mult">Multiplier for distance (number of points moved)</param>
         public void Extend(BoxMovement mv, int mult)
         {
+            TileType t = tileType;
+            if(t != TileType.Enemy
+                && t != TileType.RoamPoint
+                && t != TileType.GlowStick
+                && t != TileType.Objective)
             switch (mv)
             {
                 case BoxMovement.Down:
@@ -191,7 +248,14 @@ namespace FinalProject_LevelEditor
                 case TileType.Exit:
                     name += "Exit";
                     break;
+                case TileType.GlowStick:
+                    name += "Glow Stick";
+                    break;
+                case TileType.Arrow:
+                    name += "Arrow";
+                    break;
             }
+
             name += " (" + pBox.Location.X / bWidth + ", " + pBox.Location.Y / bHeight + ") {" + pBox.Width/bWidth + ", " + pBox.Height/bHeight + "}";
             return name;
         }
@@ -227,6 +291,27 @@ namespace FinalProject_LevelEditor
                 case TileType.Exit:
                     name += "exit," + x + "," + y + "," + w + "," + h;
                     break;
+                case TileType.GlowStick:
+                    name += "glow," + x + "," + y + "," + w + "," + h;
+                    break;
+                case TileType.Arrow:
+                    name += "arrow," + x + "," + y + "," + w + "," + h;
+                    switch (direction)
+                    {
+                        case BoxMovement.Up:
+                            name += ",up";
+                            break;
+                        case BoxMovement.Down:
+                            name += ",down";
+                            break;
+                        case BoxMovement.Left:
+                            name += ",left";
+                            break;
+                        case BoxMovement.Right:
+                            name += ",right";
+                            break;
+                    }
+                    break;
             }
             return name;
         }
@@ -239,6 +324,11 @@ namespace FinalProject_LevelEditor
         public Component GetParentEnemy()
         {
             return parentEnemy;
+        }
+
+        public PictureBox GetDirectionIndicator()
+        {
+            return directionIndicator;
         }
 
         public void ReAdjust(int width, int height)

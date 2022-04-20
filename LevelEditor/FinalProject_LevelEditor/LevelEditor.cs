@@ -19,7 +19,9 @@ namespace FinalProject_LevelEditor
         Spawn,
         Objective,
         Exit,
-        RoamPoint
+        RoamPoint,
+        GlowStick,
+        Arrow
     }
     public partial class LevelEditor : Form
     {
@@ -125,11 +127,22 @@ namespace FinalProject_LevelEditor
                         t = TileType.Exit;
                         c = Color.Green;
                         break;
+                    case "glow":
+                        t = TileType.GlowStick;
+                        c = Color.Lime;
+                        break;
+                    case "arrow":
+                        t = TileType.Arrow;
+                        c = Color.Gray;
+                        break;
                 }
+
                 int x = Convert.ToInt32(a2[1]);
                 int y = Convert.ToInt32(a2[2]);
                 int w = Convert.ToInt32(a2[3]);
                 int h = Convert.ToInt32(a2[4]);
+
+                
 
                 Component comp = new Component(new Point(x*bWidth, y*bHeight), t, w, h, bWidth, bHeight, c, new Point(-HBar.Value, -VBar.Value));
 
@@ -190,6 +203,16 @@ namespace FinalProject_LevelEditor
             currentTile = TileType.Exit;
         }
 
+        private void GlowStickButton_Click(object sender, EventArgs e)
+        {
+            currentTile = TileType.GlowStick;
+        }
+
+        private void ArrowButton_Click(object sender, EventArgs e)
+        {
+            currentTile = TileType.Arrow;
+        }
+
         /// <summary>
         /// Handles creation of new piece and adds it to necessary features
         /// </summary>
@@ -219,12 +242,19 @@ namespace FinalProject_LevelEditor
                 case TileType.RoamPoint:
                     c = Color.FromArgb(200, 130, 130);
                     break;
+                case TileType.GlowStick:
+                    c = Color.Lime;
+                    break;
+                case TileType.Arrow:
+                    c = Color.Gray;
+                    break;
             }
             if(currentTile == TileType.RoamPoint)
             {
                 Component roamPointComp = new Component(new Point(0, 0), currentTile, Convert.ToInt32(WidthTextBox.Text), Convert.ToInt32(HeightTextBox.Text), bWidth, bHeight, c, adjust, (Component)EditMenu.SelectedItem);
                 ((Component)EditMenu.Items[EditMenu.SelectedIndex]).AddRoamPoint(roamPointComp);
                 Level.Controls.Add(roamPointComp.GetBox());
+                
                 EditMenu.Items.Add(roamPointComp);
                 EditMenu.Focus();
                 EditMenu.SelectedItem = roamPointComp;
@@ -232,6 +262,10 @@ namespace FinalProject_LevelEditor
             }
             Component comp = new Component(highlighter.Location, currentTile, Convert.ToInt32(WidthTextBox.Text), Convert.ToInt32(HeightTextBox.Text), bWidth, bHeight, c, adjust);
             Level.Controls.Add(comp.GetBox());
+            if(comp.TileType == TileType.Arrow)
+            {
+                Level.Controls.Add(comp.GetDirectionIndicator());
+            }
             EditMenu.Items.Add(comp);
             EditMenu.Focus();
             EditMenu.SelectedItem = comp;
@@ -355,10 +389,15 @@ namespace FinalProject_LevelEditor
                     {
                         EditMenu.Items.Remove(c);
                         Level.Controls.Remove(c.GetBox());
+                        
                     }
                 }
                 EditMenu.Items.RemoveAt(EditMenu.SelectedIndex);
                 Level.Controls.Remove(compRemoved.GetBox());
+                if(compRemoved.TileType == TileType.Arrow)
+                {
+                    Level.Controls.Remove(compRemoved.GetDirectionIndicator());
+                }
             }
             if(EditMenu.SelectedIndex == -1)
             {
@@ -382,6 +421,14 @@ namespace FinalProject_LevelEditor
                         break;
                     case Keys.D5:
                         currentTile = TileType.Exit;
+                        NewPieceButton.PerformClick();
+                        break;
+                    case Keys.D6:
+                        currentTile = TileType.GlowStick;
+                        NewPieceButton.PerformClick();
+                        break;
+                    case Keys.D7:
+                        currentTile = TileType.Arrow;
                         NewPieceButton.PerformClick();
                         break;
                 }
@@ -523,5 +570,7 @@ namespace FinalProject_LevelEditor
                 comp.ChangeScroll(-HBar.Value, -((VScrollBar)sender).Value);
             }
         }
+
+        
     }
 }
