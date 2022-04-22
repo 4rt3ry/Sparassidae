@@ -278,7 +278,7 @@ namespace FinalProject
                         }
                         break;
                     case EnemyState.InvestigateState:
-                        if(map.LandedStones.Count > 5)
+                        if(map.LandedGlowsticks.Count > 5)
                         {
                             if (stoneInvestigateTimer > 0 && stoneInvestigateTimer < 5)
                             {
@@ -291,7 +291,7 @@ namespace FinalProject
                         }
                         else
                         {
-                            if (stoneInvestigateTimer > 0 && stoneInvestigateTimer < map.LandedStones.Count)
+                            if (stoneInvestigateTimer > 0 && stoneInvestigateTimer < map.LandedGlowsticks.Count)
                             {
                                 DrawEnemyStandingAnimation(batch);
                             }
@@ -354,7 +354,7 @@ namespace FinalProject
                     // 1.2 Stone Detection update
                     // Stone detection function
                     isStoneInvestigation = false;
-                    foreach (Stone stone in map.LandedStones)
+                    foreach (Glowstick stone in map.LandedGlowsticks)
                     {
                         // Check if the stone has been investigated
                         if (!stone.IsInvestigated)
@@ -372,9 +372,9 @@ namespace FinalProject
                                     // set the stone as investigated
                                     stone.IsInvestigated = true;
 
-                                    if (map.LandedStones.Count < 5)
+                                    if (map.LandedGlowsticks.Count < 5)
                                     {
-                                        stoneInvestigateTimer = map.LandedStones.Count;
+                                        stoneInvestigateTimer = map.LandedGlowsticks.Count;
                                     }
                                     else
                                     {
