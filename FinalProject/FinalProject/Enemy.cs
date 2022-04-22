@@ -327,7 +327,7 @@ namespace FinalProject
         /// <param name="dTime">Time passed (Seconds)</param>
         public void Update(float dTime)
         {
-           //System.Diagnostics.Debug.WriteLine(currentState);
+            System.Diagnostics.Debug.WriteLine(currentState);
             switch (currentState)
             {
                 case EnemyState.RoamingState:
@@ -451,7 +451,7 @@ namespace FinalProject
                             //Movement code
                             if (moving)
                             {
-                                //System.Diagnostics.Debug.WriteLine(this.Position);
+                                System.Diagnostics.Debug.WriteLine(this.Position);
                                 //Move enemy
                                 moveDir = roamLocations[roamTarget] - this._position;
                                 moveDir.Normalize();
@@ -482,7 +482,7 @@ namespace FinalProject
                         //Movement code
                         if (moving)
                         {
-                            //System.Diagnostics.Debug.WriteLine(this.Position);
+                            System.Diagnostics.Debug.WriteLine(this.Position);
                             //Move enemy
                             moveDir = startingPosition - this._position;
                             moveDir.Normalize();
@@ -585,7 +585,7 @@ namespace FinalProject
                             currentState = EnemyState.ChaseWindupState;
                             chaseWindupTimer = 6f;
                             target.SetShockState();
-                            //System.Diagnostics.Debug.WriteLine("Chase Start to Wind Up");
+                            System.Diagnostics.Debug.WriteLine("Chase Start to Wind Up");
                             speed = baseSpeed * 2;
                             movingTowards = target.Position;
                         }  
@@ -605,7 +605,7 @@ namespace FinalProject
                         if (chaseWindupTimer <= 0)
                         {
                             currentState = EnemyState.ChaseState;
-                            //System.Diagnostics.Debug.WriteLine("Chase start");
+                            System.Diagnostics.Debug.WriteLine("Chase start");
                             isAlerting = true;
                         }
                     }
@@ -753,7 +753,7 @@ namespace FinalProject
                 if (detectionLink.CheckCollision(wall))
                 {
 
-                    //System.Diagnostics.Debug.WriteLine($"{wall.Position}");
+                    System.Diagnostics.Debug.WriteLine($"{wall.Position}");
                     return false;
                 }
             }
