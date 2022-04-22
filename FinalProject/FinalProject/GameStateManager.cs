@@ -423,6 +423,7 @@ namespace FinalProject
                     {
                         map.TriggerEndGameChase();
                     }
+
                     if (map.IsEGCActive == false)
                     {
                         foreach (Objective goal in map.EndGoals)
@@ -432,6 +433,12 @@ namespace FinalProject
                             {
                                 map.TriggerEndGameChase();
                             }
+                        }
+                    } else
+                    {
+                        foreach (Objective goal in map.EndGoals)
+                        {
+                            goal.CloseLight(dTime);
                         }
                     }
 

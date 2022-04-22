@@ -15,6 +15,7 @@ namespace FinalProject
         private PointLight _pointLight;
         private float timeHeld = 0f;
         private float maxHold = 1f;
+        private float fadeTime = 0f;
         public PointLight PointLight { get => _pointLight; set => _pointLight = value; }
 
         Player player;
@@ -57,6 +58,17 @@ namespace FinalProject
                 }
             }
             return false;
+        }
+
+        public void CloseLight(float dt)
+        {
+            if (fadeTime > 1)
+            {
+                fadeTime = 1;
+                return;
+            }
+            fadeTime += dt;
+            _pointLight.Scale = new Vector2(100 * ((1-fadeTime) / 1));
         }
 
     }

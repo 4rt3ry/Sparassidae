@@ -307,8 +307,11 @@ namespace FinalProject
                             }
                         }
                     }
+                    if (selected != null)
+                    {
+                        selected.TargetScale = 0;
 
-                    selected.TargetScale = 0;
+                    }
                     decayTimer = stoneDecayTime;
                 }
                 decayTimer -= dTime;
