@@ -142,14 +142,42 @@ namespace FinalProject_LevelEditor
                 int w = Convert.ToInt32(a2[3]);
                 int h = Convert.ToInt32(a2[4]);
 
+                Component comp = null;
                 
+                if(t == TileType.Arrow)
+                {
+                    BoxMovement b = BoxMovement.Up;
+                    switch (a2[5])
+                    {
+                        case "up":
+                            b = BoxMovement.Up;
+                            break;
+                        case "down":
+                            b = BoxMovement.Down;
+                            break;
+                        case "left":
+                            b = BoxMovement.Left;
+                            break;
+                        case "right":
+                            b = BoxMovement.Right;
+                            break;
+                    }
+                    comp = new Component(new Point(x * bWidth, y * bHeight), t, w, h, bWidth, bHeight, c, new Point(-HBar.Value, -VBar.Value), b);
 
-                Component comp = new Component(new Point(x*bWidth, y*bHeight), t, w, h, bWidth, bHeight, c, new Point(-HBar.Value, -VBar.Value));
+                    Level.Controls.Add(comp.GetBox());
+                    Level.Controls.Add(comp.GetDirectionIndicator());
+                    EditMenu.Items.Add(comp);
+                }
+                else
+                {
+                    comp = new Component(new Point(x*bWidth, y*bHeight), t, w, h, bWidth, bHeight, c, new Point(-HBar.Value, -VBar.Value));
 
-                Level.Controls.Add(comp.GetBox());
-                EditMenu.Items.Add(comp);
+                    Level.Controls.Add(comp.GetBox());
+                    EditMenu.Items.Add(comp);
 
-                if (a2[5].Equals("empty"))
+                }
+
+                if (a2[5].Equals("empty") || t == TileType.Arrow)
                 {
 
                 }
@@ -363,6 +391,13 @@ namespace FinalProject_LevelEditor
                     case 'D':
                         selectedComp.Extend(BoxMovement.Right, 1);
                         break;
+                }
+                if(selectedComp.TileType == TileType.Arrow)
+                {
+                    if(e.KeyChar == 'r' || e.KeyChar == 'R')
+                    {
+                        selectedComp.RotateArrow();
+                    }
                 }
                 if(e.KeyChar == ' ')
                 {
