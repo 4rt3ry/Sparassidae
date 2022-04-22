@@ -84,7 +84,7 @@ namespace FinalProject
 
         internal List<Wall> Walls => _walls;
 
-        internal List<Stone> LandedStones => _landedStones;
+        //internal List<Stone> LandedStones => _landedStones;
         internal List<Objective> EndGoals => endGoals;
         internal List<Glowstick> LandedGlowsticks => _landedGlowsticks;
 
@@ -432,7 +432,7 @@ namespace FinalProject
                     case "enemy":
                         break;
                     case "spawn":
-                        Player.Position = new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2));
+                        //Player.Position = new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2));
                         break;
                     case "objective":
                         allGoals.Add(new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2)));
@@ -487,7 +487,7 @@ namespace FinalProject
             foreach (Vector2 position in allGoals)
             {
                 Objective newGoal = new Objective(position, _player);
-                //Player.Position = position;
+                Player.Position = position;
                 _penumbra.Lights.Add(newGoal.PointLight);
                 endGoals.Add(newGoal);
 
