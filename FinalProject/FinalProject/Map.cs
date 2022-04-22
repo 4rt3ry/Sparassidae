@@ -53,7 +53,7 @@ namespace FinalProject
         private float stoneDecayTime;
         private float decayTimer;
         private float egcTimer;
-
+        private List<Objective> endGoals;
         //State Manager reference
         GameStateManager stateManager;
 
@@ -83,6 +83,7 @@ namespace FinalProject
         internal List<Wall> Walls => _walls;
 
         internal List<Stone> LandedStones => _landedStones;
+        internal List<Objective> EndGoals => endGoals;
 
         //Constructors
 
@@ -381,6 +382,8 @@ namespace FinalProject
             //Close the reader
 
             String[] fileLines = data.Split('|');
+            SetupPenumbraLighting();
+            List<Vector2> allGoals = new List<Vector2>();
             foreach (String currentLine in fileLines)
             {
                 if (currentLine == "")
@@ -405,9 +408,12 @@ namespace FinalProject
                     case "enemy":
                         break;
                     case "spawn":
-                        Player.Position = new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2));
+                        //Player.Position = new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2));
                         break;
                     case "objective":
+                        allGoals.Add(new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2)));
+
+
                         break;
                     case "exit":
                         break;
@@ -446,9 +452,15 @@ namespace FinalProject
 
             // Get ahold of the lighting system and reset it
             //_penumbra = (PenumbraComponent)serviceProvider.GetService(typeof(PenumbraComponent));
-
             SetupPenumbraLighting();
 
+            foreach (Vector2 position in allGoals)
+            {
+                Objective newGoal = new Objective(position, _player);
+                endGoals.Add(newGoal);
+                Player.Position = position;
+                _penumbra.Lights.Add(newGoal.PointLight);
+            }
             //Debug code that puts all enemies into end game chase sequence at the start of the game
             /*
             foreach(Enemy e in _enemies)

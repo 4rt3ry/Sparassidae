@@ -241,10 +241,10 @@ namespace FinalProject
                         }
                     }
 
-                    if (map.Stones != null)
-                    {
-                        System.Diagnostics.Debug.WriteLine(map.Stones.Count);
-                    }
+                    //if (map.Stones != null)
+                    //{
+                    //    System.Diagnostics.Debug.WriteLine(map.Stones.Count);
+                    //}
 
                     // Task Hub
                     // Update the UI based on the center of the screen (local position)

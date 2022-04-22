@@ -327,7 +327,7 @@ namespace FinalProject
         /// <param name="dTime">Time passed (Seconds)</param>
         public void Update(float dTime)
         {
-            System.Diagnostics.Debug.WriteLine(currentState);
+            //System.Diagnostics.Debug.WriteLine(currentState);
             switch (currentState)
             {
                 case EnemyState.RoamingState:
