@@ -100,6 +100,7 @@ namespace FinalProject
             _landedStones = new List<Stone>();
             _decayingStones = new List<Stone>();
             _stoneRevealAreas = new List<Vector2>();
+            _glowstickPickups = new List<GlowstickPickup>();
             _penumbra = penumbra;
 
             // This will be external number.
