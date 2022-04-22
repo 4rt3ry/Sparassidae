@@ -255,11 +255,20 @@ namespace FinalProject
                         new Vector2(1580, 100), Color.White);
 
                     // Stone
-                    batch.Draw(_stoneUITexture, new Rectangle(40, 990, 50, 50), Color.White);
+                    if(map.TotalStoneNumber <= 5)
+                    {
+                        for(int i = 0; i < map.TotalStoneNumber; i ++)
+                        {
+                            batch.Draw(_stoneUITexture, new Rectangle(40 + 30 * i, 990, 50, 50), Color.White);
+                        }
+                    }
+                    else
+                    {
+                        batch.Draw(_stoneUITexture, new Rectangle(40, 990, 50, 50), Color.White);
 
-                    batch.DrawString(syneTactileFont48, $" x {map.TotalStoneNumber}",
-                      new Vector2(100, 975), Color.White);
-
+                        batch.DrawString(syneTactileFont48, $" x {map.TotalStoneNumber}",
+                          new Vector2(100, 975), Color.White);
+                    }
 
                     batch.DrawString(syneTactileFont24, "Press [P] to Pause",
                         new Vector2(graphics.PreferredBackBufferWidth - 260, graphics.PreferredBackBufferHeight - 50),
