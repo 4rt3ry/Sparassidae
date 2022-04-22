@@ -131,7 +131,7 @@ namespace FinalProject
         /// Constructor that takes a starting position and an array of locations to roam to
         /// </summary>
         /// <param name="map">The map this enmey is in</param>
-        /// <param name="position">The standing position</param>
+        /// <param name="position">The standing position</param>\\
         /// <param name="roamLocations">The list of roaming position (the spawn position should also be in this list)</param>
         /// <param name="texture">The unchanged texture of the enmey</param>
         public Enemy(Map map, Vector2 position, List<Vector2> roamLocations, Texture2D texture, float movingSpeed) : this()

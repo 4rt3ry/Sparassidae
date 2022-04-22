@@ -47,7 +47,7 @@ namespace FinalProject
         //Methods
         public void Draw(SpriteBatch sp, Color tint)
         {
-            sp.Draw(arrowTexture, new Vector2(displayRect.X, displayRect.Y), null, tint, rotation, new Vector2(arrowTexture.Width / 2, arrowTexture.Height / 2), new Vector2(0.4f, 0.4f), SpriteEffects.None, 0f);
+            sp.Draw(arrowTexture, new Vector2(displayRect.X, displayRect.Y), null, tint, rotation, new Vector2(arrowTexture.Width / 2, arrowTexture.Height / 2), new Vector2(0.33f, 0.33f), SpriteEffects.None, 0f);
         }
     }
 }

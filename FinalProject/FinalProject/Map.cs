@@ -461,7 +461,7 @@ namespace FinalProject
                         //An arrow will store its direction as up/down/left/right within this variable, must be parsed
                         String arrowDirection = tileData[5];
 
-                        Arrows.Add(new Arrow(new Vector2(x, y), _arrowTexture, tileData[5]));
+                        Arrows.Add(new Arrow(new Vector2(x+w/2, y+h/2), _arrowTexture, tileData[5]));
 
                         isArrow = true;
                         break;
