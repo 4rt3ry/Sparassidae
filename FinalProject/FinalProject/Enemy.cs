@@ -685,13 +685,13 @@ namespace FinalProject
 
                     // 2. Change speed if wall between enemy and player
                     detectionLink.EndPosition = target.Position;
-                    if(WallDetection())
+                    if (roamDetectionTrigger.Intersects(target.PhysicsCollider))
                     {
                         speed = baseSpeed;
                     }
                     else
                     {
-                        speed = baseSpeed / 2f;
+                        speed = baseSpeed / 2;
                     }
 
                     break;
