@@ -498,7 +498,7 @@ namespace FinalProject
         {
             _enemyTexture = _content.Load<Texture2D>("EnemySpriteSheet");
             _stoneMaskTexture = _content.Load<Texture2D>("Stone_Reveal_Mask");
-            //_glowstickTexture = _content.Load<Texture2D>("Glowstick Texture");
+            _glowstickTexture = _content.Load<Texture2D>("Stone");
 
             //Test purpose
             whiteTexture = _content.Load<Texture2D>("blackbox2");
