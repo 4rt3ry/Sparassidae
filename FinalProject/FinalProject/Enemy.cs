@@ -687,11 +687,11 @@ namespace FinalProject
                     detectionLink.EndPosition = target.Position;
                     if (roamDetectionTrigger.Intersects(target.PhysicsCollider))
                     {
-                        speed = baseSpeed;
+                        speed = baseSpeed/2;
                     }
                     else
                     {
-                        speed = baseSpeed / 2;
+                        speed = baseSpeed;
                     }
 
                     break;
