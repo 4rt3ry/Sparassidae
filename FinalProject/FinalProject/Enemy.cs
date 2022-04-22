@@ -151,13 +151,18 @@ namespace FinalProject
             
             if (roamLocations == null)
             {
-                roamLocations = new List<Vector2>();
-                roamLocations.Add(position);
+                this.roamLocations = new List<Vector2>();
+                this.roamLocations.Add(position);
+            }
+            else if(roamLocations != null && roamLocations.Count == 0)
+            {
+                this.roamLocations = roamLocations;
+                this.roamLocations.Add(position);
             }
             else if (roamLocations != null && roamLocations.Count == 1)
             {
-                roamLocations = new List<Vector2>();
-                roamLocations.Add(position);
+                this.roamLocations = roamLocations;
+                this.roamLocations.Add(position);
             }
             else
             {
@@ -390,9 +395,9 @@ namespace FinalProject
                         // 2.1 Now: It means enemy will not move
                         if (roamLocations.Count == 1)
                         {
-                            if (Math.Abs((_position - roamLocations.ElementAt(roamTarget)).Length()) > roamCheckDistance)
+                            if (Math.Abs((_position - roamLocations.ElementAt(0)).Length()) > roamCheckDistance)
                             {
-                                moveDir = roamLocations[roamTarget] - this._position;
+                                moveDir = roamLocations[0] - this._position;
                                 moveDir.Normalize();
                                 this._position += moveDir * speed * dTime;
                             }
