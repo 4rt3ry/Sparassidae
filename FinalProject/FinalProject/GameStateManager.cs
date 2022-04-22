@@ -65,6 +65,7 @@ namespace FinalProject
         private Button backMainButton;
         private Button mainMenuButton;
         private Button backGameButton;
+        private Button quitButton;
         private Slider volumeSlider;
 
         private Texture2D _stoneUITexture;
@@ -114,6 +115,7 @@ namespace FinalProject
             buttons.Add(playButton);
             buttons.Add(optionButton);
             buttons.Add(instructionButton);
+            //buttons.Add(quitButton);
             _fadeTransition = new Fade();
             _fadeTransition.LoadContent(content);
 
@@ -235,16 +237,16 @@ namespace FinalProject
                     if (isGodMode)
                     {
                         map.DrawTest(batch);
-                        if (map.TotalStoneNumber == 0)
+                        if (map.GlowstickCount == 0)
                         {
-                            map.TotalStoneNumber = 10;
+                            map.GlowstickCount = 10;
                         }
                     }
 
-                    if (map.Stones != null)
-                    {
-                        System.Diagnostics.Debug.WriteLine(map.Stones.Count);
-                    }
+                    //if (map.Stones != null)
+                    //{
+                    //    System.Diagnostics.Debug.WriteLine(map.Stones.Count);
+                    //}
 
                     // Task Hub
                     // Update the UI based on the center of the screen (local position)
@@ -255,9 +257,9 @@ namespace FinalProject
                         new Vector2(1580, 100), Color.White);
 
                     // Stone
-                    if(map.TotalStoneNumber <= 5)
+                    if(map.GlowstickCount <= 5)
                     {
-                        for(int i = 0; i < map.TotalStoneNumber; i ++)
+                        for(int i = 0; i < map.GlowstickCount; i ++)
                         {
                             batch.Draw(_stoneUITexture, new Rectangle(40 + 30 * i, 990, 50, 50), Color.White);
                         }
@@ -266,7 +268,7 @@ namespace FinalProject
                     {
                         batch.Draw(_stoneUITexture, new Rectangle(40, 990, 50, 50), Color.White);
 
-                        batch.DrawString(syneTactileFont48, $" x {map.TotalStoneNumber}",
+                        batch.DrawString(syneTactileFont48, $" x {map.GlowstickCount}",
                           new Vector2(100, 975), Color.White);
                     }
 
@@ -421,6 +423,19 @@ namespace FinalProject
                     {
                         map.TriggerEndGameChase();
                     }
+                    //if (map.IsEGCActive == false)
+                    //{
+                    //    foreach (Objective goal in map.EndGoals)
+                    //    {
+                    //        bool won = goal.CheckWin();
+                    //        if (won == true)
+                    //        {
+                    //            map.TriggerEndGameChase();
+                    //            break;
+                    //        }
+                    //    }
+                    //}
+ 
 
                     // Update lighting effects after buttons have been updated
                     UpdatePenumbraState(penumbra);

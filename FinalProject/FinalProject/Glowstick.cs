@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace FinalProject
 {
-    class Stone : GameObject
+    class Glowstick : GameObject
     {
 
         //// Fields
@@ -86,7 +86,7 @@ namespace FinalProject
         /// </summary>
         /// <param name="penumbra"></param>
 
-        public Stone(Vector2 position) : base(position)
+        public Glowstick(Vector2 position) : base(position)
         {
             // Position information
             _physicsCollider = new CircleCollider(this, new Vector2(0, 0), 10, false);
@@ -109,7 +109,7 @@ namespace FinalProject
         /// </summary>
         /// <param name="position">Location of the stone</param>
         /// <param name="texture">Texture the stones light will have</param>
-        public Stone(Vector2 position, Texture2D texture) : this(position)
+        public Glowstick(Vector2 position, Texture2D texture) : this(position)
         {
             _texturedLight = new TexturedLight
             {

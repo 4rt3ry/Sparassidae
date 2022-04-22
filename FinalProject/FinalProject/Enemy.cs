@@ -279,7 +279,7 @@ namespace FinalProject
                         }
                         break;
                     case EnemyState.InvestigateState:
-                        if(map.LandedStones.Count > 5)
+                        if(map.LandedGlowsticks.Count > 5)
                         {
                             if (stoneInvestigateTimer > 0 && stoneInvestigateTimer < 5)
                             {
@@ -292,7 +292,7 @@ namespace FinalProject
                         }
                         else
                         {
-                            if (stoneInvestigateTimer > 0 && stoneInvestigateTimer < map.LandedStones.Count)
+                            if (stoneInvestigateTimer > 0 && stoneInvestigateTimer < map.LandedGlowsticks.Count)
                             {
                                 DrawEnemyStandingAnimation(batch);
                             }
@@ -355,7 +355,7 @@ namespace FinalProject
                     // 1.2 Stone Detection update
                     // Stone detection function
                     isStoneInvestigation = false;
-                    foreach (Stone stone in map.LandedStones)
+                    foreach (Glowstick stone in map.LandedGlowsticks)
                     {
                         if(Math.Abs((_position - stone.Position).Length()) < detectionRadius)
                         {
@@ -382,14 +382,14 @@ namespace FinalProject
                                         // Set up moving position
                                         movingTowards = stone.Position;
 
-                                        if (map.LandedStones.Count < 5)
-                                        {
-                                            stoneInvestigateTimer = map.LandedStones.Count;
-                                        }
-                                        else
-                                        {
-                                            stoneInvestigateTimer = 5;
-                                        }
+                                    if (map.LandedGlowsticks.Count < 5)
+                                    {
+                                        stoneInvestigateTimer = map.LandedGlowsticks.Count;
+                                    }
+                                    else
+                                    {
+                                        stoneInvestigateTimer = 5;
+                                    }
 
                                         // Change state
                                         currentState = EnemyState.InvestigateState;
@@ -674,13 +674,13 @@ namespace FinalProject
 
                     // 2. Change speed if wall between enemy and player
                     detectionLink.EndPosition = target.Position;
-                    if(WallDetection())
+                    if (roamDetectionTrigger.Intersects(target.PhysicsCollider))
                     {
-                        speed = baseSpeed;
+                        speed = baseSpeed/2;
                     }
                     else
                     {
-                        speed = baseSpeed / 2f;
+                        speed = baseSpeed;
                     }
 
                     break;
