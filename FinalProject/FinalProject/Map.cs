@@ -78,7 +78,7 @@ namespace FinalProject
         public ContentManager Content => _content;
         public Player Player => _player;
 
-        internal List<Glowstick> Stones => _glowsticks;
+        internal List<Glowstick> Glowsticks => _glowsticks;
 
         public int GlowstickCount { get => _glowstickCount; set => _glowstickCount = value; }
 
@@ -203,14 +203,14 @@ namespace FinalProject
             // Player 
             _player.Move(dTime);
             _player.Update(dTime);
-            _player.ThrowStone(Stones, _penumbra, _stoneMaskTexture, this);
+            _player.ThrowStone(Glowsticks, _penumbra, _stoneMaskTexture, this);
 
-            foreach (Glowstick stone in Stones) stone.Update(dTime);
+            foreach (Glowstick stone in Glowsticks) stone.Update(dTime);
             foreach (Glowstick stone in LandedGlowsticks) stone.Update(dTime);
             foreach (Glowstick stone in _decayingStones) stone.Update(dTime);
 
             Glowstick selected = null;
-            if (Stones.Count > 0)
+            if (Glowsticks.Count > 0)
             {
                 selected = _glowsticks[0];
             }
@@ -229,7 +229,7 @@ namespace FinalProject
                 }
 
                 // Stone collisions
-                foreach (Glowstick stone in Stones)
+                foreach (Glowstick stone in Glowsticks)
                 {
                     if (wall.PhysicsCollider.CheckCollision(stone, out hit))
                     {
