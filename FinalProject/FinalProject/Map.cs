@@ -53,7 +53,7 @@ namespace FinalProject
         private float stoneDecayTime;
         private float decayTimer;
         private float egcTimer;
-        private List<Objective> endGoals;
+        private List<Objective> endGoals = new List<Objective>();
         //State Manager reference
         GameStateManager stateManager;
 
@@ -84,6 +84,8 @@ namespace FinalProject
 
         internal List<Stone> LandedStones => _landedStones;
         internal List<Objective> EndGoals => endGoals;
+
+        public bool IsEGCActive { get => isEGCActive; set => isEGCActive = value; }
 
         //Constructors
 
@@ -408,7 +410,7 @@ namespace FinalProject
                     case "enemy":
                         break;
                     case "spawn":
-                        //Player.Position = new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2));
+                        Player.Position = new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2));
                         break;
                     case "objective":
                         allGoals.Add(new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2)));
@@ -453,14 +455,17 @@ namespace FinalProject
             // Get ahold of the lighting system and reset it
             //_penumbra = (PenumbraComponent)serviceProvider.GetService(typeof(PenumbraComponent));
             SetupPenumbraLighting();
-
+    
             foreach (Vector2 position in allGoals)
             {
                 Objective newGoal = new Objective(position, _player);
-                endGoals.Add(newGoal);
-                Player.Position = position;
+                //Player.Position = position;
                 _penumbra.Lights.Add(newGoal.PointLight);
+                endGoals.Add(newGoal);
+
             }
+       
+
             //Debug code that puts all enemies into end game chase sequence at the start of the game
             /*
             foreach(Enemy e in _enemies)
@@ -507,12 +512,17 @@ namespace FinalProject
         /// </summary>
         public void TriggerEndGameChase()
         {
+            if (isEGCActive == true)
+            {
+                return;
+            }
+            isEGCActive = true;
+
             foreach (Enemy e in _enemies)
             {
                 e.StartEndGameChaseSequence();
             }
             _player.SetChaseState();
-            isEGCActive = true;
         }
 
         /// <summary>

@@ -412,6 +412,19 @@ namespace FinalProject
                     {
                         map.TriggerEndGameChase();
                     }
+                    //if (map.IsEGCActive == false)
+                    //{
+                    //    foreach (Objective goal in map.EndGoals)
+                    //    {
+                    //        bool won = goal.CheckWin();
+                    //        if (won == true)
+                    //        {
+                    //            map.TriggerEndGameChase();
+                    //            break;
+                    //        }
+                    //    }
+                    //}
+ 
 
                     // Update lighting effects after buttons have been updated
                     UpdatePenumbraState(penumbra);

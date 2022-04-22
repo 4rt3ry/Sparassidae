@@ -29,7 +29,7 @@ namespace FinalProject
                 Scale = new Vector2(100),
                 ShadowType = ShadowType.Solid,
                 Color = new Color(0f, 0f, .75f),
-                Intensity = 1f,
+                Intensity = .5f,
             };
 
         }
