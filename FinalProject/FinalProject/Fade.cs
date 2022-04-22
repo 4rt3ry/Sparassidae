@@ -59,7 +59,6 @@ namespace FinalProject
             }
             else if (finishedIn == true && faded2 == false)
             {
-                System.Diagnostics.Debug.WriteLine("adding");
 
                 transparency += dTime;
                 if (transparency >= 1f)
@@ -75,7 +74,6 @@ namespace FinalProject
                     faded = true;
                 }
             }
-            System.Diagnostics.Debug.WriteLine("trans is " + transparency);
 
         }
 
@@ -83,7 +81,6 @@ namespace FinalProject
         {
             //System.Diagnostics.Debug.WriteLine(currentState.ToString() + faded);
             if (currentState != prevState && faded == true) {
-                System.Diagnostics.Debug.WriteLine("new" + currentState.ToString() + prevState.ToString());
 
                 faded = false;
                 finishedIn = false;

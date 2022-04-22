@@ -12,11 +12,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace FinalProject
 {
-    class Stone : GameObject
+    class Glowstick : GameObject
     {
 
-        // Fields
-        private bool isInvestigated; // This is bool value used by enemy to record if this stone is investigated or not
+        //// Fields
+        //private bool isInvestigated; // This is bool value used by enemy to record if this stone is investigated or not
 
         // Constants
         private const float _maxThrowSpeed = 800; // Pixels per second
@@ -59,7 +59,7 @@ namespace FinalProject
         /// <summary>
         /// Has this stone been investigated by an enemy
         /// </summary>
-        public bool IsInvestigated { get => isInvestigated; set => isInvestigated = value; }
+        //public bool IsInvestigated { get => isInvestigated; set => isInvestigated = value; }
 
         /// <summary>
         /// Has this stone landed, or is it still in motion
@@ -86,10 +86,9 @@ namespace FinalProject
         /// </summary>
         /// <param name="penumbra"></param>
 
-        public Stone(Vector2 position) : base()
+        public Glowstick(Vector2 position) : base(position)
         {
             // Position information
-            _position = position;
             _physicsCollider = new CircleCollider(this, new Vector2(0, 0), 10, false);
 
             // Lighting
@@ -102,7 +101,7 @@ namespace FinalProject
                 Intensity = 0.7f,
             };
 
-            IsInvestigated = false;
+            //IsInvestigated = false;
         }
 
         /// <summary>
@@ -110,7 +109,7 @@ namespace FinalProject
         /// </summary>
         /// <param name="position">Location of the stone</param>
         /// <param name="texture">Texture the stones light will have</param>
-        public Stone(Vector2 position, Texture2D texture) : this(position)
+        public Glowstick(Vector2 position, Texture2D texture) : this(position)
         {
             _texturedLight = new TexturedLight
             {

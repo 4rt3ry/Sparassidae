@@ -77,6 +77,7 @@ namespace FinalProject
         // Stone investigating varibles
         private float stoneInvestigateTimer;
         private bool isStoneInvestigation; // Detect stone
+        private List<Glowstick> checkedStone = new List<Glowstick>();
 
         // Return state timer
         private float returnTimer = 3; // After enemy lost player's position, the enemy will stay in the same position for 3 seconds
@@ -151,13 +152,18 @@ namespace FinalProject
             
             if (roamLocations == null)
             {
-                roamLocations = new List<Vector2>();
-                roamLocations.Add(position);
+                this.roamLocations = new List<Vector2>();
+                this.roamLocations.Add(position);
+            }
+            else if(roamLocations != null && roamLocations.Count == 0)
+            {
+                this.roamLocations = roamLocations;
+                this.roamLocations.Add(position);
             }
             else if (roamLocations != null && roamLocations.Count == 1)
             {
-                roamLocations = new List<Vector2>();
-                roamLocations.Add(position);
+                this.roamLocations = roamLocations;
+                this.roamLocations.Add(position);
             }
             else
             {
@@ -273,7 +279,7 @@ namespace FinalProject
                         }
                         break;
                     case EnemyState.InvestigateState:
-                        if(map.LandedStones.Count > 5)
+                        if(map.LandedGlowsticks.Count > 5)
                         {
                             if (stoneInvestigateTimer > 0 && stoneInvestigateTimer < 5)
                             {
@@ -286,7 +292,7 @@ namespace FinalProject
                         }
                         else
                         {
-                            if (stoneInvestigateTimer > 0 && stoneInvestigateTimer < map.LandedStones.Count)
+                            if (stoneInvestigateTimer > 0 && stoneInvestigateTimer < map.LandedGlowsticks.Count)
                             {
                                 DrawEnemyStandingAnimation(batch);
                             }
@@ -327,7 +333,7 @@ namespace FinalProject
         /// <param name="dTime">Time passed (Seconds)</param>
         public void Update(float dTime)
         {
-            System.Diagnostics.Debug.WriteLine(currentState);
+            //System.Diagnostics.Debug.WriteLine(currentState);
             switch (currentState)
             {
                 case EnemyState.RoamingState:
@@ -349,39 +355,51 @@ namespace FinalProject
                     // 1.2 Stone Detection update
                     // Stone detection function
                     isStoneInvestigation = false;
-                    foreach (Stone stone in map.LandedStones)
+                    foreach (Glowstick stone in map.LandedGlowsticks)
                     {
-                        // Check if the stone has been investigated
-                        if (!stone.IsInvestigated)
+                        if(Math.Abs((_position - stone.Position).Length()) < detectionRadius)
                         {
-                            // Check uninvestigated stone is in the roam detection range
-                            if (RoamDetectionTrigger.CheckCollision(stone))
+                            bool stoneIsChecked = false;
+                            foreach(Glowstick checkedStone in checkedStone)
                             {
-                                // Set the Detection link
-                                detectionLink.EndPosition = stone.Position;
-                                // Check the wall between stone and enemy
-                                if (WallDetection())
+                                if(stone == checkedStone)
                                 {
-                                    // Set up moving position
-                                    movingTowards = stone.Position;
-                                    // set the stone as investigated
-                                    stone.IsInvestigated = true;
+                                    stoneIsChecked = true;   
+                                }
+                            }
 
-                                    if (map.LandedStones.Count < 5)
+                            if(!stoneIsChecked)
+                            {
+
+                                // Check uninvestigated stone is in the roam detection range
+                                if (RoamDetectionTrigger.CheckCollision(stone))
+                                {
+                                    // Set the Detection link
+                                    detectionLink.EndPosition = stone.Position;
+                                    // Check the wall between stone and enemy
+                                    if (WallDetection())
                                     {
-                                        stoneInvestigateTimer = map.LandedStones.Count;
+                                        // Set up moving position
+                                        movingTowards = stone.Position;
+
+                                    if (checkedStone.Count < 5)
+                                    {
+                                        stoneInvestigateTimer = checkedStone.Count;
                                     }
                                     else
                                     {
                                         stoneInvestigateTimer = 5;
                                     }
 
-                                    // Change state
-                                    currentState = EnemyState.InvestigateState;
-                                    isStoneInvestigation = true;
+                                        // Change state
+                                        currentState = EnemyState.InvestigateState;
+                                        isStoneInvestigation = true;
+                                        checkedStone.Add(stone);
+                                    }
                                 }
                             }
                         }
+
                     }
 
                     // 2 Roaming Parts
@@ -390,36 +408,12 @@ namespace FinalProject
                         // 2.1 Now: It means enemy will not move
                         if (roamLocations.Count == 1)
                         {
-                            if (Math.Abs((_position - roamLocations.ElementAt(roamTarget)).Length()) > roamCheckDistance)
+                            if (Math.Abs((_position - roamLocations.ElementAt(0)).Length()) > roamCheckDistance)
                             {
-                                moveDir = roamLocations[roamTarget] - this._position;
+                                moveDir = roamLocations[0] - this._position;
                                 moveDir.Normalize();
                                 this._position += moveDir * speed * dTime;
                             }
-                            ////Movement code
-                            //if (moving)
-                            //{
-                            //    //Move enemy
-
-
-                                //    //Time Increment
-                                //    moveTime -= dTime;
-                                //    if (moveTime <= 0)
-                                //    {
-                                //        downTime = 1f;
-                                //        moving = false;
-                                //    }
-                                //}
-                                //else
-                                //{
-                                //    //Time Increment
-                                //    downTime -= dTime;
-                                //    if (downTime <= 0)
-                                //    {
-                                //        moveTime = 1.5f;
-                                //        moving = true;
-                                //    }
-                                //}
                         }
                         // 2.2 Multiple locations (Roam between locations)
                         else if (roamLocations.Count > 1)
@@ -482,7 +476,7 @@ namespace FinalProject
                         //Movement code
                         if (moving)
                         {
-                            System.Diagnostics.Debug.WriteLine(this.Position);
+                            //System.Diagnostics.Debug.WriteLine(this.Position);
                             //Move enemy
                             moveDir = startingPosition - this._position;
                             moveDir.Normalize();
@@ -680,13 +674,13 @@ namespace FinalProject
 
                     // 2. Change speed if wall between enemy and player
                     detectionLink.EndPosition = target.Position;
-                    if(WallDetection())
+                    if (roamDetectionTrigger.Intersects(target.PhysicsCollider))
                     {
-                        speed = baseSpeed;
+                        speed = baseSpeed/2;
                     }
                     else
                     {
-                        speed = baseSpeed / 2f;
+                        speed = baseSpeed;
                     }
 
                     break;
@@ -753,7 +747,7 @@ namespace FinalProject
                 if (detectionLink.CheckCollision(wall))
                 {
 
-                    System.Diagnostics.Debug.WriteLine($"{wall.Position}");
+                    //System.Diagnostics.Debug.WriteLine($"{wall.Position}");
                     return false;
                 }
             }

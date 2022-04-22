@@ -227,7 +227,7 @@ namespace FinalProject
         /// </summary>
         /// <param name="stones"></param>
         /// <param name="penumbra"></param>
-        public void ThrowStone(List<Stone> stones, PenumbraComponent penumbra)
+        public void ThrowStone(List<Glowstick> stones, PenumbraComponent penumbra)
         {
             currentMouse = Mouse.GetState();
 
@@ -235,7 +235,7 @@ namespace FinalProject
             if (currentMouse.LeftButton == ButtonState.Pressed &&
                 previousMouse.LeftButton == ButtonState.Released)
             {
-                Stone stone = new Stone(_position);
+                Glowstick stone = new Glowstick(_position);
                 Vector2 throwDirection = new Vector2(MathF.Cos(flashlight.Rotation), MathF.Sin(flashlight.Rotation));
                 Vector2 mousePosition = camera.ScreenToWorldSpace(new Vector2(currentMouse.X, currentMouse.Y));
                 Debug.WriteLine("Throw: " + throwDirection);
@@ -270,24 +270,24 @@ namespace FinalProject
         /// <param name="stones"></param>
         /// <param name="penumbra"></param>
         /// <param name="texture"></param>
-        public void ThrowStone(List<Stone> stones, PenumbraComponent penumbra, Texture2D texture, Map map)
+        public void ThrowStone(List<Glowstick> stones, PenumbraComponent penumbra, Texture2D texture, Map map)
         {
              currentMouse = Mouse.GetState();
 
-             if(map.TotalStoneNumber >= 1)
+             if(map.GlowstickCount >= 1)
              {
                 // Throw a stone when left mouse button is pressed
                 if (currentMouse.LeftButton == ButtonState.Pressed &&
                     previousMouse.LeftButton == ButtonState.Released)
                 {
-                    Stone stone = new Stone(_position, texture);
+                    Glowstick stone = new Glowstick(_position, texture);
                     Vector2 throwDirection = new Vector2(MathF.Cos(flashlight.Rotation), MathF.Sin(flashlight.Rotation));
                     Vector2 mousePosition = camera.ScreenToWorldSpace(new Vector2(currentMouse.X, currentMouse.Y));
                     Debug.WriteLine("Throw: " + throwDirection);
                     stone.Throw(mousePosition);
                     stones.Add(stone);
                     penumbra.Lights.Add(stone.Light);
-                    map.TotalStoneNumber--;
+                    map.GlowstickCount--;
                 }
              }
              previousMouse = currentMouse;
