@@ -77,6 +77,7 @@ namespace FinalProject
         // Stone investigating varibles
         private float stoneInvestigateTimer;
         private bool isStoneInvestigation; // Detect stone
+        private List<Glowstick> checkedStone = new List<Glowstick>();
 
         // Return state timer
         private float returnTimer = 3; // After enemy lost player's position, the enemy will stay in the same position for 3 seconds
@@ -356,37 +357,49 @@ namespace FinalProject
                     isStoneInvestigation = false;
                     foreach (Glowstick stone in map.LandedGlowsticks)
                     {
-                        // Check if the stone has been investigated
-                        if (!stone.IsInvestigated)
+                        if(Math.Abs((_position - stone.Position).Length()) < detectionRadius)
                         {
-                            // Check uninvestigated stone is in the roam detection range
-                            if (RoamDetectionTrigger.CheckCollision(stone))
+                            bool stoneIsChecked = false;
+                            foreach(Glowstick checkedStone in checkedStone)
                             {
-                                // Set the Detection link
-                                detectionLink.EndPosition = stone.Position;
-                                // Check the wall between stone and enemy
-                                if (WallDetection())
+                                if(stone == checkedStone)
                                 {
-                                    // Set up moving position
-                                    movingTowards = stone.Position;
-                                    // set the stone as investigated
-                                    stone.IsInvestigated = true;
+                                    stoneIsChecked = true;   
+                                }
+                            }
 
-                                    if (map.LandedGlowsticks.Count < 5)
+                            if(!stoneIsChecked)
+                            {
+
+                                // Check uninvestigated stone is in the roam detection range
+                                if (RoamDetectionTrigger.CheckCollision(stone))
+                                {
+                                    // Set the Detection link
+                                    detectionLink.EndPosition = stone.Position;
+                                    // Check the wall between stone and enemy
+                                    if (WallDetection())
                                     {
-                                        stoneInvestigateTimer = map.LandedGlowsticks.Count;
+                                        // Set up moving position
+                                        movingTowards = stone.Position;
+
+                                    if (checkedStone.Count < 5)
+                                    {
+                                        stoneInvestigateTimer = checkedStone.Count;
                                     }
                                     else
                                     {
                                         stoneInvestigateTimer = 5;
                                     }
 
-                                    // Change state
-                                    currentState = EnemyState.InvestigateState;
-                                    isStoneInvestigation = true;
+                                        // Change state
+                                        currentState = EnemyState.InvestigateState;
+                                        isStoneInvestigation = true;
+                                        checkedStone.Add(stone);
+                                    }
                                 }
                             }
                         }
+
                     }
 
                     // 2 Roaming Parts
@@ -401,30 +414,6 @@ namespace FinalProject
                                 moveDir.Normalize();
                                 this._position += moveDir * speed * dTime;
                             }
-                            ////Movement code
-                            //if (moving)
-                            //{
-                            //    //Move enemy
-
-
-                                //    //Time Increment
-                                //    moveTime -= dTime;
-                                //    if (moveTime <= 0)
-                                //    {
-                                //        downTime = 1f;
-                                //        moving = false;
-                                //    }
-                                //}
-                                //else
-                                //{
-                                //    //Time Increment
-                                //    downTime -= dTime;
-                                //    if (downTime <= 0)
-                                //    {
-                                //        moveTime = 1.5f;
-                                //        moving = true;
-                                //    }
-                                //}
                         }
                         // 2.2 Multiple locations (Roam between locations)
                         else if (roamLocations.Count > 1)
@@ -487,7 +476,7 @@ namespace FinalProject
                         //Movement code
                         if (moving)
                         {
-                            System.Diagnostics.Debug.WriteLine(this.Position);
+                            //System.Diagnostics.Debug.WriteLine(this.Position);
                             //Move enemy
                             moveDir = startingPosition - this._position;
                             moveDir.Normalize();
@@ -758,7 +747,7 @@ namespace FinalProject
                 if (detectionLink.CheckCollision(wall))
                 {
 
-                    System.Diagnostics.Debug.WriteLine($"{wall.Position}");
+                    //System.Diagnostics.Debug.WriteLine($"{wall.Position}");
                     return false;
                 }
             }

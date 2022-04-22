@@ -22,7 +22,8 @@ namespace FinalProject
         Tutorial,
         Test1,
         Level1,
-        Level2
+        Level2,
+        Level3
     }
 
     class Map
@@ -32,6 +33,7 @@ namespace FinalProject
         private readonly Player _player;
         private readonly List<Enemy> _enemies;
         private readonly List<Wall> _walls;
+        private readonly List<Arrow> _arrows;
         private List<Glowstick> _glowsticks;
         private List<Glowstick> _landedGlowsticks;
         private List<Glowstick> _decayingStones;
@@ -66,6 +68,7 @@ namespace FinalProject
         private Texture2D _enemyTexture;
         private Texture2D _stoneMaskTexture;
         private Texture2D _glowstickTexture;
+        private Texture2D _arrowTexture;
 
         // Imported using LoadMap()
         private Texture2D _mapTexture;
@@ -84,15 +87,15 @@ namespace FinalProject
 
         internal List<Wall> Walls => _walls;
 
-        //internal List<Stone> LandedStones => _landedStones;
+        internal List<Glowstick> LandedStones => _landedGlowsticks;
         internal List<Objective> EndGoals => endGoals;
         internal List<Glowstick> LandedGlowsticks => _landedGlowsticks;
 
         public bool IsEGCActive { get => isEGCActive; set => isEGCActive = value; }
 
+        internal List<Arrow> Arrows => _arrows;
+
         //Constructors
-
-
         public Map(PenumbraComponent penumbra, ContentManager content, Camera2D camera, GameStateManager stateManager)
         {
             _content = content;
@@ -100,6 +103,7 @@ namespace FinalProject
             _player = new Player(new Vector2(500, 500), camera);
             _enemies = new List<Enemy>();
             _walls = new List<Wall>();
+            _arrows = new List<Arrow>();
             _glowsticks = new List<Glowstick>();
             _landedGlowsticks = new List<Glowstick>();
             _decayingStones = new List<Glowstick>();
@@ -170,6 +174,11 @@ namespace FinalProject
             foreach (Enemy enemy in _enemies)
             {
                 enemy.Display(batch);
+            }
+
+            foreach (Arrow arrow in _arrows)
+            {
+                arrow.Draw(batch, Color.White);
             }
 
         }
@@ -345,6 +354,10 @@ namespace FinalProject
                     LoadFromFile("MainLevel2.lvl");
                     break;
 
+                case Level.Level3:
+                    LoadFromFile("MainLevel3.lvl");
+                    break;
+
                 default:
                     LoadTutorial();
                     break;
@@ -448,6 +461,8 @@ namespace FinalProject
                         //An arrow will store its direction as up/down/left/right within this variable, must be parsed
                         String arrowDirection = tileData[5];
 
+                        Arrows.Add(new Arrow(new Vector2(x, y), _arrowTexture, tileData[5]));
+
                         isArrow = true;
                         break;
                 }
@@ -532,6 +547,7 @@ namespace FinalProject
             _enemyTexture = _content.Load<Texture2D>("EnemySpriteSheet");
             _stoneMaskTexture = _content.Load<Texture2D>("Stone_Reveal_Mask");
             _glowstickTexture = _content.Load<Texture2D>("Glowstick_Lit");
+            _arrowTexture = _content.Load<Texture2D>("BloodyArrowUp");
 
             //Test purpose
             whiteTexture = _content.Load<Texture2D>("blackbox2");
