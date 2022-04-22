@@ -40,7 +40,7 @@ namespace FinalProject
         {
             _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1080;
-            _graphics.IsFullScreen = true;
+            //_graphics.IsFullScreen = true;
             _graphics.HardwareModeSwitch = true;
             _graphics.ApplyChanges();
 
