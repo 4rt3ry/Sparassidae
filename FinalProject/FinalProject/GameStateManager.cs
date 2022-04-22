@@ -243,10 +243,10 @@ namespace FinalProject
                         }
                     }
 
-                    if (map.Stones != null)
-                    {
-                        System.Diagnostics.Debug.WriteLine(map.Stones.Count);
-                    }
+                    //if (map.Stones != null)
+                    //{
+                    //    System.Diagnostics.Debug.WriteLine(map.Stones.Count);
+                    //}
 
                     // Task Hub
                     // Update the UI based on the center of the screen (local position)
@@ -423,6 +423,19 @@ namespace FinalProject
                     {
                         map.TriggerEndGameChase();
                     }
+                    //if (map.IsEGCActive == false)
+                    //{
+                    //    foreach (Objective goal in map.EndGoals)
+                    //    {
+                    //        bool won = goal.CheckWin();
+                    //        if (won == true)
+                    //        {
+                    //            map.TriggerEndGameChase();
+                    //            break;
+                    //        }
+                    //    }
+                    //}
+ 
 
                     // Update lighting effects after buttons have been updated
                     UpdatePenumbraState(penumbra);
