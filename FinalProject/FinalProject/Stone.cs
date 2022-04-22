@@ -15,8 +15,8 @@ namespace FinalProject
     class Stone : GameObject
     {
 
-        // Fields
-        private bool isInvestigated; // This is bool value used by enemy to record if this stone is investigated or not
+        //// Fields
+        //private bool isInvestigated; // This is bool value used by enemy to record if this stone is investigated or not
 
         // Constants
         private const float _maxThrowSpeed = 800; // Pixels per second
