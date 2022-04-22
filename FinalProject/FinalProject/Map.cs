@@ -81,7 +81,7 @@ namespace FinalProject
         public ContentManager Content => _content;
         public Player Player => _player;
 
-        internal List<Glowstick> Stones => _glowsticks;
+        internal List<Glowstick> Glowsticks => _glowsticks;
 
         public int GlowstickCount { get => _glowstickCount; set => _glowstickCount = value; }
 
@@ -212,14 +212,14 @@ namespace FinalProject
             // Player 
             _player.Move(dTime);
             _player.Update(dTime);
-            _player.ThrowStone(Stones, _penumbra, _stoneMaskTexture, this);
+            _player.ThrowStone(Glowsticks, _penumbra, _stoneMaskTexture, this);
 
-            foreach (Glowstick stone in Stones) stone.Update(dTime);
+            foreach (Glowstick stone in Glowsticks) stone.Update(dTime);
             foreach (Glowstick stone in LandedGlowsticks) stone.Update(dTime);
             foreach (Glowstick stone in _decayingStones) stone.Update(dTime);
 
             Glowstick selected = null;
-            if (Stones.Count > 0)
+            if (Glowsticks.Count > 0)
             {
                 selected = _glowsticks[0];
             }
@@ -238,11 +238,11 @@ namespace FinalProject
                 }
 
                 // Stone collisions
-                foreach (Glowstick stone in Stones)
+                foreach (Glowstick stone in Glowsticks)
                 {
                     if (wall.PhysicsCollider.CheckCollision(stone, out hit))
                     {
-                        stone.Position = hit.HitPoint + hit.Normal * ((CircleCollider)stone.PhysicsCollider).Radius;
+                        stone.Position = hit.HitPoint + hit.Normal * (((CircleCollider)stone.PhysicsCollider).Radius + 1);
                         stone.Bounce(hit.Normal);
                     }
                     if (stone.Landed)
@@ -268,24 +268,42 @@ namespace FinalProject
                         removed.Add(stone);
                     }
                 }
-
-                for(int i = _glowstickPickups.Count - 1; i >= 0; i--)
+                if (removed.Count > 0)
                 {
-                    if (_player.PhysicsCollider.CheckCollision(_glowstickPickups[i]))
+                    foreach(Glowstick s in removed)
                     {
-                        _glowstickCount += _glowstickPickups[i].NumGlowsticks;
-                        _penumbra.Lights.Remove(_glowstickPickups[i].PointLight);
-                        _glowstickPickups.RemoveAt(i);
+                        _glowsticks.Remove(s);
                     }
                 }
+            }
 
-                if (isEGCActive && decayTimer <= 0)
+            for (int i = _glowstickPickups.Count - 1; i >= 0; i--)
+            {
+                if (_player.PhysicsCollider.CheckCollision(_glowstickPickups[i]))
                 {
-                    foreach(Glowstick stone in LandedGlowsticks)
+                    _glowstickCount += _glowstickPickups[i].NumGlowsticks;
+                    _penumbra.Lights.Remove(_glowstickPickups[i].PointLight);
+                    _glowstickPickups.RemoveAt(i);
+                }
+            }
+
+            // Enemy 
+            foreach (Enemy enemy in _enemies)
+            {
+                enemy.Update(dTime);
+            }
+
+            //EGC Stuff
+
+            if (isEGCActive)
+            {
+                if (decayTimer < 0)
+                {
+                    foreach (Glowstick stone in LandedGlowsticks)
                     {
                         if (stone.TargetScale > 0)
                         {
-                            if(selected == null)
+                            if (selected == null)
                             {
                                 selected = stone;
                             }
@@ -298,27 +316,7 @@ namespace FinalProject
                             }
                         }
                     }
-                }
-                if (removed.Count > 0)
-                {
-                    foreach(Glowstick s in removed)
-                    {
-                        _glowsticks.Remove(s);
-                    }
-                }
-            }
 
-            // Enemy 
-            foreach (Enemy enemy in _enemies)
-            {
-                enemy.Update(dTime);
-            }
-
-            //EGC Stuff
-            if (isEGCActive)
-            {
-                if (decayTimer < 0)
-                {
                     selected.TargetScale = 0;
                     decayTimer = stoneDecayTime;
                 }
@@ -445,7 +443,7 @@ namespace FinalProject
                     case "enemy":
                         break;
                     case "spawn":
-                        Player.Position = new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2));
+                        //Player.Position = new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2));
                         break;
                     case "objective":
                         allGoals.Add(new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2)));
@@ -502,7 +500,7 @@ namespace FinalProject
             foreach (Vector2 position in allGoals)
             {
                 Objective newGoal = new Objective(position, _player);
-                //Player.Position = position;
+                Player.Position = position;
                 _penumbra.Lights.Add(newGoal.PointLight);
                 endGoals.Add(newGoal);
 

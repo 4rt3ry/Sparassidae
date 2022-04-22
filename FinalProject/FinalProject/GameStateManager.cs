@@ -65,6 +65,7 @@ namespace FinalProject
         private Button backMainButton;
         private Button mainMenuButton;
         private Button backGameButton;
+        private Button quitButton;
         private Slider volumeSlider;
 
         private Texture2D _stoneUITexture;
@@ -114,6 +115,7 @@ namespace FinalProject
             buttons.Add(playButton);
             buttons.Add(optionButton);
             buttons.Add(instructionButton);
+            //buttons.Add(quitButton);
             _fadeTransition = new Fade();
             _fadeTransition.LoadContent(content);
 
@@ -421,19 +423,18 @@ namespace FinalProject
                     {
                         map.TriggerEndGameChase();
                     }
-                    //if (map.IsEGCActive == false)
-                    //{
-                    //    foreach (Objective goal in map.EndGoals)
-                    //    {
-                    //        bool won = goal.CheckWin();
-                    //        if (won == true)
-                    //        {
-                    //            map.TriggerEndGameChase();
-                    //            break;
-                    //        }
-                    //    }
-                    //}
- 
+                    if (map.IsEGCActive == false)
+                    {
+                        foreach (Objective goal in map.EndGoals)
+                        {
+                            bool won = goal.CheckWin(dTime);
+                            if (won == true)
+                            {
+                                map.TriggerEndGameChase();
+                            }
+                        }
+                    }
+
 
                     // Update lighting effects after buttons have been updated
                     UpdatePenumbraState(penumbra);
