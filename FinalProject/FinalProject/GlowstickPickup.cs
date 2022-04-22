@@ -20,6 +20,11 @@ namespace FinalProject
         public int NumGlowsticks => _numGlowsticks;
 
         /// <summary>
+        /// The glowstick pickup's point light
+        /// </summary>
+        public PointLight PointLight => _pointLight;
+
+        /// <summary>
         /// The <see cref="PenumbraComponent"/> that contains the glowstick pickup's point light
         /// </summary>
         public PenumbraComponent Penumbra { get; set; }
@@ -36,11 +41,10 @@ namespace FinalProject
             _pointLight = new PointLight
             {
                 Position = _position,
-                Scale = new Vector2(50),
-                Intensity =  0.5f,
-                //Color = new Color()
+                Scale = new Vector2(160),
+                Intensity =  1.2f,
+                Color = new Color(0.35f, 0.62f, 0.35f),
             };
-            penumbra.Lights.Add(_pointLight);
             PhysicsCollider = new CircleCollider(this, Vector2.Zero, 25, true);
         }
 
@@ -52,7 +56,7 @@ namespace FinalProject
         {
             if (_texure != null)
             {
-                batch.Draw(_texure, _position - new Vector2(_texure.Width / 2, _texure.Height / 2), Color.White);
+                batch.Draw(_texure, new Rectangle((int)_position.X - 25, (int)_position.Y - 25, 50, 50), Color.White);
             }
         }
     }
