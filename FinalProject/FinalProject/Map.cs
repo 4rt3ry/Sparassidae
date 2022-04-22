@@ -36,6 +36,7 @@ namespace FinalProject
         private List<Stone> _landedStones;
         private List<Stone> _decayingStones;
         private readonly List<Vector2> _stoneRevealAreas;
+        private List<GlowstickPickup> _glowstickPickups;
         private int totalStoneNumber;
 
         private readonly PenumbraComponent _penumbra;
@@ -64,6 +65,7 @@ namespace FinalProject
         private Texture2D _stoneRevealMask;
         private Texture2D _enemyTexture;
         private Texture2D _stoneMaskTexture;
+        private Texture2D _glowstickTexture;
 
         // Imported using LoadMap()
         private Texture2D _mapTexture;
@@ -98,6 +100,7 @@ namespace FinalProject
             _landedStones = new List<Stone>();
             _decayingStones = new List<Stone>();
             _stoneRevealAreas = new List<Vector2>();
+            _glowstickPickups = new List<GlowstickPickup>();
             _penumbra = penumbra;
 
             // This will be external number.
@@ -154,6 +157,11 @@ namespace FinalProject
             {
                 wall.PhysicsCollider.DrawDebugTexture(batch, Color.White);
             }
+
+            //foreach(GlowstickPickup glowstickPickup in _glowstickPickups)
+            //{
+            //    glowstickPickup.Draw(batch);
+            //}
 
             foreach (Enemy enemy in _enemies)
             {
@@ -448,7 +456,7 @@ namespace FinalProject
 
             }
 
-
+            _glowstickPickups.Add(new GlowstickPickup(_player.Position + Vector2.UnitX * 200, _penumbra, _glowstickTexture));
 
             // Create a new content manager to load content used just by this map
             // this content can be used to content.Load, not sure if we need it
@@ -491,6 +499,7 @@ namespace FinalProject
         {
             _enemyTexture = _content.Load<Texture2D>("EnemySpriteSheet");
             _stoneMaskTexture = _content.Load<Texture2D>("Stone_Reveal_Mask");
+            _glowstickTexture = _content.Load<Texture2D>("Stone");
 
             //Test purpose
             whiteTexture = _content.Load<Texture2D>("blackbox2");
