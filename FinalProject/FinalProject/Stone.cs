@@ -86,10 +86,9 @@ namespace FinalProject
         /// </summary>
         /// <param name="penumbra"></param>
 
-        public Stone(Vector2 position) : base()
+        public Stone(Vector2 position) : base(position)
         {
             // Position information
-            _position = position;
             _physicsCollider = new CircleCollider(this, new Vector2(0, 0), 10, false);
 
             // Lighting

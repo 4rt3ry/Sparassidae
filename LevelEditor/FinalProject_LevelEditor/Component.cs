@@ -106,6 +106,7 @@ namespace FinalProject_LevelEditor
                     directionIndicator.Location = new Point(pBox.Location.X, pBox.Location.Y + bWidth);
                     break;
             }
+            ResizeArrow();
         }
 
         //Methods
@@ -184,6 +185,7 @@ namespace FinalProject_LevelEditor
                     }
                     break;
             }
+            ResizeArrow();
         }
 
         /// <summary>
@@ -215,6 +217,7 @@ namespace FinalProject_LevelEditor
                     pBox.Width = pBox.Width + bWidth * mult;
                     break;
             }
+            ResizeArrow();
         }
 
         public PictureBox GetBox()
@@ -351,6 +354,56 @@ namespace FinalProject_LevelEditor
             pBox.Location = new Point(pBox.Location.X + (dX - adjustment.X*bWidth), pBox.Location.Y + (dY - adjustment.Y*bHeight));
 
             adjustment = new Point(xOffset, yOffset);
+        }
+
+        public void RotateArrow()
+        {
+            if(tileType == TileType.Arrow)
+            {
+                switch (direction)
+                {
+                    case BoxMovement.Up:
+                        direction = BoxMovement.Right;
+                        directionIndicator.Location = new Point(pBox.Location.X + pBox.Width, pBox.Location.Y + pBox.Height / 2 - bHeight / 2);
+                        break;
+                    case BoxMovement.Down:
+                        direction = BoxMovement.Left;
+                        directionIndicator.Location = new Point(pBox.Location.X - bWidth, pBox.Location.Y + pBox.Height/2 - bHeight/2);
+                        break;
+                    case BoxMovement.Left:
+                        direction = BoxMovement.Up;
+                        directionIndicator.Location = new Point(pBox.Location.X + pBox.Width / 2 - bWidth / 2, pBox.Location.Y - bHeight);
+                        break;
+                    case BoxMovement.Right:
+                        direction = BoxMovement.Down;
+                        directionIndicator.Location = new Point(pBox.Location.X + pBox.Width / 2 - bWidth / 2, pBox.Location.Y + pBox.Height);
+                        break;
+                }
+            }
+        }
+
+        public void ResizeArrow()
+        {
+            if(tileType == TileType.Arrow)
+            {
+                switch (direction)
+                {
+                    case BoxMovement.Up:
+                        directionIndicator.Location = new Point(pBox.Location.X + pBox.Width / 2 - bWidth / 2, pBox.Location.Y - bHeight);
+                        break;
+                    case BoxMovement.Down:
+                        directionIndicator.Location = new Point(pBox.Location.X + pBox.Width / 2 - bWidth / 2, pBox.Location.Y + pBox.Height);
+                        break;
+                    case BoxMovement.Left:
+                        directionIndicator.Location = new Point(pBox.Location.X - bWidth, pBox.Location.Y + pBox.Height / 2 - bHeight / 2);
+                        break;
+                    case BoxMovement.Right:
+                        directionIndicator.Location = new Point(pBox.Location.X + pBox.Width, pBox.Location.Y + pBox.Height / 2 - bHeight / 2);
+                        break;
+                }
+                directionIndicator.Width = bWidth;
+                directionIndicator.Height = bHeight;
+            }
         }
     }
 }
