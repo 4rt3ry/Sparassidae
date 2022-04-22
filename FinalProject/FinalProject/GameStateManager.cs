@@ -235,9 +235,9 @@ namespace FinalProject
                     if (isGodMode)
                     {
                         map.DrawTest(batch);
-                        if (map.TotalStoneNumber == 0)
+                        if (map.GlowstickCount == 0)
                         {
-                            map.TotalStoneNumber = 10;
+                            map.GlowstickCount = 10;
                         }
                     }
 
@@ -255,11 +255,20 @@ namespace FinalProject
                         new Vector2(1580, 100), Color.White);
 
                     // Stone
-                    batch.Draw(_stoneUITexture, new Rectangle(40, 990, 50, 50), Color.White);
+                    if(map.GlowstickCount <= 5)
+                    {
+                        for(int i = 0; i < map.GlowstickCount; i ++)
+                        {
+                            batch.Draw(_stoneUITexture, new Rectangle(40 + 30 * i, 990, 50, 50), Color.White);
+                        }
+                    }
+                    else
+                    {
+                        batch.Draw(_stoneUITexture, new Rectangle(40, 990, 50, 50), Color.White);
 
-                    batch.DrawString(syneTactileFont48, $" x {map.TotalStoneNumber}",
-                      new Vector2(100, 975), Color.White);
-
+                        batch.DrawString(syneTactileFont48, $" x {map.GlowstickCount}",
+                          new Vector2(100, 975), Color.White);
+                    }
 
                     batch.DrawString(syneTactileFont24, "Press [P] to Pause",
                         new Vector2(graphics.PreferredBackBufferWidth - 260, graphics.PreferredBackBufferHeight - 50),

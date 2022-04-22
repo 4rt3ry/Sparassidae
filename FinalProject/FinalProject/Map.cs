@@ -32,11 +32,12 @@ namespace FinalProject
         private readonly Player _player;
         private readonly List<Enemy> _enemies;
         private readonly List<Wall> _walls;
-        private List<Stone> _stones;
-        private List<Stone> _landedStones;
-        private List<Stone> _decayingStones;
-        private readonly List<Vector2> _stoneRevealAreas;
-        private int totalStoneNumber;
+        private List<Glowstick> _glowsticks;
+        private List<Glowstick> _landedGlowsticks;
+        private List<Glowstick> _decayingStones;
+        private readonly List<Vector2> _glowstickRevealAreas;
+        private List<GlowstickPickup> _glowstickPickups;
+        private int _glowstickCount;
 
         private readonly PenumbraComponent _penumbra;
         private readonly ContentManager _content;
@@ -64,6 +65,7 @@ namespace FinalProject
         private Texture2D _stoneRevealMask;
         private Texture2D _enemyTexture;
         private Texture2D _stoneMaskTexture;
+        private Texture2D _glowstickTexture;
 
         // Imported using LoadMap()
         private Texture2D _mapTexture;
@@ -76,14 +78,15 @@ namespace FinalProject
         public ContentManager Content => _content;
         public Player Player => _player;
 
-        internal List<Stone> Stones => _stones;
+        internal List<Glowstick> Stones => _glowsticks;
 
-        public int TotalStoneNumber { get => totalStoneNumber; set => totalStoneNumber = value; }
+        public int GlowstickCount { get => _glowstickCount; set => _glowstickCount = value; }
 
         internal List<Wall> Walls => _walls;
 
         internal List<Stone> LandedStones => _landedStones;
         internal List<Objective> EndGoals => endGoals;
+        internal List<Glowstick> LandedGlowsticks => _landedGlowsticks;
 
         public bool IsEGCActive { get => isEGCActive; set => isEGCActive = value; }
 
@@ -97,14 +100,15 @@ namespace FinalProject
             _player = new Player(new Vector2(500, 500), camera);
             _enemies = new List<Enemy>();
             _walls = new List<Wall>();
-            _stones = new List<Stone>();
-            _landedStones = new List<Stone>();
-            _decayingStones = new List<Stone>();
-            _stoneRevealAreas = new List<Vector2>();
+            _glowsticks = new List<Glowstick>();
+            _landedGlowsticks = new List<Glowstick>();
+            _decayingStones = new List<Glowstick>();
+            _glowstickRevealAreas = new List<Vector2>();
+            _glowstickPickups = new List<GlowstickPickup>();
             _penumbra = penumbra;
 
             // This will be external number.
-            TotalStoneNumber = 10;
+            GlowstickCount = 10;
 
             //EGC Variables
             isEGCActive = false;
@@ -158,6 +162,11 @@ namespace FinalProject
                 wall.PhysicsCollider.DrawDebugTexture(batch, Color.White);
             }
 
+            foreach (GlowstickPickup glowstickPickup in _glowstickPickups)
+            {
+                glowstickPickup.Draw(batch);
+            }
+
             foreach (Enemy enemy in _enemies)
             {
                 enemy.Display(batch);
@@ -196,18 +205,18 @@ namespace FinalProject
             _player.Update(dTime);
             _player.ThrowStone(Stones, _penumbra, _stoneMaskTexture, this);
 
-            foreach (Stone stone in Stones) stone.Update(dTime);
-            foreach (Stone stone in LandedStones) stone.Update(dTime);
-            foreach (Stone stone in _decayingStones) stone.Update(dTime);
+            foreach (Glowstick stone in Stones) stone.Update(dTime);
+            foreach (Glowstick stone in LandedGlowsticks) stone.Update(dTime);
+            foreach (Glowstick stone in _decayingStones) stone.Update(dTime);
 
-            Stone selected = null;
+            Glowstick selected = null;
             if (Stones.Count > 0)
             {
-                selected = _stones[0];
+                selected = _glowsticks[0];
             }
 
             //Turns true if a stone has moved from the active list to the dead list
-            List<Stone> removed = new List<Stone>();
+            List<Glowstick> removed = new List<Glowstick>();
 
             // Wall collisions
             foreach (Wall wall in Walls)
@@ -220,7 +229,7 @@ namespace FinalProject
                 }
 
                 // Stone collisions
-                foreach (Stone stone in Stones)
+                foreach (Glowstick stone in Stones)
                 {
                     if (wall.PhysicsCollider.CheckCollision(stone, out hit))
                     {
@@ -230,7 +239,7 @@ namespace FinalProject
                     if (stone.Landed)
                     {
                         bool availableLandingPosition = true;
-                        foreach(Stone s in LandedStones)
+                        foreach(Glowstick s in LandedGlowsticks)
                         {
                             if(Vector2.Distance(s.Position, stone.Position) < s.TargetScale/1.8f)
                             {
@@ -239,20 +248,31 @@ namespace FinalProject
                         }
                         if (availableLandingPosition)
                         {
-                            LandedStones.Add(stone);
+                            LandedGlowsticks.Add(stone);
                         }
                         else
                         {
-                            totalStoneNumber += 1;
+                            _glowstickCount += 1;
                             _decayingStones.Add(stone);
                             stone.TargetScale = 0;
                         }
                         removed.Add(stone);
                     }
                 }
+
+                for(int i = _glowstickPickups.Count - 1; i >= 0; i--)
+                {
+                    if (_player.PhysicsCollider.CheckCollision(_glowstickPickups[i]))
+                    {
+                        _glowstickCount += _glowstickPickups[i].NumGlowsticks;
+                        _penumbra.Lights.Remove(_glowstickPickups[i].PointLight);
+                        _glowstickPickups.RemoveAt(i);
+                    }
+                }
+
                 if (isEGCActive && decayTimer <= 0)
                 {
-                    foreach(Stone stone in LandedStones)
+                    foreach(Glowstick stone in LandedGlowsticks)
                     {
                         if (stone.TargetScale > 0)
                         {
@@ -272,9 +292,9 @@ namespace FinalProject
                 }
                 if (removed.Count > 0)
                 {
-                    foreach(Stone s in removed)
+                    foreach(Glowstick s in removed)
                     {
-                        _stones.Remove(s);
+                        _glowsticks.Remove(s);
                     }
                 }
             }
@@ -401,6 +421,8 @@ namespace FinalProject
                 int w = Convert.ToInt32(tileData[3]) * indexToPixels;
                 int h = Convert.ToInt32(tileData[4]) * indexToPixels;
 
+                bool isArrow = false;
+
                 //Switch for all different types of placeables
                 switch (tileData[0])
                 {
@@ -419,12 +441,20 @@ namespace FinalProject
                         break;
                     case "exit":
                         break;
+                    case "glow":
+                        break;
+                    case "arrow":
+                        //An arrow will store its direction as up/down/left/right within this variable, must be parsed
+                        String arrowDirection = tileData[5];
+
+                        isArrow = true;
+                        break;
                 }
 
 
 
                 //Set up for the roam points, do nothing if empty
-                if (!tileData[5].Equals("empty"))
+                if (!tileData[5].Equals("empty") && !isArrow)
                 {
                     List<Vector2> roamPoints2 = new List<Vector2>();
                     String[] roamPoints = tileData[5].Split('[');
@@ -445,8 +475,6 @@ namespace FinalProject
                 }
 
             }
-
-
 
             // Create a new content manager to load content used just by this map
             // this content can be used to content.Load, not sure if we need it
@@ -487,6 +515,10 @@ namespace FinalProject
             {
                 _penumbra.Hulls.Add(wall.Hull);
             }
+            foreach(GlowstickPickup glowstickPickup in _glowstickPickups)
+            {
+                _penumbra.Lights.Add(glowstickPickup.PointLight);
+            }
             _penumbra.Lights.Add(_player.Flashlight);
         }
 
@@ -498,6 +530,7 @@ namespace FinalProject
         {
             _enemyTexture = _content.Load<Texture2D>("EnemySpriteSheet");
             _stoneMaskTexture = _content.Load<Texture2D>("Stone_Reveal_Mask");
+            _glowstickTexture = _content.Load<Texture2D>("Glowstick_Lit");
 
             //Test purpose
             whiteTexture = _content.Load<Texture2D>("blackbox2");
@@ -533,16 +566,16 @@ namespace FinalProject
             _player.Reset();
             _walls.Clear();
             _enemies.Clear();
-            _stoneRevealAreas.Clear();
+            _glowstickRevealAreas.Clear();
             _width = _defaultWidth;
             _height = _defaultHeight;
-            totalStoneNumber = 10;
+            _glowstickCount = 5;
             isEGCActive = false;
             egcTimer = 30f;
             decayTimer = 3.8f;
-            _stones = new List<Stone>();
-            _landedStones = new List<Stone>();
-            _decayingStones = new List<Stone>();
+            _glowsticks = new List<Glowstick>();
+            _landedGlowsticks = new List<Glowstick>();
+            _decayingStones = new List<Glowstick>();
         }
     }
 }

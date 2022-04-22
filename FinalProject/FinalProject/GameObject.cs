@@ -42,10 +42,11 @@ namespace FinalProject
 
         //Constructors
 
-        public GameObject()
+        public GameObject() { }
+
+        public GameObject(Vector2 position)
         {
-            Position = new Vector2(0, 0);
-            Velocity = new Vector2(0, 0);
+            _position = position;
         }
 
         //Methods
