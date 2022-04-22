@@ -77,7 +77,7 @@ namespace FinalProject
         // Stone investigating varibles
         private float stoneInvestigateTimer;
         private bool isStoneInvestigation; // Detect stone
-        private List<Stone> checkedStone = new List<Stone>();
+        private List<Glowstick> checkedStone = new List<Glowstick>();
 
         // Return state timer
         private float returnTimer = 3; // After enemy lost player's position, the enemy will stay in the same position for 3 seconds
@@ -360,7 +360,7 @@ namespace FinalProject
                         if(Math.Abs((_position - stone.Position).Length()) < detectionRadius)
                         {
                             bool stoneIsChecked = false;
-                            foreach(Stone checkedStone in checkedStone)
+                            foreach(Glowstick checkedStone in checkedStone)
                             {
                                 if(stone == checkedStone)
                                 {
@@ -382,9 +382,9 @@ namespace FinalProject
                                         // Set up moving position
                                         movingTowards = stone.Position;
 
-                                    if (map.LandedGlowsticks.Count < 5)
+                                    if (checkedStone.Count < 5)
                                     {
-                                        stoneInvestigateTimer = map.LandedGlowsticks.Count;
+                                        stoneInvestigateTimer = checkedStone.Count;
                                     }
                                     else
                                     {

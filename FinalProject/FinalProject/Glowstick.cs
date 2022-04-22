@@ -59,7 +59,7 @@ namespace FinalProject
         /// <summary>
         /// Has this stone been investigated by an enemy
         /// </summary>
-        public bool IsInvestigated { get => isInvestigated; set => isInvestigated = value; }
+        //public bool IsInvestigated { get => isInvestigated; set => isInvestigated = value; }
 
         /// <summary>
         /// Has this stone landed, or is it still in motion
@@ -101,7 +101,7 @@ namespace FinalProject
                 Intensity = 0.7f,
             };
 
-            IsInvestigated = false;
+            //IsInvestigated = false;
         }
 
         /// <summary>
