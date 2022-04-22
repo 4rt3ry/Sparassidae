@@ -403,6 +403,8 @@ namespace FinalProject
                 int w = Convert.ToInt32(tileData[3]) * indexToPixels;
                 int h = Convert.ToInt32(tileData[4]) * indexToPixels;
 
+                bool isArrow = false;
+
                 //Switch for all different types of placeables
                 switch (tileData[0])
                 {
@@ -418,12 +420,20 @@ namespace FinalProject
                         break;
                     case "exit":
                         break;
+                    case "glow":
+                        break;
+                    case "arrow":
+                        //An arrow will store its direction as up/down/left/right within this variable, must be parsed
+                        String arrowDirection = tileData[5];
+
+                        isArrow = true;
+                        break;
                 }
 
 
 
                 //Set up for the roam points, do nothing if empty
-                if (!tileData[5].Equals("empty"))
+                if (!tileData[5].Equals("empty") && !isArrow)
                 {
                     List<Vector2> roamPoints2 = new List<Vector2>();
                     String[] roamPoints = tileData[5].Split('[');
