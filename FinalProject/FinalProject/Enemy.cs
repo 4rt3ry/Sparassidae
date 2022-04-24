@@ -7,6 +7,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Penumbra;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,6 +59,7 @@ namespace FinalProject
         //  Visual Variables
         private Texture2D enemyTexture;
         private Rectangle displayRectangle;
+        private PointLight egcLight;
 
         // Animated Visual variables
         private Texture2D enemyAnimatedTexturesheet;
@@ -99,6 +101,15 @@ namespace FinalProject
             //Starting state
             currentState = EnemyState.RoamingState;
             displayRectangle = default(Rectangle);
+            egcLight = new PointLight()
+            {
+                Position = this.Position,
+                Scale = new Vector2(0), //Range of the light source
+                ShadowType = ShadowType.Illuminated,
+                Color = new Color(0.3f, 0.2f, 0.1f),
+                Intensity = 0.75f
+            };
+            
         }
 
 
@@ -676,13 +687,13 @@ namespace FinalProject
                     detectionLink.EndPosition = target.Position;
                     if (roamDetectionTrigger.Intersects(target.PhysicsCollider))
                     {
-                        speed = baseSpeed/2;
+                        speed = baseSpeed/4;
                     }
                     else
                     {
                         speed = baseSpeed;
                     }
-
+                    egcLight.Position = this.Position;
                     break;
             }
 
@@ -724,9 +735,11 @@ namespace FinalProject
         /// <summary>
         /// Starts the end game chase, causing enemy to charge at player through walls
         /// </summary>
-        public void StartEndGameChaseSequence()
+        public void StartEndGameChaseSequence(PenumbraComponent penumbra)
         {
             currentState = EnemyState.EndGameChaseState;
+            egcLight.Scale = new Vector2(100);
+            penumbra.Lights.Add(egcLight);
         }
 
         private void InvestiageTORoam()

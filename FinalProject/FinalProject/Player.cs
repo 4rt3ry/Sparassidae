@@ -71,7 +71,7 @@ namespace FinalProject
             Flashlight = new Spotlight
             {
                 Position = this.Position,
-                Scale = new Vector2(800), //Range of the light source
+                Scale = new Vector2(0), //Range of the light source
                 ShadowType = ShadowType.Solid,
                 Color = new Color(0.45f, 0.45f, 0.44f),
                 ConeDecay = 2.0f
@@ -365,6 +365,12 @@ namespace FinalProject
             alertTimer = 2f;
             targetScale = 150;
             flashlight.Scale = new Vector2(150);
+        }
+
+        public void StartEndGameChase()
+        {
+            SFXManager.PlaySound(Sounds.Alert);
+            targetScale = 500;
         }
 
         /// <summary>

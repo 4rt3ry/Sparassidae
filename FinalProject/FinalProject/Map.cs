@@ -570,9 +570,10 @@ namespace FinalProject
 
             foreach (Enemy e in _enemies)
             {
-                e.StartEndGameChaseSequence();
+                e.StartEndGameChaseSequence(_penumbra);
             }
             _player.SetChaseState();
+            _player.StartEndGameChase();
         }
 
         /// <summary>
