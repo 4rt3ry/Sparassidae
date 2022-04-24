@@ -319,7 +319,7 @@ namespace FinalProject
             SFXManager.StopAllHB();
             SFXManager.StopAllBr();
             SFXManager.StopInstancedSound(Sounds.WNAmb);
-            shockTimer = 4.5f;
+            shockTimer = 2f;
             targetScale = 300;
         }
 

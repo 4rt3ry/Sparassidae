@@ -577,7 +577,7 @@ namespace FinalProject
                         if (WallDetection())
                         {
                             currentState = EnemyState.ChaseWindupState;
-                            chaseWindupTimer = 6f;
+                            chaseWindupTimer = 4f;
                             target.SetShockState();
                             System.Diagnostics.Debug.WriteLine("Chase Start to Wind Up");
                             speed = baseSpeed * 2;
