@@ -75,6 +75,7 @@ namespace FinalProject
         private Vector2 origin;
         private float rotation;
         private Vector2 topLeft;
+        private bool isStanding = false;
 
         // Stone investigating varibles
         private float stoneInvestigateTimer;
@@ -276,7 +277,8 @@ namespace FinalProject
                 switch (currentState)
                 {
                     case EnemyState.RoamingState:
-                        if(roamLocations == null|| roamLocations.Count == 1 || roamLocations.Count == 0)
+                        //if(roamLocations == null|| roamLocations.Count == 1 || roamLocations.Count == 0 && isStanding)
+                        if (isStanding)
                         {
                             DrawEnemyStandingAnimation(batch);
                         }
@@ -290,29 +292,15 @@ namespace FinalProject
                         }
                         break;
                     case EnemyState.InvestigateState:
-                        if(map.LandedGlowsticks.Count > 5)
+                        if (isStanding)
                         {
-                            if (stoneInvestigateTimer > 0 && stoneInvestigateTimer < 5)
-                            {
-                                DrawEnemyStandingAnimation(batch);
-                            }
-                            else
-                            {
-                                DrawEnemyWalkingAnimation(batch);
-                            }
+                            DrawEnemyStandingAnimation(batch);
                         }
                         else
                         {
-                            if (stoneInvestigateTimer > 0 && stoneInvestigateTimer < map.LandedGlowsticks.Count)
-                            {
-                                DrawEnemyStandingAnimation(batch);
-                            }
-                            else
-                            {
-                                DrawEnemyWalkingAnimation(batch);
-                            }
+                            DrawEnemyWalkingAnimation(batch);
                         }
-                        
+
                         break;
                     case EnemyState.ChaseWindupState:
                         DrawEnemyStandingAnimation(batch);
@@ -360,6 +348,8 @@ namespace FinalProject
                             movingTowards = target.Position;
                             System.Diagnostics.Debug.WriteLine($"Start to investigate {movingTowards}");
                             currentState = EnemyState.InvestigateState;
+                            isStanding = false;
+                            speed = baseSpeed;
                         }
                     }
 
@@ -381,7 +371,6 @@ namespace FinalProject
 
                             if(!stoneIsChecked)
                             {
-
                                 // Check uninvestigated stone is in the roam detection range
                                 if (RoamDetectionTrigger.CheckCollision(stone))
                                 {
@@ -393,18 +382,20 @@ namespace FinalProject
                                         // Set up moving position
                                         movingTowards = stone.Position;
 
-                                    if (checkedStone.Count < 5)
-                                    {
+                                        if (checkedStone.Count < 5)
+                                        {
                                         stoneInvestigateTimer = checkedStone.Count;
-                                    }
-                                    else
-                                    {
+                                        }
+                                        else
+                                        {
                                         stoneInvestigateTimer = 5;
-                                    }
+                                        }
 
                                         // Change state
                                         currentState = EnemyState.InvestigateState;
+                                        speed = baseSpeed;
                                         isStoneInvestigation = true;
+                                        isStanding = false;
                                         checkedStone.Add(stone);
                                     }
                                 }
@@ -421,9 +412,14 @@ namespace FinalProject
                         {
                             if (Math.Abs((_position - roamLocations.ElementAt(0)).Length()) > roamCheckDistance)
                             {
+                                isStanding = false;
                                 moveDir = roamLocations[0] - this._position;
                                 moveDir.Normalize();
                                 this._position += moveDir * speed * dTime;
+                            }
+                            else
+                            {
+                                isStanding = true;
                             }
                         }
                         // 2.2 Multiple locations (Roam between locations)
@@ -433,6 +429,7 @@ namespace FinalProject
                             // Set new roam target if enemy arrive the current one
                             if (Math.Abs((_position - roamLocations.ElementAt(roamTarget)).Length()) <= roamCheckDistance)
                             {
+                                speed = baseSpeed;
                                 isForward = rng.Next(0, 2);
                                 //Update target location
                                 if (roamTarget == 0)
@@ -520,6 +517,14 @@ namespace FinalProject
                      moveDir = movingTowards - this._position;
                      moveDir.Normalize();
                      this._position += moveDir * speed * dTime;
+                    if(speed == 0)
+                    {
+                        isStanding = true;
+                    }
+                    else
+                    {
+                        isStanding = false;
+                    }
 
                     // 2. Investigate Detection code
                     // 2.1 Check if the enemy arrives the investigate point (stone/player)
@@ -537,6 +542,7 @@ namespace FinalProject
                                 movingTowards = target.Position;
                                 speed = baseSpeed;
                                 isStoneInvestigation = false;
+                                isStanding = false;
                             }
                             // There is wall between the enemy and player
                             else
@@ -545,6 +551,7 @@ namespace FinalProject
                                 if (isStoneInvestigation)
                                 {
                                     speed = 0;
+                                    isStanding = true;
                                     stoneInvestigateTimer -= dTime;
                                     if (stoneInvestigateTimer <= 0)
                                     {
@@ -564,6 +571,7 @@ namespace FinalProject
                             // 2.2.1 Investigating stone, it will stay around the stone
                             if (isStoneInvestigation)
                             {
+                                isStanding = true;
                                 speed = 0;
                                 stoneInvestigateTimer -= dTime;
                                 if (stoneInvestigateTimer <= 0)
@@ -656,6 +664,7 @@ namespace FinalProject
                         currentState = EnemyState.RoamingState;
                         isAlerting = false;
                         returnTimer = 3;
+                        speed = baseSpeed * 4;
                     }
 
                     // 2. If player enter the investigate range during the return state
@@ -744,6 +753,7 @@ namespace FinalProject
 
         private void InvestiageTORoam()
         {
+            isStanding = false; 
             speed = baseSpeed;
             target.SetWalkingState();
             currentState = EnemyState.RoamingState;
