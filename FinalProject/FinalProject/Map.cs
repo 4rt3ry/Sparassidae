@@ -96,6 +96,8 @@ namespace FinalProject
 
         internal List<Arrow> Arrows => _arrows;
 
+        internal List<Enemy> Enemies => _enemies;
+
         //Constructors
         public Map(PenumbraComponent penumbra, ContentManager content, Camera2D camera, GameStateManager stateManager)
         {
@@ -138,7 +140,7 @@ namespace FinalProject
             //}
 
             Vector2 offset = new Vector2(transformMatrix.Translation.X, transformMatrix.Translation.Y) * -1;
-            foreach (Enemy enemy in _enemies)
+            foreach (Enemy enemy in Enemies)
             {
                 batch.Draw(whiteTexture,
                     new Rectangle(enemy.DisplayRectangle.Location - new Point((int)offset.X,
@@ -177,7 +179,7 @@ namespace FinalProject
                 glowstickPickup.Draw(batch);
             }
 
-            foreach (Enemy enemy in _enemies)
+            foreach (Enemy enemy in Enemies)
             {
                 enemy.Display(batch);
             }
@@ -211,18 +213,18 @@ namespace FinalProject
         {
             float width = batch.GraphicsDevice.Viewport.Width;
             float height = batch.GraphicsDevice.Viewport.Height;
-            for (int i = 0; i < _enemies.Count; i++)
+            for (int i = 0; i < Enemies.Count; i++)
             {
                 if (_enemies[i].CurrentState == EnemyState.ChaseState || 
                     _enemies[i].CurrentState == EnemyState.EndGameChaseState ||
                     _enemies[i].CurrentState == EnemyState.InvestigateState ||
                     _enemies[i].CurrentState == EnemyState.ChaseWindupState)
                 {
-                    float angle = MathF.Atan2(_enemies[i].Y - _player.Y, _enemies[i].X - _player.X) + MathF.PI / 2;
+                    float angle = MathF.Atan2(Enemies[i].Y - _player.Y, Enemies[i].X - _player.X) + MathF.PI / 2;
 
                     // Get alpha from enemy distance
                     // Uses squares of distance to avoid sqrt()
-                    float alpha = MathHelper.Clamp((MathF.Pow(_enemies[i].X - _player.X, 2) + MathF.Pow(_enemies[i].Y - _player.Y, 2)) /
+                    float alpha = MathHelper.Clamp((MathF.Pow(Enemies[i].X - _player.X, 2) + MathF.Pow(Enemies[i].Y - _player.Y, 2)) /
                                                    (width * width / 4),
                                                    0, 1);
 
@@ -331,7 +333,7 @@ namespace FinalProject
             }
 
             // Enemy 
-            foreach (Enemy enemy in _enemies)
+            foreach (Enemy enemy in Enemies)
             {
                 enemy.Update(dTime);
             }
@@ -432,7 +434,7 @@ namespace FinalProject
 
             //Create Roam Points
             List<Vector2> roamPoints = new List<Vector2> { new Vector2(1500, 700), new Vector2(1500, 100), new Vector2(100, 100) };
-            _enemies.Add(new Enemy(_enemyTexture, this, roamPoints[0], roamPoints, 800, 100));
+            Enemies.Add(new Enemy(_enemyTexture, this, roamPoints[0], roamPoints, 800, 100));
 
             // Set up lighting after walls are created
             SetupPenumbraLighting();
@@ -530,7 +532,7 @@ namespace FinalProject
                         }
                     }
                     //_enemies.Add(new Enemy(new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2)), roamPoints2, 800, _enemyTexture, 150, 150, 100, Player, _walls));
-                    _enemies.Add(new Enemy(_enemyTexture, this, new Vector2(x + 130, y + 130), roamPoints2, 650, 100));
+                    Enemies.Add(new Enemy(_enemyTexture, this, new Vector2(x + 130, y + 130), roamPoints2, 650, 100));
                 }
 
             }
@@ -613,7 +615,7 @@ namespace FinalProject
             }
             isEGCActive = true;
 
-            foreach (Enemy e in _enemies)
+            foreach (Enemy e in Enemies)
             {
                 e.StartEndGameChaseSequence(_penumbra);
             }
@@ -628,7 +630,7 @@ namespace FinalProject
         {
             _player.Reset();
             _walls.Clear();
-            _enemies.Clear();
+            Enemies.Clear();
             _glowstickRevealAreas.Clear();
             _width = _defaultWidth;
             _height = _defaultHeight;
