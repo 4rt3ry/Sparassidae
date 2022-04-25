@@ -216,7 +216,6 @@ namespace FinalProject
             for (int i = 0; i < Enemies.Count; i++)
             {
                 if (_enemies[i].CurrentState == EnemyState.ChaseState || 
-                    _enemies[i].CurrentState == EnemyState.EndGameChaseState ||
                     _enemies[i].CurrentState == EnemyState.InvestigateState ||
                     _enemies[i].CurrentState == EnemyState.ChaseWindupState)
                 {
@@ -228,8 +227,7 @@ namespace FinalProject
                                                    (width * width / 4),
                                                    0, 1);
 
-                    Color tint = _enemies[i].CurrentState == EnemyState.ChaseState ||
-                                 _enemies[i].CurrentState == EnemyState.EndGameChaseState ?
+                    Color tint = _enemies[i].CurrentState == EnemyState.ChaseState ?
                                  new Color(1, 1, 1, 1 - alpha) :
                                  new Color(0.5f, 1, 0, 1 - alpha);
 
