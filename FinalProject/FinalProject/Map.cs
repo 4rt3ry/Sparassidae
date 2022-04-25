@@ -213,7 +213,10 @@ namespace FinalProject
             float height = batch.GraphicsDevice.Viewport.Height;
             for (int i = 0; i < _enemies.Count; i++)
             {
-                if (_enemies[i].CurrentState == EnemyState.ChaseState || _enemies[i].CurrentState == EnemyState.EndGameChaseState)
+                if (_enemies[i].CurrentState == EnemyState.ChaseState || 
+                    _enemies[i].CurrentState == EnemyState.EndGameChaseState ||
+                    _enemies[i].CurrentState == EnemyState.InvestigateState ||
+                    _enemies[i].CurrentState == EnemyState.ChaseWindupState)
                 {
                     float angle = MathF.Atan2(_enemies[i].Y - _player.Y, _enemies[i].X - _player.X) + MathF.PI / 2;
 
@@ -223,11 +226,15 @@ namespace FinalProject
                                                    (width * width / 4),
                                                    0, 1);
 
+                    Color tint = _enemies[i].CurrentState == EnemyState.ChaseState ||
+                                 _enemies[i].CurrentState == EnemyState.EndGameChaseState ?
+                                 new Color(1, 1, 1, 1 - alpha) :
+                                 new Color(0.5f, 1, 0, 1 - alpha);
 
                     batch.Draw(_directionalPointerTexture,
                                new Vector2(width / 2 + MathF.Cos(angle) * 100, height / 2 + MathF.Sin(angle) * 100),
                                null,
-                               new Color(1, 1, 1, 1 - alpha),
+                               tint,
                                angle,
                                new Vector2(_directionalPointerTexture.Width * 5 / 4, _directionalPointerTexture.Height / 2 + 100),
                                1,
