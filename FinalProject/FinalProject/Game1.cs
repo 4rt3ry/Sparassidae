@@ -152,7 +152,7 @@ namespace FinalProject
             _batch.Begin(sortMode: SpriteSortMode.FrontToBack);
 
             ShapeBatch.Begin(GraphicsDevice);
-            _gameStateManager.DrawUI(_batch);
+            _gameStateManager.DrawUI(_batch, transMatrix);
             _fadeTransition.StartFade(_batch, 1f, 1f,GameState.InstructionState);
             ShapeBatch.End();
             _batch.End();

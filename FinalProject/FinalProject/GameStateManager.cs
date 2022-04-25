@@ -181,7 +181,7 @@ namespace FinalProject
         /// Draw UI and things that are not effected by Light system
         /// </summary>
         /// <param name="batch"></param>
-        public void DrawUI(SpriteBatch batch)
+        public void DrawUI(SpriteBatch batch, Matrix transformMatrix)
         {
             //Current state actions
             _fadeTransition.StartFade(_batch, 2f, 2f, currentState);
@@ -236,17 +236,22 @@ namespace FinalProject
 
                     if (isGodMode)
                     {
-                        map.DrawTest(batch);
+                        map.DrawTest(batch, transformMatrix);
                         if (map.GlowstickCount == 0)
                         {
                             map.GlowstickCount = 10;
                         }
                     }
 
+                    // Direction arrows pointing towards aggrevated enemies
+                    map.DrawDirectionalArrows(batch);
+
                     //if (map.Stones != null)
                     //{
                     //    System.Diagnostics.Debug.WriteLine(map.Stones.Count);
                     //}
+
+
 
                     // Task Hub
                     // Update the UI based on the center of the screen (local position)

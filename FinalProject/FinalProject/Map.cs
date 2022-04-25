@@ -69,6 +69,7 @@ namespace FinalProject
         private Texture2D _stoneMaskTexture;
         private Texture2D _glowstickTexture;
         private Texture2D _arrowTexture;
+        private Texture2D _directionalPointerTexture;
 
         // Imported using LoadMap()
         private Texture2D _mapTexture;
@@ -129,24 +130,29 @@ namespace FinalProject
         /// This method is used to show the enemy.
         /// </summary>
         /// <param name="batch"></param>
-        public void DrawTest(SpriteBatch batch)
+        public void DrawTest(SpriteBatch batch, Matrix transformMatrix)
         {
             //foreach (Wall wall in _walls)
             //{
             //    batch.Draw(whiteTexture, wall.WallRec, Color.Yellow); ;
             //}
 
+            Vector2 offset = new Vector2(transformMatrix.Translation.X, transformMatrix.Translation.Y) * -1;
             foreach (Enemy enemy in _enemies)
             {
-                batch.Draw(whiteTexture, enemy.DisplayRectangle, Color.White);
+                batch.Draw(whiteTexture,
+                    new Rectangle(enemy.DisplayRectangle.Location - new Point((int)offset.X,
+                    (int)offset.Y),
+                    enemy.DisplayRectangle.Size),
+                    Color.White);
                 enemy.RoamDetectionTrigger.DrawDebugTexture(batch, Color.Red);
                 batch.Draw(circleTexture,
-                    new Rectangle((int)enemy.Position.X - (int)enemy.DetectionRadius,
-                    (int)enemy.Position.Y - (int)enemy.DetectionRadius,
+                    new Rectangle((int)enemy.Position.X - (int)enemy.DetectionRadius - (int)offset.X,
+                    (int)enemy.Position.Y - (int)enemy.DetectionRadius - (int)offset.Y,
                     (int)enemy.DetectionRadius * 2, (int)enemy.DetectionRadius * 2), Color.White);
                 batch.Draw(circleTexture,
-                    new Rectangle((int)enemy.Position.X - (int)enemy.ChaseStartDistance,
-                    (int)enemy.Position.Y - (int)enemy.ChaseStartDistance,
+                    new Rectangle((int)enemy.Position.X - (int)enemy.ChaseStartDistance - (int)offset.X,
+                    (int)enemy.Position.Y - (int)enemy.ChaseStartDistance - (int)offset.Y,
                     (int)enemy.ChaseStartDistance * 2, (int)enemy.ChaseStartDistance * 2), Color.Yellow);
 
             }
@@ -200,6 +206,28 @@ namespace FinalProject
             batch.Draw(_tileTexture, batch.GraphicsDevice.Viewport.Bounds, Color.White);
             batch.End();
         }
+
+        public void DrawDirectionalArrows(SpriteBatch batch)
+        {
+            float width = batch.GraphicsDevice.Viewport.Width;
+            float height = batch.GraphicsDevice.Viewport.Height;
+            for (int i = 0; i < _enemies.Count; i++)
+            {
+                if (_enemies[i].CurrentState == EnemyState.ChaseState || _enemies[i].CurrentState == EnemyState.EndGameChaseState)
+                {
+                    float angle = MathF.Atan2(_enemies[i].Y - _player.Y, _enemies[i].X - _player.X) + MathF.PI / 2;
+                    batch.Draw(_directionalPointerTexture,
+                               new Vector2(width / 2 + MathF.Cos(angle) * 100, height / 2 + MathF.Sin(angle) * 100),
+                               null,
+                               Color.White,
+                               angle,
+                               new Vector2(_directionalPointerTexture.Width * 5 / 4, _directionalPointerTexture.Height / 2 + 100),
+                               1,
+                               SpriteEffects.None,
+                               1);
+                }
+            }
+        }
         #endregion
 
         /// <summary>
@@ -248,9 +276,9 @@ namespace FinalProject
                     if (stone.Landed)
                     {
                         bool availableLandingPosition = true;
-                        foreach(Glowstick s in LandedGlowsticks)
+                        foreach (Glowstick s in LandedGlowsticks)
                         {
-                            if(Vector2.Distance(s.Position, stone.Position) < s.TargetScale/1.8f)
+                            if (Vector2.Distance(s.Position, stone.Position) < s.TargetScale / 1.8f)
                             {
                                 availableLandingPosition = false;
                             }
@@ -270,7 +298,7 @@ namespace FinalProject
                 }
                 if (removed.Count > 0)
                 {
-                    foreach(Glowstick s in removed)
+                    foreach (Glowstick s in removed)
                     {
                         _glowsticks.Remove(s);
                     }
@@ -461,7 +489,7 @@ namespace FinalProject
                         //An arrow will store its direction as up/down/left/right within this variable, must be parsed
                         String arrowDirection = tileData[5];
 
-                        Arrows.Add(new Arrow(new Vector2(x+w/2, y+h/2), _arrowTexture, tileData[5]));
+                        Arrows.Add(new Arrow(new Vector2(x + w / 2, y + h / 2), _arrowTexture, tileData[5]));
 
                         isArrow = true;
                         break;
@@ -487,7 +515,7 @@ namespace FinalProject
                         }
                     }
                     //_enemies.Add(new Enemy(new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2)), roamPoints2, 800, _enemyTexture, 150, 150, 100, Player, _walls));
-                    _enemies.Add(new Enemy(_enemyTexture, this, new Vector2(x+130, y+130), roamPoints2, 650, 100));
+                    _enemies.Add(new Enemy(_enemyTexture, this, new Vector2(x + 130, y + 130), roamPoints2, 650, 100));
                 }
 
             }
@@ -499,7 +527,7 @@ namespace FinalProject
             // Get ahold of the lighting system and reset it
             //_penumbra = (PenumbraComponent)serviceProvider.GetService(typeof(PenumbraComponent));
             SetupPenumbraLighting();
-    
+
             foreach (Vector2 position in allGoals)
             {
                 Objective newGoal = new Objective(position, _player);
@@ -508,7 +536,7 @@ namespace FinalProject
                 endGoals.Add(newGoal);
 
             }
-       
+
 
             //Debug code that puts all enemies into end game chase sequence at the start of the game
             /*
@@ -531,7 +559,7 @@ namespace FinalProject
             {
                 _penumbra.Hulls.Add(wall.Hull);
             }
-            foreach(GlowstickPickup glowstickPickup in _glowstickPickups)
+            foreach (GlowstickPickup glowstickPickup in _glowstickPickups)
             {
                 _penumbra.Lights.Add(glowstickPickup.PointLight);
             }
@@ -548,6 +576,7 @@ namespace FinalProject
             _stoneMaskTexture = _content.Load<Texture2D>("Stone_Reveal_Mask");
             _glowstickTexture = _content.Load<Texture2D>("Glowstick_Lit");
             _arrowTexture = _content.Load<Texture2D>("BloodyArrowUp");
+            _directionalPointerTexture = _content.Load<Texture2D>("directional_pointer");
 
             //Test purpose
             whiteTexture = _content.Load<Texture2D>("blackbox2");
@@ -555,6 +584,7 @@ namespace FinalProject
             _tileTexture = _content.Load<Texture2D>("MossBackground");
             _tileEffect = _content.Load<Effect>("TileBackgroundEffect");
             _maskEffect = _content.Load<Effect>("ImageMask");
+
         }
 
         /// <summary>
