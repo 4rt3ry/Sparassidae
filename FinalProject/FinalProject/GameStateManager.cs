@@ -260,11 +260,20 @@ namespace FinalProject
                     batch.DrawString(syneTactileFont24, "Mission Hud",
                        new Vector2(1730, 50), Color.White);
 
-                    batch.DrawString(syneTactileFont24, "Objective: Walk Around",
-                        new Vector2(1580, 100), Color.White);
-
+                    if(map.Enemies[0].CurrentState == EnemyState.EndGameChaseState)
+                    {
+                        batch.DrawString(syneTactileFont24, "Objective: Survive 30 Seconds",
+                        new Vector2(1500, 100), Color.White);
+                    }
+                    else
+                    {
+                        batch.DrawString(syneTactileFont24, "Objective: Find The Blue Generator",
+                   new Vector2(1450, 100), Color.White);
+                        batch.DrawString(syneTactileFont24, "Press [E] to Turn On the Generator",
+                            new Vector2(1450, 150), Color.White);
+                    }
                     // Stone
-                    if(map.GlowstickCount <= 5)
+                    if (map.GlowstickCount <= 5)
                     {
                         for(int i = 0; i < map.GlowstickCount; i ++)
                         {
