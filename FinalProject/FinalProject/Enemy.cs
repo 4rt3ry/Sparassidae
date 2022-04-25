@@ -86,6 +86,8 @@ namespace FinalProject
         private float returnTimer = 3; // After enemy lost player's position, the enemy will stay in the same position for 3 seconds
         private bool isAlerting;
 
+        private float chaseMaxDistance = 2000;
+
         // Properties
         public EnemyState CurrentState { get => currentState; }
         public Rectangle DisplayRectangle { get => displayRectangle; }
@@ -338,7 +340,8 @@ namespace FinalProject
                 case EnemyState.RoamingState:
                     // 1. Update the detection info
                     // 1.1 Player detection update
-                    if (RoamDetectionTrigger.CheckCollision(target))
+                    if (RoamDetectionTrigger.CheckCollision(target) && 
+                        Math.Abs((target.Position - roamLocations[0]).Length()) < chaseMaxDistance)
                     {
                         detectionLink.EndPosition = target.Position;
                         if (WallDetection()) // IF there is no wall between enemy and player
@@ -346,7 +349,7 @@ namespace FinalProject
                             //System.Diagnostics.Debug.WriteLine("Dececting");
                             target.SetAfraidState();
                             movingTowards = target.Position;
-                            System.Diagnostics.Debug.WriteLine($"Start to investigate {movingTowards}");
+                            //System.Diagnostics.Debug.WriteLine($"Start to investigate {movingTowards}");
                             currentState = EnemyState.InvestigateState;
                             isStanding = false;
                             speed = baseSpeed;
@@ -358,7 +361,8 @@ namespace FinalProject
                     isStoneInvestigation = false;
                     foreach (Glowstick stone in map.LandedGlowsticks)
                     {
-                        if(Math.Abs((_position - stone.Position).Length()) < detectionRadius)
+                        if(Math.Abs((_position - stone.Position).Length()) < detectionRadius && 
+                            Math.Abs((stone.Position - roamLocations[0]).Length()) < chaseMaxDistance)
                         {
                             bool stoneIsChecked = false;
                             foreach(Glowstick checkedStone in checkedStone)
@@ -453,7 +457,7 @@ namespace FinalProject
                             //Movement code
                             if (moving)
                             {
-                                System.Diagnostics.Debug.WriteLine(this.Position);
+                                //System.Diagnostics.Debug.WriteLine(this.Position);
                                 //Move enemy
                                 moveDir = roamLocations[roamTarget] - this._position;
                                 moveDir.Normalize();
@@ -514,6 +518,14 @@ namespace FinalProject
 
                 case EnemyState.InvestigateState:
                      // 1. Movement code
+                     if(Math.Abs((movingTowards - roamLocations[0]).Length()) > chaseMaxDistance)
+                     {
+                         target.SetWalkingState();
+                         speed = baseSpeed;
+                         currentState = EnemyState.RoamingState;
+                         System.Diagnostics.Debug.WriteLine("???");
+                         break;
+                     }
                      moveDir = movingTowards - this._position;
                      moveDir.Normalize();
                      this._position += moveDir * speed * dTime;
@@ -589,7 +601,8 @@ namespace FinalProject
 
                     // 3. Chase Detection Code
                     //    Check If player is within chase start distance
-                    if (Math.Abs((this._position - target.Position).Length()) <= ChaseStartDistance)
+                    if (Math.Abs((this._position - target.Position).Length()) <= ChaseStartDistance
+                        && Math.Abs((target.Position - roamLocations[0]).Length()) < chaseMaxDistance)
                     {
                         detectionLink.EndPosition = target.Position;
                         // Check if there is wall between enemy and player
@@ -597,8 +610,15 @@ namespace FinalProject
                         {
                             currentState = EnemyState.ChaseWindupState;
                             chaseWindupTimer = 4f;
-                            target.SetShockState();
-                            System.Diagnostics.Debug.WriteLine("Chase Start to Wind Up");
+                            if(isAlerting)
+                            {
+                                target.SetChaseState();
+                            }
+                            else
+                            {
+                                target.SetShockState();
+                            }
+                            //System.Diagnostics.Debug.WriteLine("Chase Start to Wind Up");
                             speed = baseSpeed * 2;
                             movingTowards = target.Position;
                         }  
@@ -618,7 +638,7 @@ namespace FinalProject
                         if (chaseWindupTimer <= 0)
                         {
                             currentState = EnemyState.ChaseState;
-                            System.Diagnostics.Debug.WriteLine("Chase start");
+                            //System.Diagnostics.Debug.WriteLine("Chase start");
                             isAlerting = true;
                         }
                     }
@@ -626,6 +646,13 @@ namespace FinalProject
                     break;
 
                 case EnemyState.ChaseState:
+                    if(Math.Abs((this.Position - roamLocations[0]).Length()) > chaseMaxDistance)
+                    {
+                        target.SetWalkingState();
+                        speed = baseSpeed;
+                        currentState = EnemyState.ReturnState;
+                        break;
+                    }
                     // 1. Movement code
                     movingTowards = target.Position;
                     moveDir = movingTowards - this._position;
@@ -664,7 +691,7 @@ namespace FinalProject
                         currentState = EnemyState.RoamingState;
                         isAlerting = false;
                         returnTimer = 3;
-                        speed = baseSpeed * 4;
+                        speed = baseSpeed * 3;
                     }
 
                     // 2. If player enter the investigate range during the return state
@@ -677,7 +704,7 @@ namespace FinalProject
                             //System.Diagnostics.Debug.WriteLine("Dececting");
                             target.SetAfraidState();
                             movingTowards = target.Position;
-                            System.Diagnostics.Debug.WriteLine($"Start to investigate {movingTowards}");
+                            //System.Diagnostics.Debug.WriteLine($"Start to investigate {movingTowards}");
                             currentState = EnemyState.InvestigateState;
                         }
                     }
@@ -709,7 +736,7 @@ namespace FinalProject
             //This code always runs regardless of state
             if (this.PhysicsCollider.CheckCollision(target))
             {
-                System.Diagnostics.Debug.WriteLine("Player died");
+                //System.Diagnostics.Debug.WriteLine("Player died");
                 currentState = EnemyState.PlayerDeadState;
                 target.SetDeadState();
             }
