@@ -349,6 +349,7 @@ namespace FinalProject
                             System.Diagnostics.Debug.WriteLine($"Start to investigate {movingTowards}");
                             currentState = EnemyState.InvestigateState;
                             isStanding = false;
+                            speed = baseSpeed;
                         }
                     }
 
@@ -370,7 +371,6 @@ namespace FinalProject
 
                             if(!stoneIsChecked)
                             {
-
                                 // Check uninvestigated stone is in the roam detection range
                                 if (RoamDetectionTrigger.CheckCollision(stone))
                                 {
@@ -382,17 +382,18 @@ namespace FinalProject
                                         // Set up moving position
                                         movingTowards = stone.Position;
 
-                                    if (checkedStone.Count < 5)
-                                    {
+                                        if (checkedStone.Count < 5)
+                                        {
                                         stoneInvestigateTimer = checkedStone.Count;
-                                    }
-                                    else
-                                    {
+                                        }
+                                        else
+                                        {
                                         stoneInvestigateTimer = 5;
-                                    }
+                                        }
 
                                         // Change state
                                         currentState = EnemyState.InvestigateState;
+                                        speed = baseSpeed;
                                         isStoneInvestigation = true;
                                         isStanding = false;
                                         checkedStone.Add(stone);
@@ -428,6 +429,7 @@ namespace FinalProject
                             // Set new roam target if enemy arrive the current one
                             if (Math.Abs((_position - roamLocations.ElementAt(roamTarget)).Length()) <= roamCheckDistance)
                             {
+                                speed = baseSpeed;
                                 isForward = rng.Next(0, 2);
                                 //Update target location
                                 if (roamTarget == 0)
@@ -662,6 +664,7 @@ namespace FinalProject
                         currentState = EnemyState.RoamingState;
                         isAlerting = false;
                         returnTimer = 3;
+                        speed = baseSpeed * 4;
                     }
 
                     // 2. If player enter the investigate range during the return state
