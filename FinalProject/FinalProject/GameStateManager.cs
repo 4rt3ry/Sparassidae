@@ -108,6 +108,7 @@ namespace FinalProject
             instructionButton.Click += Click_ToInstruction;
             optionButton.Click += Click_ToOption;
             playButton.Click += Click_ToPlay;
+            quitButton.Click += Click_Quit;
             backMainButton.Click += Click_ToMenu;
             mainMenuButton.Click += Click_ToMenu;
             backGameButton.Click += Click_ToRestartPlay;
@@ -116,7 +117,7 @@ namespace FinalProject
             buttons.Add(playButton);
             buttons.Add(optionButton);
             buttons.Add(instructionButton);
-            //buttons.Add(quitButton);
+            buttons.Add(quitButton);
             _fadeTransition = new Fade();
             _fadeTransition.LoadContent(content);
 
@@ -502,9 +503,11 @@ namespace FinalProject
             gameInstruction_Texture = content.Load<Texture2D>("InstructionPage");
             winPage_Texture = content.Load<Texture2D>("WinPage");
 
-            playButton = new Button(content.Load<Texture2D>("Controls/Play"), content.Load<Texture2D>("Controls/Play_hover"), 1500, 700, graphics);
-            optionButton = new Button(content.Load<Texture2D>("Controls/Options"), content.Load<Texture2D>("Controls/Options_hover"), 1500, 800, graphics);
-            instructionButton = new Button(content.Load<Texture2D>("Controls/Instruction"), content.Load<Texture2D>("Controls/Instruction_hover"), 1500, 900, graphics);
+            playButton = new Button(content.Load<Texture2D>("Controls/Play"), content.Load<Texture2D>("Controls/Play_hover"), 1500, 600, graphics);
+            optionButton = new Button(content.Load<Texture2D>("Controls/Options"), content.Load<Texture2D>("Controls/Options_hover"), 1500, 700, graphics);
+            instructionButton = new Button(content.Load<Texture2D>("Controls/Instruction"), content.Load<Texture2D>("Controls/Instruction_hover"), 1500, 800, graphics);
+            quitButton = new Button(content.Load<Texture2D>("Controls/Quit"), content.Load<Texture2D>("Controls/Quit_hover"), 1500, 900, graphics);
+
 
             Texture2D back = content.Load<Texture2D>("Controls/Back");
             Texture2D back_Hover = content.Load<Texture2D>("Controls/Back_Hover");
@@ -523,6 +526,16 @@ namespace FinalProject
 
             _stoneUITexture = content.Load<Texture2D>("Stone");
 
+        }
+
+        /// <summary>
+        /// Quits the game
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void Click_Quit(object sender, EventArgs e)
+        {
+            Environment.Exit(0);
         }
 
         /// <summary>
