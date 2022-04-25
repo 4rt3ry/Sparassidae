@@ -549,7 +549,7 @@ namespace FinalProject
             foreach (Vector2 position in allGoals)
             {
                 Objective newGoal = new Objective(position, _player);
-                //Player.Position = position;
+                Player.Position = position;
                 _penumbra.Lights.Add(newGoal.PointLight);
                 endGoals.Add(newGoal);
 
