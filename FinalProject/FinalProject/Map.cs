@@ -489,7 +489,7 @@ namespace FinalProject
                     case "enemy":
                         break;
                     case "spawn":
-                        //Player.Position = new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2));
+                        Player.Position = new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2));
                         break;
                     case "objective":
                         allGoals.Add(new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2)));
@@ -499,6 +499,7 @@ namespace FinalProject
                     case "exit":
                         break;
                     case "glow":
+                        _glowstickPickups.Add(new GlowstickPickup(new Vector2(x + (indexToPixels / 2), y + (indexToPixels / 2)), _penumbra, _glowstickTexture));
                         break;
                     case "arrow":
                         //An arrow will store its direction as up/down/left/right within this variable, must be parsed
@@ -546,7 +547,7 @@ namespace FinalProject
             foreach (Vector2 position in allGoals)
             {
                 Objective newGoal = new Objective(position, _player);
-                Player.Position = position;
+                //Player.Position = position;
                 _penumbra.Lights.Add(newGoal.PointLight);
                 endGoals.Add(newGoal);
 
