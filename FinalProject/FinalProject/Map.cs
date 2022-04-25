@@ -454,7 +454,8 @@ namespace FinalProject
             ResetMap();
 
             //Create reader and grab the data
-            string fullPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "..\\..\\..\\..\\Content\\" + filepath;
+            string fullPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "..\\..\\..\\..\\" + filepath;
+            fullPath = filepath;
             StreamReader reader = new StreamReader(fullPath);
             String data = reader.ReadToEnd();
             reader.Close();

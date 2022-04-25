@@ -42,8 +42,8 @@ namespace FinalProject
             {
                 Position = _position,
                 Scale = new Vector2(160),
-                Intensity =  1.2f,
-                Color = new Color(0.35f, 0.62f, 0.35f),
+                Intensity =  0.6f,
+                Color = new Color(0.05f, 0.52f, 0.15f),
             };
             PhysicsCollider = new CircleCollider(this, Vector2.Zero, 25, true);
         }
