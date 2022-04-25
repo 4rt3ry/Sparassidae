@@ -58,6 +58,7 @@ namespace FinalProject
         private Texture2D black_Texture;
         private Texture2D gameOver_Texture;
         private Texture2D gameInstruction_Texture; // How to play the game
+        private Texture2D winPage_Texture;
 
         private Button playButton;
         private Button optionButton;
@@ -304,9 +305,8 @@ namespace FinalProject
                     break;
 
                 case GameState.WinState:
-                    //Write 'You Win' on the screen
-                    batch.DrawString(syneTactileFont48, "You Won",
-                       new Vector2(1730, 50), Color.White);
+                    batch.Draw(winPage_Texture, new Rectangle(0, 0, black_Texture.Width, black_Texture.Height), Color.White);
+                    
                     break;
             }
         }
@@ -495,6 +495,7 @@ namespace FinalProject
             black_Texture = content.Load<Texture2D>("Blackbackground");
             gameOver_Texture = content.Load<Texture2D>("GameEnd");
             gameInstruction_Texture = content.Load<Texture2D>("InstructionPage");
+            winPage_Texture = content.Load<Texture2D>("WinPage");
 
             playButton = new Button(content.Load<Texture2D>("Controls/Play"), content.Load<Texture2D>("Controls/Play_hover"), 1500, 700, graphics);
             optionButton = new Button(content.Load<Texture2D>("Controls/Options"), content.Load<Texture2D>("Controls/Options_hover"), 1500, 800, graphics);
