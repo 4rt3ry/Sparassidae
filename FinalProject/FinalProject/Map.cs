@@ -216,10 +216,18 @@ namespace FinalProject
                 if (_enemies[i].CurrentState == EnemyState.ChaseState || _enemies[i].CurrentState == EnemyState.EndGameChaseState)
                 {
                     float angle = MathF.Atan2(_enemies[i].Y - _player.Y, _enemies[i].X - _player.X) + MathF.PI / 2;
+
+                    // Get alpha from enemy distance
+                    // Uses squares of distance to avoid sqrt()
+                    float alpha = MathHelper.Clamp((MathF.Pow(_enemies[i].X - _player.X, 2) + MathF.Pow(_enemies[i].Y - _player.Y, 2)) /
+                                                   (width * width / 4),
+                                                   0, 1);
+
+
                     batch.Draw(_directionalPointerTexture,
                                new Vector2(width / 2 + MathF.Cos(angle) * 100, height / 2 + MathF.Sin(angle) * 100),
                                null,
-                               Color.White,
+                               new Color(1, 1, 1, 1 - alpha),
                                angle,
                                new Vector2(_directionalPointerTexture.Width * 5 / 4, _directionalPointerTexture.Height / 2 + 100),
                                1,
