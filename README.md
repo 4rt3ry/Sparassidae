@@ -14,6 +14,9 @@ Our concept was for a horror where the player explores a dark, top-down environm
 Idea generation and gameplay development was done through group effort and communication, and the model of the game changed as we worked on it based on input from each individual. A breakdown of major features is as follows:
 
 Physics system - Arthur
+
 Art Assets/Enemy AI - Runi
+
 Sound Design/Level Editor - Nick
+
 Flashlight/Final Objective - Ciyu
